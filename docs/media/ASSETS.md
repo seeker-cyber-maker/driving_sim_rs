@@ -1,4 +1,53 @@
-# AI Coaching Story: Driving Grounds media
+# AI Training Story: Driving Around media
+
+The current hero and thumbnail are AI-generated editorial concept art in the established cozy pixel management-game style. The Formula car practises on asphalt, the Snowmobile uses ice, the Rally car is stuck nose-first against tires on dirt, and the Truck is under repair in the workshop. The wall emblem depicts a layered neural network. These images express vehicle variety and training difficulty; they are not screenshots, measured driving results or a claim of implemented garage/repair mechanics. Actual app replay uses dots and recorded telemetry.
+
+| File | Dimensions | Bytes | Role |
+| --- | --- | --- | --- |
+| `driving-around-hero.png` | 1672 × 941 | 2,450,642 | Current README hero, including the open challenge question |
+| `driving-around-thumbnail.jpg` | 1774 × 887 | 599,843 | Current 2:1 sharing thumbnail |
+
+The thumbnail was exported from the generated PNG as JPEG without cropping or resizing and is below 1 MB. The generated PNG originals are retained. App/repository URLs, old README anchors and prior artwork URLs are preserved. The repository social-preview setting is unchanged. No ALD simulation, training or ZeroGPU run was used to make the artwork.
+
+## Current prompt set
+
+### Hero
+
+Use case: precise-object-edit
+Asset type: coordinated final GitHub README hero, wide 16:9.
+Input image 1 is the EDIT TARGET: the existing AI Coaching Story: Driving Grounds hero. Preserve its polished cozy isometric pixel-art character, midnight navy negative space, warm workshop lighting, sage grass, red roof, mint and amber accents, readable left typography, framing, camera angle, quality and safe margins.
+Change exact text: top brand to "AI TRAINING STORY"; large two-line title to "DRIVING AROUND". Preserve the question VERBATIM: "Can you train a neural network to drive better than an agent?" Keep footer "Train · Replay · Inspect". Remove all old name text, add no other copy.
+Replace the identical tiny hatchbacks with FOUR distinct vehicles distributed in different surfaces:
+- Clearly recognizable low open-wheel Formula car with exposed tires, slim nose, front and rear wings on the central dark asphalt; keep a small amber sensor fan near this car.
+- Clearly recognizable Snowmobile, with two front skis and rear track and no wheels, on a compact pale-blue ICE side lane with frosty edges on one side of the campus.
+- A boxy Rally car on a brown DIRT section on the other side. Show it visibly stuck/crashed nose-first into an outer tire stack/barrier with a crumpled bumper, skewed position and a muddy rut/skid trail, communicating that learning is difficult. Gentle comical mishap, no flames, injuries or explosions.
+- A heavy TRUCK inside the open workshop, raised hood and removed wheel, on a small lift/jack with spare wheel/tools, visibly under repair. Keep the truck inside the bay, not racing.
+The central track remains asphalt with clear ice and dirt side sections. Keep island visually coherent and avoid cluttering the type.
+Replace the emblem on the workshop outer wall with an unmistakable layered feed-forward neural network: 3 vertical layers of round mint nodes (3 input nodes, 4 hidden nodes, 2 output nodes), fine connections only BETWEEN adjacent layers. No connected perimeter or molecule/constellation shape.
+Keep text all perfectly readable and exact. Retain the established charming miniature pixel management-game feel. This is editorial concept art; no fake gameplay window, metrics, scores, trophies, lap records, platform logos, watermark or claims of performance.
+
+## Thumbnail
+
+Use case: precise-object-edit
+Asset type: updated final GitHub sharing thumbnail, exact wide 2:1.
+Input image 1 is the EDIT TARGET: the existing cozy pixel-art "AI Coaching Story: Driving Grounds" thumbnail. The user loves this thumbnail. Preserve its overall composition, quality, dark navy negative space on the left, warm cream/mint pixel typography, tiny isometric driving-campus island at the right, red-roof workshop, fences, lamps, friendly detailed pixel clusters and safe margins. Keep the thumbnail as memorable and readable as the original.
+Change title text exactly to "AI TRAINING STORY" (small top line) and "DRIVING AROUND" (large title over two lines). Keep "Train · Replay · Inspect" as the small footer. Remove all old name text. No other text.
+Make the right-hand campus showcase FOUR unmistakably DIFFERENT vehicles and a learning failure:
+1. A small low open-wheel Formula racing car with exposed tires, nose, front and rear wings driving on the central dark asphalt section; this is the visual center of the circuit.
+2. At one side of the island, a small distinct light-blue icy practice loop or side lane with snow edges, carrying a clearly recognizable Snowmobile with front skis and rear track, no wheels.
+3. On the opposite outer side, a brown dirt/gravel practice lane with a boxy Rally hatchback. This Rally car has made a training mistake: visibly nose-first into a tire stack/barrier at the edge of the dirt, slightly crumpled bumper, skewed rear wheels stuck in a small muddy rut and a short curved skid trail. Make the stuck/crashed situation immediately readable but gentle and comical, no injury, flames or explosions.
+4. Inside the open workshop bay, a clearly recognizable heavy TRUCK cab under repair on a small lift/jack, raised hood, a wheel removed with spare wheel/tools beside it. Keep truck visibly INSIDE the workshop.
+Replace the workshop wall emblem with a clean, recognizable feed-forward NEURAL NETWORK: 3 vertical layers of mint circular nodes (3 inputs, 4 hidden, 2 outputs), connecting lines BETWEEN adjacent layers only, no perimeter loop or polygon. It should read as a layered network, not a molecule or constellation.
+Keep title legibility dominant. Widen/rearrange the scene within its original right-hand footprint only as needed to show these four subjects; do not crowd the title. Ice and dirt are small clearly distinct side sections, center remains asphalt. Preserve the charming cohesive original pixel-management-game feel. No fake UI, charts, scores, rewards, results, company logos or watermark. Concept art, not a screenshot. Flat/limited palette with detail on island, no full-image grain. All text exact.
+
+
+---
+
+## Historical Driving Grounds artwork and provenance
+
+The following assets, wording and prompts describe the prior brand and remain for history. The current title above is authoritative for the live presentation.
+
+### Prior AI Coaching Story: Driving Grounds media
 
 The current hero and thumbnail use original cozy pixel-art management-game imagery. They are **AI-generated editorial concept illustrations**, not app screenshots or measured replay frames. The workshop/campus and tiny cars express the coaching theme; they do not claim an implemented garage, campaign, progression system, learning coach or agent-driving benchmark. Actual replay continues to use dots and recorded telemetry.
 

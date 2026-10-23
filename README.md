@@ -1,7 +1,8 @@
 <a id="ald-training-lab-release"></a>
+<a id="ai-coaching-story-driving-grounds"></a>
 <div align="center">
 
-<h1>AI Coaching Story: Driving Grounds</h1>
+<h1>AI Training Story: Driving Around</h1>
 
 <p><strong>Can you train a neural network to drive better than an agent?</strong></p>
 
@@ -10,7 +11,7 @@
 <p>A browser-based controller workshop inspired by <em>AI Learns To Drive</em>.</p>
 
 <p>
-  <a href="https://tiga-rce-ald-tao-gpu.hf.space/"><strong>Open Driving Grounds →</strong></a>
+  <a href="https://tiga-rce-ald-tao-gpu.hf.space/"><strong>Open Driving Around →</strong></a>
   &nbsp; · &nbsp;
   <a href="#start-with-one-run">Quick start</a>
   &nbsp; · &nbsp;
@@ -23,27 +24,27 @@
 
 </div>
 
-![AI Coaching Story: Driving Grounds concept art, with a cozy pixel-art workshop and miniature practice circuit](docs/media/driving-grounds-hero.png)
+![AI Training Story: Driving Around pixel concept art featuring Formula on asphalt, Rally stuck on dirt, Snowmobile on ice and a Truck under repair](docs/media/driving-around-hero.png)
 
-*AI-generated editorial concept art. The miniature campus expresses the coaching theme; it is not a screenshot or a claim of garage, campaign or progression mechanics. The current app uses a functional experiment workspace and dot-style replay.*
+*AI-generated editorial concept art. The miniature campus shows four vehicle types, mixed surfaces and a training mishap; it is not a screenshot or a claim of repair, garage, campaign or progression mechanics. The current app uses a functional experiment workspace and dot-style replay.*
 
-[Full-size artwork](docs/media/driving-grounds-hero.png) · [Thumbnail / social preview](docs/media/driving-grounds-thumbnail.jpg) · [Image provenance and prompts](docs/media/ASSETS.md)
+[Full-size artwork](docs/media/driving-around-hero.png) · [Thumbnail / social preview](docs/media/driving-around-thumbnail.jpg) · [Image provenance and prompts](docs/media/ASSETS.md)
 
 ## More than a lap time
 
 A faster lap tells you that something improved. It does not tell you which controller produced it, what changed during training, or whether the same driver can repeat it.
 
-Driving Grounds brings controller editing, evolutionary population training, frozen evaluation, reusable recipes and measured driving replay into one workflow. Create a driver or bring a compatible `.evolution` file, run a bounded experiment, then inspect and save the result.
+Driving Around brings controller editing, evolutionary population training, frozen evaluation, reusable recipes and measured driving replay into one workflow. Create a driver or bring a compatible `.evolution` file, run a bounded experiment, then inspect and save the result.
 
 | Build a driver | Run an experiment | Inspect the drive |
 | --- | --- | --- |
 | Start in the browser or import a controller. Choose sensors, layers and supported outputs. | Evaluate unchanged weights or evolve candidates. Adjust rewards, mutation, freezing and recipes. | Record a native drive, step through measured samples, and compare controls with the inputs the network used. |
 
-No original-game installation is needed for the built-in replica tracks and browser editor. This is a standalone experimental companion, with its own branding, separate from the original game and its campaign. The broader AI Coaching Story coach-and-tyke game is a separate development project; this app does not yet integrate that learning-coach system. The opening question invites comparison: an agent can operate the experiment tools, while driving quality must be measured under matching conditions. There is no built-in agent-driving benchmark or demonstrated superiority claim.
+No original-game installation is needed for the built-in replica tracks and browser editor. This is a standalone experimental companion, with its own branding, separate from the original game and its campaign. You train the driving neural network directly: choose its architecture, reward settings and experiments, then measure its driving. An agent can help operate these tools and inspect results. The opening question invites a matched comparison against a declared agent baseline; there is no built-in agent-driving benchmark or demonstrated superiority claim.
 
 ## Start with one run
 
-1. **Choose a track.** [Open Driving Grounds](https://tiga-rce-ald-tao-gpu.hf.space/) and select a built-in replica, such as **Replica A01 Beginner**, or upload a compatible `.track` file.
+1. **Choose a track.** [Open Driving Around](https://tiga-rce-ald-tao-gpu.hf.space/) and select a built-in replica, such as **Replica A01 Beginner**, or upload a compatible `.track` file.
 2. **Choose a driver.** Click **Create starter network**, use the **Network editor**, or import a compatible `.evolution`. Imported drivers retain their vehicle type. Keep your original network as the baseline.
 3. **Choose the question.** Use **Frozen evaluation** to measure a driver without changing its weights, or **Train a population** to evolve candidates. Review **Training & recipes** before starting.
 4. **Run on CPU first.** CPU does not require Hugging Face sign-in or consume GPU allowance. For GPU runs, sign in before selecting files and check the current allowance.
@@ -98,7 +99,7 @@ The portable **ald-run-experiment** skill gives an agent a bounded workflow: dis
 [Read the skill](skills/ald-run-experiment/SKILL.md) · [Download the standalone skill](https://github.com/seeker-cyber-maker/driving_sim_rs/releases/download/ald-lab-2026.10.23/ald-run-experiment-2026.10.23.zip)
 
 ```text
-Use $ald-run-experiment on AI Coaching Story: Driving Grounds.
+Use $ald-run-experiment on AI Training Story: Driving Around.
 Run one bounded CPU experiment on Replica A01 Beginner.
 Keep my input driver as the baseline and use 60 Hz decisions.
 Save the driver, analysis archive and run receipt.
@@ -140,7 +141,7 @@ The packaged worker supports up to **20 inputs** (13 raycasts plus 7 other senso
 <details>
 <summary><strong>Run the published package locally</strong></summary>
 
-Download `ald-lab-2026.10.23-hf-space.tar.gz` from the [release page](https://github.com/seeker-cyber-maker/driving_sim_rs/releases/tag/ald-lab-2026.10.23), extract it, and follow the included guide. That immutable release preserves the pre-rename build and its checksums. The current GitHub `main` and hosted app use the Driving Grounds branding.
+Download `ald-lab-2026.10.23-hf-space.tar.gz` from the [release page](https://github.com/seeker-cyber-maker/driving_sim_rs/releases/tag/ald-lab-2026.10.23), extract it, and follow the included guide. That immutable release preserves the pre-rename build and its checksums. The current GitHub `main` and hosted app use the Driving Around branding.
 
 From the extracted package root, verify the snapshot:
 
@@ -199,7 +200,7 @@ Do not post access tokens, job keys, private networks, proprietary tracks or unr
 
 <div align="center">
 <p><strong>Change the training. Measure the driving. Preserve what you learned.</strong></p>
-<p><a href="https://tiga-rce-ald-tao-gpu.hf.space/">Open AI Coaching Story: Driving Grounds →</a></p>
+<p><a href="https://tiga-rce-ald-tao-gpu.hf.space/">Open AI Training Story: Driving Around →</a></p>
 </div>
 
 <details>

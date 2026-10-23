@@ -492,7 +492,7 @@ feedbackLink?.addEventListener('click',()=>{
   const url=new URL('https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new');
   const browser=navigator.userAgent||'Not reported';
   const body=['Build: '+(appBuild?.build_id??'Not reported'),'Browser and OS: '+browser,'Selected backend: '+$('backend').value.toUpperCase(),'','What happened?'].join('\n');
-  url.searchParams.set('title','Driving Grounds problem report');url.searchParams.set('body',body);
+  url.searchParams.set('title','Driving Around problem report');url.searchParams.set('body',body);
   feedbackLink.href=url.href;
 });
 function saveLocal() {
@@ -1411,7 +1411,7 @@ function downloadBytes(bytes,name,type){const url=URL.createObjectURL(new Blob([
 function downloadTextFile(text,name,type){downloadBytes(text,name,type);}
 function formatPlayerReport(receipt){
   const r=receipt.report,metric=value=>typeof value==='number'?String(value):'Not reported';
-  const lines=['AI Coaching Story: Driving Grounds — driving run report','',`Build: ${receipt.build_id}`,`Backend: ${receipt.backend}`,`Vehicle: ${r.vehicle_name} (Type ${r.vehicle_type})`,`Generations: ${r.generations_completed} / ${r.generations_requested}`,`Population: ${r.population}`,`Elapsed seconds: ${metric(r.elapsed_seconds)}`,`Final-generation population best score: ${metric(r.best_score)}`,`Final-generation population mean score: ${metric(r.mean_score)}`,`Best completed lap observed during this run (may be another car): ${r.best_lap_seconds===null?'None':metric(r.best_lap_seconds)+' s'}`,`Cars completing a lap in the final generation: ${r.lapped_cars===null?'Not reported':r.lapped_cars}`,`Simulated ticks: ${r.simulated_ticks}`,`Input network SHA-256: ${r.inputs.network_sha256}`,`Track SHA-256: ${r.inputs.track_sha256}`,`Output network SHA-256: ${receipt.output_sha256}`,'','Configured training settings:',JSON.stringify(r.settings,null,2),'','Reward weights are configured values; per-reward contribution is not reported by the engine.'];
+  const lines=['AI Training Story: Driving Around — driving run report','',`Build: ${receipt.build_id}`,`Backend: ${receipt.backend}`,`Vehicle: ${r.vehicle_name} (Type ${r.vehicle_type})`,`Generations: ${r.generations_completed} / ${r.generations_requested}`,`Population: ${r.population}`,`Elapsed seconds: ${metric(r.elapsed_seconds)}`,`Final-generation population best score: ${metric(r.best_score)}`,`Final-generation population mean score: ${metric(r.mean_score)}`,`Best completed lap observed during this run (may be another car): ${r.best_lap_seconds===null?'None':metric(r.best_lap_seconds)+' s'}`,`Cars completing a lap in the final generation: ${r.lapped_cars===null?'Not reported':r.lapped_cars}`,`Simulated ticks: ${r.simulated_ticks}`,`Input network SHA-256: ${r.inputs.network_sha256}`,`Track SHA-256: ${r.inputs.track_sha256}`,`Output network SHA-256: ${receipt.output_sha256}`,'','Configured training settings:',JSON.stringify(r.settings,null,2),'','Reward weights are configured values; per-reward contribution is not reported by the engine.'];
   if(r.history?.length){lines.push('','Generation history:','Generation | Mutation | Best score | Mean score | Best lap observed in generation | Cars lapped | Simulated ticks');for(const h of r.history)lines.push([h.generation,h.mutation,h.best_score,h.mean_score,h.best_lap_seconds===null?'':h.best_lap_seconds,h.lapped_cars===null?'':h.lapped_cars,h.simulated_ticks].join(' | '));}
   return lines.join('\n')+'\n';
 }

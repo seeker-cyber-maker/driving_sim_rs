@@ -1,4 +1,4 @@
-# AI Coaching Story: Driving Grounds
+# AI Training Story: Driving Around
 
 Hosted package and agent experiments.
 
@@ -6,7 +6,7 @@ Open the [hosted app](https://tiga-rce-ald-tao-gpu.hf.space/) to run a CPU exper
 
 ## Source layout and identity
 
-`hf-space/` contains the current 100-file hosted package, including the Driving Grounds presentation update. Its [current source record](HF_SOURCE.json) identifies the exact HF revision and build. All 99 members of its release manifest are verified. The original snapshot and qualification remain available at the immutable `ald-lab-2026.10.23` tag. The Python, browser code, vendored dependencies, three Linux native artifacts, replica tracks, native source archives, licenses and build provenance are included.
+`hf-space/` contains the current 100-file hosted package, including the Driving Around presentation update. Its [current source record](HF_SOURCE.json) identifies the exact HF revision and build. All 99 members of its release manifest are verified. The original snapshot and qualification remain available at the immutable `ald-lab-2026.10.23` tag. The Python, browser code, vendored dependencies, three Linux native artifacts, replica tracks, native source archives, licenses and build provenance are included.
 
 The repository's root Rust tree retains its previous state. Its `Cargo.toml` version and build instructions do not identify the hosted binary. Use `hf-space/UPSTREAM.json`, `hf-space/BINARY_PROVENANCE.json` and the native archives for the hosted package's custom source lineage. Historical build receipts contain the original build host's paths; they are provenance, not required runtime locations. The branding update changes presentation and its content-derived build identity. Native binaries, worker settings, tracks, service routes, OAuth scope and HF visibility retain their qualified values.
 

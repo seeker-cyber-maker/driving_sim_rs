@@ -1,4 +1,4 @@
 interface:
-  display_name: "Driving Grounds Run Experiment"
+  display_name: "Driving Around Run Experiment"
   short_description: "Run bounded driving experiments and verify results"
-  default_prompt: "Use $ald-run-experiment to plan and verify a bounded Driving Grounds run."
+  default_prompt: "Use $ald-run-experiment to plan and verify a bounded Driving Around run."
