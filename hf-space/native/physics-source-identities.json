@@ -1,0 +1,50 @@
+{
+  "local/Cargo.toml": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/web-dashboard/reviews/native-upstream-20261014/Cargo.toml",
+    "sha256": "f9bf44c197883bc105a7d9ac4248c8d9ef450fa99b6b6d04924f7612aaff8875"
+  },
+  "local/Cargo.lock": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/web-dashboard/reviews/native-upstream-20261014/Cargo.lock",
+    "sha256": "3486e24f81b254c6e9d7fdbb2be8d645df69340b96f2401b6d4d8dcd9fa3ba85"
+  },
+  "local/src/physics/collision.rs": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/web-dashboard/reviews/native-upstream-20261014/src/physics/collision.rs",
+    "sha256": "c5226d6e10637725fa374b184e258a89932c239186f88ae69f4815a538ff4b82"
+  },
+  "local/gpu/sim/step.h": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/web-dashboard/reviews/native-upstream-20261014/gpu/sim/step.h",
+    "sha256": "9cd8847b53ad289dfc94288db7630537a5b5c4abf6a0a7561bf2430dcaacd1d0"
+  },
+  "local/gpu/sim/altd_gpu.hip": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/web-dashboard/reviews/native-upstream-20261014/gpu/sim/altd_gpu.hip",
+    "sha256": "cd4e95792ab5f70ec1a698fc327576abac4e9b19322fc37136f48099d56e0055"
+  },
+  "local/examples/parity_controls.rs": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/web-dashboard/reviews/native-upstream-20261014/examples/parity_controls.rs",
+    "sha256": "28e23df53c9db9e636893eb1dd1bb400f1344d68b100880c222e5a75bd561332"
+  },
+  "hf/Cargo.toml": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/source/Cargo.toml",
+    "sha256": "f9bf44c197883bc105a7d9ac4248c8d9ef450fa99b6b6d04924f7612aaff8875"
+  },
+  "hf/Cargo.lock": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/source/Cargo.lock",
+    "sha256": "3486e24f81b254c6e9d7fdbb2be8d645df69340b96f2401b6d4d8dcd9fa3ba85"
+  },
+  "hf/src/physics/collision.rs": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/source/src/physics/collision.rs",
+    "sha256": "443b9700229f6973e2d22163f8ef31c90aefe674a21ec0a3fd5bd91186cb4c14"
+  },
+  "hf/gpu/sim/step.h": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/source/gpu/sim/step.h",
+    "sha256": "dfbe41cc3891e94ba7ea15d5277661431fd78be08ee16dc2b300c79571ccf6ee"
+  },
+  "hf/gpu/sim/altd_gpu.hip": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/source/gpu/sim/altd_gpu.hip",
+    "sha256": "ce7a97e0b2f43df6f3b9d1cb70e284a8242a7386088ba0a72ef0b4bbe32a42ae"
+  },
+  "hf/examples/parity_controls.rs": {
+    "path": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/source/examples/parity_controls.rs",
+    "sha256": "28e23df53c9db9e636893eb1dd1bb400f1344d68b100880c222e5a75bd561332"
+  }
+}

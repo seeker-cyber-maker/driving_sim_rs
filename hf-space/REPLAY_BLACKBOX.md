@@ -1,0 +1,13 @@
+# Measured replay and car black box
+
+Recording runs the selected unchanged policy in one fresh native CPU drive, including when the policy was trained on GPU. It is not a recording of an earlier training population. Physics and decisions run at 60 Hz with batch_count=1; snapshots are saved at tick 1, every sixth tick and the requested endpoint (5 or 15 seconds). The new single-pass recorder replaces repeated prefix runs. No commands or sensor values are reconstructed in the browser.
+
+Playback starts paused. Full-circuit and follow cameras are manual. Previous/next sample selects actual measurements. Measured poses are the default; optional pose smoothing interpolates position/heading only. The inspector always displays the preceding actual native sample, not an interpolated control or sensor value.
+
+The car black box shows post-physics position, velocity, heading, angular velocity, boost energy, active status, physical contact counter and statistics update count. Native control commands appear beside their normalized values applied by physics. The ordered sensor vector is copied from the inference cache that actually drove the controls, with its pre-physics decision tick. Held decisions retain their original tick; reset clears the cache. Missing output slots are native defaults, not claimed neural outputs. Hidden-layer activations and ray-hit positions are not recorded.
+
+Contact and active-state events mark sampled intervals. A contact increase in (tick A, tick B] does not identify an exact impact tick, and the engine contact counter is not a count of unique crashes. Reward metrics are cumulative native statistics, not instantaneous reward contributions.
+
+Version 2 JSON contains explicit capture provenance and phases, the ordered sensor descriptors/output slots, each frame's raw/applied commands, and its cached decision tick/input vector. The browser rejects mismatched selected track/policy hashes, missing samples, nonfinite values, invalid sensor layouts, normalization mismatches, future or backward decision clocks and decreasing contact counters. Legacy version 1 recordings remain viewable with controls/sensors explicitly unavailable. Open recording and Download recording support repeatable inspection without starting another simulation. Imported recordings are data, not authenticated provenance claims.
+
+The native extension does not change CUDA kernels, GPU ABI, physics or evolutionary policy rules. An actual Linux CPU comparison checks old versus new physical samples exactly. Native cache tests check pre-physics inputs and last decision/reset semantics. GPU execution of the new candidate is a separate quota-checked release gate; CPU replay cannot establish general CPU/GPU or original-game parity.

@@ -1,0 +1,292 @@
+{
+  "cases": 57,
+  "passed": 57,
+  "library_sha256": "e5e9a61d863bc3b429af69a13cd8d50f63cad8984b3e6a9001ae342fc5981e05",
+  "results": [
+    {
+      "case": "B01-formula-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-formula-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-formula-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-formula-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-formula-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-rally-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-rally-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-rally-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-rally-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-rally-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-truck-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-truck-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-truck-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-truck-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-truck-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-snowmobile-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-snowmobile-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-snowmobile-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "B01-snowmobile-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-formula-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-formula-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-formula-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-formula-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-formula-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-rally-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-rally-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-rally-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-rally-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-rally-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-truck-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-truck-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-truck-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-truck-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-truck-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-snowmobile-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-snowmobile-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-snowmobile-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A04-snowmobile-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-formula-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-formula-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-formula-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-formula-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-formula-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-rally-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-rally-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-rally-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-rally-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-rally-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-truck-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-truck-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-truck-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-truck-turn-boost",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-truck-turn-handbrake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-snowmobile-straight",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-snowmobile-turn",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-snowmobile-turn-brake",
+      "passed": true,
+      "differences": []
+    },
+    {
+      "case": "A06-snowmobile-turn-boost",
+      "passed": true,
+      "differences": []
+    }
+  ]
+}

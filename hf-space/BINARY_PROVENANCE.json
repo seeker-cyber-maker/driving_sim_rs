@@ -1,0 +1,28 @@
+{
+  "schema": "ald-native-blackbox-binary-provenance/1",
+  "source_repository": "https://github.com/Zorro909/driving_sim_rs",
+  "base_hf_revision": "9c2dbdc053f255e4f928ba087ddad3337c287352",
+  "source_snapshot_path": "native/blackbox-source.tar.gz",
+  "source_snapshot_sha256": "56b43430c68b95bf7ac0d8312975c366c920f99b1653d790fb15b59453728e28",
+  "build_receipt_path": "native/blackbox-build-receipt.json",
+  "build_receipt_sha256": "de3eea6c45a5ae4897287a97b0e2822fdae552a0655250bf940cef20d9b60d96",
+  "artifacts": {
+    "bin/altd-sim": {
+      "sha256": "225de9c2b7dd0d9cb11c2578f50fff8a34f4cf6223580035ab0fa64e700beac8",
+      "bytes": 3661976,
+      "origin": "new telemetry CLI build"
+    },
+    "bin/extract_saved_track": {
+      "sha256": "3a7733c45b4301a786fcbfe92660a1c484749272da5f608d62f34878bd4ff31a",
+      "bytes": 3247776,
+      "origin": "retained unchanged from base HF release"
+    },
+    "bin/libaltd_gpu.so": {
+      "sha256": "e5e9a61d863bc3b429af69a13cd8d50f63cad8984b3e6a9001ae342fc5981e05",
+      "bytes": 4707512,
+      "origin": "retained unchanged from base HF release"
+    }
+  },
+  "historical_provenance_path": "native/pre-blackbox-binary-provenance.json",
+  "release_ceiling": "Local CPU and blackbox checks; fresh hosted GPU acceptance recorded separately before final release"
+}

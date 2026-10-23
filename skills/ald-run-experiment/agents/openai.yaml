@@ -1,0 +1,4 @@
+interface:
+  display_name: "ALD Run Experiment"
+  short_description: "Run bounded ALD policy experiments and verify results"
+  default_prompt: "Use $ald-run-experiment to plan and verify a bounded ALD run."

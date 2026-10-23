@@ -1,0 +1,69 @@
+{
+  "artifacts": {
+    "bin/altd-sim": {
+      "bytes": 3647808,
+      "sha256": "ce31f754f6b6f3afaf4dcc44c1e6fda3e6414eb2924fa167b8778523bcaf2070"
+    },
+    "bin/extract_saved_track": {
+      "bytes": 3247776,
+      "sha256": "3a7733c45b4301a786fcbfe92660a1c484749272da5f608d62f34878bd4ff31a"
+    },
+    "bin/libaltd_gpu.so": {
+      "bytes": 4711704,
+      "sha256": "3b1b88bccc06a21acc33ac4400af016d55a7e3d8727136a0c43b541f3c7887ca"
+    }
+  },
+  "build_receipt_path": "native/selective-freeze-build-receipt.json",
+  "build_receipt_sha256": "ed804b1cd49a9ba34abc6f7cadaf4fb97807e27f3d14af117f8292a2d3f2d172",
+  "compiler": "rustc 1.95.0 aarch64-apple-darwin -> x86_64-unknown-linux-gnu",
+  "historical_native_files": [
+    "native/analysis.patch",
+    "native/build-receipt.json",
+    "native/source-receipt.json"
+  ],
+  "linux_runtime_status": "hosted execution pending",
+  "retained_artifact_origins": {
+    "bin/extract_saved_track": {
+      "build_receipt_path": "IMPORTER_BUILD_RECEIPT.json",
+      "build_receipt_sha256": "4ba5c533cc617105478e4d85c83f456a7dfa68b1388049624619871ba9e42e9d",
+      "bytes": 3247776,
+      "compatibility_receipt_path": "native/build-receipt.json",
+      "compatibility_receipt_sha256": "559a7e4e382f9f7caa1c5ceb566a5a0bbefad2ed3a2e2cf604e31c9c3890c348",
+      "evidence_path": "IMPORTER_BUILD_RECEIPT.json",
+      "evidence_sha256": "4ba5c533cc617105478e4d85c83f456a7dfa68b1388049624619871ba9e42e9d",
+      "origin_type": "retained_verified_importer_binary",
+      "sha256": "3a7733c45b4301a786fcbfe92660a1c484749272da5f608d62f34878bd4ff31a",
+      "source_repository": "https://github.com/Zorro909/driving_sim_rs",
+      "source_revision": "d8ab74c25df70b6a86ed101080e33d5fb785ea6f"
+    },
+    "bin/libaltd_gpu.so": {
+      "build_receipt_path": "native/build-receipt.json",
+      "build_receipt_sha256": "559a7e4e382f9f7caa1c5ceb566a5a0bbefad2ed3a2e2cf604e31c9c3890c348",
+      "bytes": 4711704,
+      "origin_type": "retained_cuda_b90",
+      "patch_sha256": "42f79de67cb0734cffb2a7582f5479cab42ab82675884b8b42b9f158d46a98e8",
+      "sha256": "3b1b88bccc06a21acc33ac4400af016d55a7e3d8727136a0c43b541f3c7887ca",
+      "source_receipt_sha256": "36feba861501baf8672884476bbeed5e375254cbb4feffb9f4f90aa61a415a93",
+      "source_revision": "b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0"
+    }
+  },
+  "schema": "ald-selective-freeze-binary-provenance-v1",
+  "source_base_revision": "b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0",
+  "source_repository": "https://github.com/Zorro909/driving_sim_rs",
+  "source_snapshot_path": "native/selective-freeze-source.tar.gz",
+  "source_snapshot_sha256": "297d2ce34569994acd2a477e64c5315cb2081699b4333b8abdabb3ff7451d8db",
+  "physics_update": {
+    "upstream_version": "1.3.0",
+    "upstream_revision": "ab3ec67",
+    "local_additions_preserved": true,
+    "source_receipt": "native/physics-source-identities.json",
+    "status": "candidate; requires deployment and hosted app acceptance",
+    "artifacts": {
+      "bin/altd-sim": "792139f30bcfecf25f2d78595d2611234d30b0a254b5ece0ec587f1d27a80df2",
+      "bin/libaltd_gpu.so": "e5e9a61d863bc3b429af69a13cd8d50f63cad8984b3e6a9001ae342fc5981e05"
+    },
+    "source_archive": "native/physics-source.tar.gz",
+    "source_archive_sha256": "6abefb234de18dee58d69758c6cc8900f259993663ac37f90ce39aa114a30718",
+    "cuda_original_cases_passed": 57
+  }
+}

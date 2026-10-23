@@ -1,0 +1,27 @@
+{
+  "base_provenance": {
+    "output_sha256": "a145fbb303a85c728a530d98fbea998677c1c62a2589c46af9b8b287e4ce1f48",
+    "scope": "Frontend only; no engine, private data, track assets, API calls or storage copied",
+    "source": "Runner r14 single-engine browser UI; selected .track tile renderer added from simulator atlas",
+    "source_sha256": "65d1e5f2c4e19b4951b828e82510005ab99a5270cf3dcb9f4eaa0fa1af8c40f8"
+  },
+  "client_sha256": "401011a6fd4ad5133c7d7688080a53c0ad22246e6b12b7f3bb9e92534a0639d3",
+  "identity_note": "The historical source fields describe the base frontend; local packaged file hashes describe this candidate's derived frontend.",
+  "local_customization_id": "five-issue-ui-polish-v2-20261023",
+  "output_sha256": "8d33f953dc2decc0895841940b7d8019684c968fdda17309c2b2405486e8bf3f",
+  "packaged_frontend_files": {
+    "agent-manifest.json": "7187c85327d588cb3b81f5ddf60bae099567a656bcceac8147ecb2227e07f561",
+    "agent-tools.js": "134b8c511a04671edf2129b7b4f42d2c0399713471feefaaeee542efab7127b8",
+    "agents.html": "3e129500b30299ce628f04208dc7e77a2592991adb9c0d92042b63249077caa6",
+    "assets/track-atlas.json": "d97c8900e3e5fb17734b5bd61d1f4f4b196d9be30af9848e2e273ae7e4079ae4",
+    "client.js": "401011a6fd4ad5133c7d7688080a53c0ad22246e6b12b7f3bb9e92534a0639d3",
+    "help.html": "58959e994a8e4bbd3c70b2a6256cb699ac615cde718c6d0288fabeee909098a2",
+    "hf-auth.js": "3f3938bbc0935e4e9230c094029ef46e03beea74be199887c50e053e03dafcfe",
+    "index.html": "8d33f953dc2decc0895841940b7d8019684c968fdda17309c2b2405486e8bf3f",
+    "track-library.js": "351ec4c026b49420ce963f4310cb000d9e987fd28e6dac5ecd0176509340f6e6",
+    "track-map.js": "c5f56f1083f4c9487f8d3d663c939c736bdc478217e2b60142f820f3263adb44"
+  },
+  "packaged_frontend_sha256": "ab985a034eddf2c9a04a7bf8e4d98d92168db81b254a7a9cb0e41d2cd4a9efdc",
+  "packaged_frontend_sha256_format": "SHA-256 of UTF-8 JSON for packaged_frontend_files, sorted keys, compact separators, no trailing newline",
+  "status": "Compact run summary, truthful recording identity, paired map and transport, compact utilities and measured navigation offsets"
+}

@@ -1,0 +1,54 @@
+{
+  "schema": "ald.agent-interface",
+  "version": 1,
+  "documentation": "/agents",
+  "state": {
+    "selector": "#agent_state",
+    "schema": "ald.agent-state",
+    "version": 1
+  },
+  "actions": [
+    {
+      "name": "get_state",
+      "webmcp_tool": "ald_get_state",
+      "effect": "read",
+      "state_selector": "#agent_state"
+    },
+    {
+      "name": "open_section",
+      "webmcp_tool": "ald_open_section",
+      "effect": "local_navigation",
+      "arguments": {
+        "section": [
+          "drive",
+          "training",
+          "batch",
+          "editor"
+        ]
+      },
+      "controls": {
+        "drive": "#tab-drive",
+        "training": "#tab-training",
+        "batch": "#tab-batch",
+        "editor": "#tab-editor"
+      }
+    },
+    {
+      "name": "create_starter",
+      "webmcp_tool": "ald_create_starter",
+      "effect": "local_selection",
+      "control": "#starter_create",
+      "status": "#starter_network_status"
+    },
+    {
+      "name": "inspect_selected_network",
+      "webmcp_tool": "ald_inspect_selected_network",
+      "effect": "local_inspection",
+      "control": "#editor_import",
+      "status": "#editor_status"
+    }
+  ],
+  "remote_job_tools": false,
+  "storage_tools": false,
+  "credentials_returned": false
+}

@@ -1,0 +1,1052 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AI Learns To Drive</title>
+<link rel="service-desc" type="application/json" href="/agent-manifest.json"><style>.pane h2,#editor_status,#agent-interface{scroll-margin-top:110px}#editor_status{border:1px solid #49627c;border-radius:8px;padding:10px 12px;min-height:1.4em}#editor_status[data-state="error"]{border-color:#e59a89;background:#3a2328;color:#ffe4dd}#agent-interface{margin:16px 0}#agent-interface summary{cursor:pointer}#agent_state{font-size:12px;max-height:28rem;overflow:auto}</style><style>
+:root{color-scheme:dark;font:16px system-ui;background:#0c1420;color:#e5edf5}body{max-width:1400px;margin:auto;padding:22px}h1{font-size:32px;margin:0}h2{font-size:21px;margin:0 0 14px}small,.hint{color:#a2b4c8;line-height:1.6}.grid{display:grid;grid-template-columns:minmax(360px,.9fr) minmax(0,1.25fr);gap:24px}.card{background:#152233;border:1px solid #2a3d52;border-radius:16px;padding:22px;margin-top:20px}label{display:block;margin:12px 0 5px}input,select,button{font:inherit;background:#0c1725;color:#e5edf5;border:1px solid #49627c;border-radius:7px;padding:9px}input[type=number],select{width:100%;box-sizing:border-box}input[type=file]{max-width:100%;box-sizing:border-box}button{cursor:pointer}button.primary{background:#62dfb1;color:#102522;font-weight:700}button:disabled{opacity:.4;cursor:default}.row{display:grid;grid-template-columns:1fr 1fr;gap:15px}.reward{display:grid;grid-template-columns:1.7fr 1fr 70px 30px;gap:5px;margin:8px 0}.reward input{width:70px;box-sizing:border-box}a{color:#7ce4c3}canvas{width:100%;background:#09111b;border-radius:10px}#status{white-space:pre-wrap;line-height:1.7}table{width:100%;text-align:left;border-collapse:collapse;font-size:14px}td,th{padding:9px;border-bottom:1px solid #2a3d52}.pill{display:inline-block;background:#284539;border-radius:20px;padding:5px 12px;color:#91efc6;margin:6px 0}#error{color:#ffb5a2;white-space:pre-wrap}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid #2a3d52;margin-bottom:15px}.run-card{position:sticky;top:20px}details{margin-top:18px;border-top:1px solid #2a3d52;padding-top:14px}summary{cursor:pointer;font-weight:600;color:#c6d9e9}details[open]>summary{margin-bottom:12px}[hidden]{display:none!important}#map_note{font-size:14px}#runs{max-height:380px;overflow:auto}.table-scroll{overflow:auto}@media(max-width:850px){.grid{grid-template-columns:minmax(0,1fr)}.card{min-width:0}.run-card{position:static}body{padding:16px}}
+.tabs{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}.tabs button[aria-selected=true]{background:#62dfb1;color:#102522}.library{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}.library input[type=text]{width:100%;box-sizing:border-box}.queue-row{display:flex;gap:8px;margin:8px 0}.queue-row select{flex:1}.pane{min-width:0}.map{min-height:300px;background:#09111b;border-radius:12px;padding:10px}.map canvas{display:block;width:100%;height:auto;max-height:320px;object-fit:contain}.map-legend{display:flex;gap:18px;flex-wrap:wrap;margin:10px 0;color:#c6d9e9;font-size:14px}pre{white-space:pre-wrap;overflow-wrap:anywhere}input[type=text]{width:100%;box-sizing:border-box}#libraries .row label>input,#libraries .row label>select{display:block;margin-top:6px}#editor_parameters input{max-width:240px} .eyebrow{color:#62dfb1;font-size:12px;letter-spacing:.18em;font-weight:800}.intro{font-size:19px;color:#b9cddd;max-width:820px;margin:10px 0 0}header{padding:12px 0 4px}header h1{font-size:clamp(30px,4vw,45px);letter-spacing:-.03em;margin-top:7px}.about{max-width:850px;font-size:14px;margin-top:15px}.about p{line-height:1.65}.card{box-shadow:0 10px 35px #050a1280}.tabs{position:sticky;top:0;z-index:3;background:#0c1420eF;padding:12px 0;border-bottom:1px solid #2a3d52}.tabs button{border-radius:12px;padding:11px 15px}.map-status{margin:7px 0;color:#dbe9f1;font-size:14px}#run{background:#62dfb1;color:#102522;font-weight:800;width:100%;margin-top:12px;padding:13px}.privacy-note{font-size:13px;line-height:1.5;color:#a2b4c8}.keep-result{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid #3b566b;border-radius:10px;background:#102030;line-height:1.4}.keep-result input{margin:3px 0 0;flex:none} .terrain{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;background:#607e96}.terrain.dirt{background:#b89561}.terrain.ice{background:#b9d9ed}.terrain.start{background:#66e5aa}.output-options{display:flex;flex-wrap:wrap;gap:5px 14px}.output-options label{display:flex;align-items:center;gap:5px;margin:5px 0}.output-options input{margin:0}#editor_outputs{margin:12px 0;padding:10px 12px;border:1px solid #49627c;border-radius:8px}#editor_outputs legend{padding:0 5px;color:#c6d9e9}.freeze-group{min-width:190px;flex:1;margin:8px 0;padding:8px 12px;border:1px solid #49627c;border-radius:8px}.freeze-group summary{padding:0 5px;color:#c6d9e9;cursor:pointer}.freeze-group label{display:block;margin:6px 0}@media(max-width:850px){.map{min-height:0}}dialog#appConfirm{box-sizing:border-box;width:min(92vw,440px);border:1px solid #54718d;border-radius:16px;padding:24px;background:#152233;color:#e5edf5;box-shadow:0 24px 80px #000b}dialog#appConfirm::backdrop{background:#02060bcc}#appConfirm h2{margin:0 0 10px}#appConfirm p{line-height:1.55;color:#c4d3e1;white-space:pre-wrap}#appConfirm .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:22px}#appConfirm button{min-width:100px}#appConfirm button.danger{background:#8e3b37;color:#fff;border-color:#d7837e}
+/* Workspace layout: help stays close; recipes and batch steps stay readable. */
+*{box-sizing:border-box}button,select,summary{min-height:44px}button,a,summary,input,select,textarea{scroll-margin-top:90px}:focus-visible{outline:3px solid #ffd073;outline-offset:3px}.lab-header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:6px 0}.lab-header h1{font-size:clamp(26px,3vw,34px);margin-top:4px}.lab-header .intro{font-size:16px;margin-top:5px}.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.help-link{display:inline-flex;align-items:center;min-height:44px;border:1px solid #49627c;border-radius:8px;padding:9px 13px;text-decoration:none;font-weight:650}.about{max-width:none;margin:4px 0 0;padding:0;border:0}.about>summary{display:flex;align-items:center;font-size:14px;width:fit-content;gap:8px}.about>summary::before{content:'▸'}.about[open]>summary::before{content:'▾'}.about[open]{border:1px solid #2a3d52;border-radius:10px;padding:0 16px 12px}.quick-start{border:1px solid #385568;background:#102232;border-radius:12px;margin-top:8px;padding:0 16px}.quick-start>summary{padding:12px 0;line-height:1.4}.quick-start>summary .hint{font-size:14px;font-weight:400;margin-left:12px}.quick-start[open]>summary{margin-bottom:0}.quick-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;list-style:none;padding:12px 0;margin:0;counter-reset:quick}.quick-steps li{counter-increment:quick;min-width:0}.quick-steps strong{display:block;margin-bottom:8px}.quick-steps strong::before{content:counter(quick) '. ';color:#62dfb1}.quick-steps p{font-size:14px;line-height:1.55;color:#b9cddd;margin:0 0 10px}.quick-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 0;border-top:1px solid #2a3d52}.tabs{margin:12px 0 0;gap:8px}.tabs button{border-radius:9px}.pane>.card{margin-top:16px}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.section-heading h2,.section-heading h3{margin:0}.section-heading a{font-size:14px}.section-intro{max-width:85ch;margin:10px 0 18px;color:#b9cddd;line-height:1.55}.recipe-panel{border:1px solid #385568;border-radius:12px;background:#102030;padding:16px;margin:16px 0 24px}.recipe-panel .row label{margin-top:0}.recipe-actions,.batch-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:14px}.form-state{font-size:14px;font-weight:650;color:#ffd073;margin:10px 0 0;line-height:1.55}.form-state[data-state="saved"]{color:#82e6bb}.form-state[data-state="invalid"]{color:#ffb5a2}.settings-summary{font-size:14px;color:#b9cddd;line-height:1.55;margin:8px 0 0;overflow-wrap:anywhere}.recipe-panel details{margin-top:12px;padding-top:10px}.recipe-panel textarea{box-sizing:border-box;width:100%;background:#0c1725;color:#e5edf5;border:1px solid #49627c;border-radius:8px;padding:10px}.recipe-panel .manage-actions{display:flex;align-items:start;gap:12px;flex-wrap:wrap}.destructive-action{margin-top:14px;color:#ffb5a2}.batch-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:24px;align-items:start}.batch-setup{background:#102030;border:1px solid #385568;border-radius:12px;padding:18px;position:sticky;top:92px}.batch-setup h3{margin:0 0 10px}.batch-context{margin:12px 0}.batch-context div{padding:9px 0;border-bottom:1px solid #2a3d52}.batch-context dt{font-size:13px;color:#a2b4c8}.batch-context dd{margin:3px 0 0;overflow-wrap:anywhere;font-weight:600}.sequence-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px}.sequence-heading h3{margin:0}.step-count{font-size:14px;color:#b9cddd;white-space:nowrap}.batch-steps{list-style:none;counter-reset:steps;padding:0;margin:12px 0}.batch-step{border:1px solid #3b5268;border-radius:10px;padding:14px;margin-bottom:10px;background:#101d2c}.batch-step[data-invalid="true"]{border-color:#d78970}.step-header{display:grid;grid-template-columns:30px minmax(0,1fr);align-items:center;gap:10px}.step-number{color:#82e6bb;font-size:14px;font-weight:800;text-align:center}.step-summary{font-size:14px;line-height:1.5;color:#b9cddd;margin:10px 0 8px;padding-left:40px}.step-actions{display:flex;gap:8px;flex-wrap:wrap;padding-left:40px}.step-actions button{font-size:14px;padding:8px 10px}.batch-empty{border:1px dashed #49627c;border-radius:10px;padding:18px;margin:12px 0;color:#b9cddd;line-height:1.55}.batch-empty p{margin:0 0 12px}.add-step{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.add-step label{margin:0}.add-step select{margin-top:6px}.batch-mode{margin:18px 0 6px;display:flex;align-items:flex-start;gap:10px;line-height:1.5}.batch-mode input{margin-top:5px;flex:none}.batch-progress{border-top:1px solid #2a3d52;margin-top:24px;padding-top:20px}.batch-progress h3{margin:0 0 12px}.batch-progress #batch_status{line-height:1.6}.batch-setup #batch_start{flex:1;min-width:140px}.batch-setup #batch_ready{line-height:1.55}.batch-actions button{min-height:46px}#recipe_feedback:empty,#batches_feedback:empty{display:none}.muted-note{font-size:14px;line-height:1.6;color:#b9cddd}.training-track{margin-top:18px}.training-track label{margin-top:0}
+@media(max-width:1000px){.batch-layout{grid-template-columns:minmax(0,1fr)}.batch-setup{position:static}.quick-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){body{padding:12px}.card{padding:16px}.row{grid-template-columns:minmax(0,1fr)}.quick-steps{grid-template-columns:minmax(0,1fr)}.header-actions{width:100%}.header-actions>*{flex:1;justify-content:center;text-align:center}.lab-header .intro{font-size:15px}.quick-start>summary .hint{display:block;margin-left:18px}.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px}.tabs button{font-size:14px;padding:9px 7px}.step-actions,.step-summary{padding-left:0}.add-step{grid-template-columns:minmax(0,1fr)}.batch-setup{padding:14px}.recipe-actions>*{flex:1}.reward{grid-template-columns:minmax(0,1fr) minmax(85px,.7fr) 65px 44px}.reward input{width:65px}.recipe-panel{padding:12px}}
+.replay-bar{background:#101d2c;border:1px solid #2a3d52;border-radius:11px;padding:10px 12px;margin:10px 0}.replay-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.replay-row button{min-height:36px;padding:6px 11px;font-size:13px;font-weight:650}.replay-row select{width:auto;min-height:36px;padding:5px 9px;font-size:13px}.replay-row input[type=range]{flex:1;min-width:120px;accent-color:#62dfb1;padding:0}.replay-time{font:600 12px ui-monospace,SFMono-Regular,monospace;color:#91efc6;white-space:nowrap}.replay-layers{display:flex;gap:6px 12px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid #223447;font-size:12.5px;color:#b9cddd}.replay-layers label{display:inline-flex;align-items:center;gap:5px;margin:0;cursor:pointer}.replay-layers input{margin:0}.kpi-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.kpi-tile{background:#101d2c;border:1px solid #2a3d52;border-radius:10px;padding:10px 12px}.kpi-tile .kpi-label{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:#a2b4c8}.kpi-tile .kpi-val{font:800 19px ui-monospace,SFMono-Regular,monospace;color:#62dfb1;margin-top:3px}.kpi-tile .kpi-sub{font-size:11.5px;color:#8fa6bc;margin-top:2px}.chart-box{background:#09111b;border:1px solid #2a3d52;border-radius:10px;padding:10px;margin:10px 0}.chart-box canvas{max-height:190px;display:block}.subtab-bar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.subtab-bar button{min-height:36px;padding:6px 12px;font-size:13px;border-radius:18px}.subtab-bar button[aria-pressed=true]{background:#62dfb1;color:#102522;font-weight:700}.editor-visual-grid{display:grid;grid-template-columns:minmax(260px,.85fr) minmax(0,1.35fr);gap:16px;align-items:start;margin:14px 0}@media(max-width:850px){.kpi-strip{grid-template-columns:1fr 1fr}.editor-visual-grid{grid-template-columns:minmax(0,1fr)}}
+
+.replay-workbench{display:grid;gap:14px;align-items:start}#replayControls,#replay_transport,#replay_blackbox{scroll-margin-top:160px}#replayControls{min-width:0}.replay-row>*{max-width:100%}#replay_blackbox{padding:12px;border:1px solid #2a3d52;border-radius:10px;min-width:0}#replay_blackbox h3{margin-top:0}#replay_blackbox td,#replay_blackbox th{padding:6px;font-size:12px}#drive.replay-focused>.grid{grid-template-columns:minmax(0,1fr)}#drive.replay-focused>.grid>section:first-child{display:none}#drive.replay-focused .replay-workbench{grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr)}#drive.replay-focused .map{position:sticky;top:70px}#drive.replay-focused .map canvas{max-height:500px}@media(max-width:850px){#drive.replay-focused .replay-workbench{grid-template-columns:minmax(0,1fr)}#drive.replay-focused .map{position:static}}
+
+/* Compact release workspace. All scroll targets use the measured wrapped tab height. */
+:root{--lab-nav-height:76px;--lab-scroll-offset:calc(var(--lab-nav-height) + 14px)}
+.pane h2,#editor_status,#agent-interface,#replayControls,#replay_transport,#replay_blackbox,#replay_workspace,button,a,summary,input,select,textarea,[tabindex="-1"]{scroll-margin-top:var(--lab-scroll-offset)}
+.lab-utilities{display:flex;gap:8px 22px;flex-wrap:wrap;align-items:start;margin:2px 0 6px}.lab-utilities>details{border:0;margin:0;padding:0;font-size:13px}.lab-utilities>details>summary{display:flex;align-items:center;min-height:34px;font-size:13px}.lab-utilities>details[open]{flex-basis:100%;border:1px solid #2a3d52;border-radius:10px;padding:0 14px 12px}.lab-utilities #agent-interface{margin:0}.quick-start{margin:4px 0 0;padding:0 12px}.quick-start>summary{padding:8px 0;min-height:40px;font-size:14px}.quick-steps{gap:12px;padding:6px 0}.quick-steps strong{font-size:14px;margin-bottom:4px}.quick-steps p{font-size:13px;line-height:1.4;margin-bottom:6px}.quick-steps button{font-size:13px;padding:6px 9px;min-height:36px}.quick-footer{padding:8px 0;font-size:13px}.quick-footer button{font-size:13px;min-height:36px;padding:6px 10px}.quick-start>summary .hint{font-size:12px}.lab-header{gap:8px}.lab-header .intro{margin-bottom:8px}.batch-setup{top:var(--lab-scroll-offset)}
+.result-summary{padding:16px 20px}.result-summary h3{font-size:16px;margin:8px 0}.result-summary .pill{margin:0;font-size:12px}.result-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.result-actions button{font-size:14px;min-height:40px;padding:8px 12px}.result-summary details{padding-top:8px;margin-top:10px}.result-summary details>summary{font-size:13px;min-height:32px}.result-summary pre{font-size:13px}.result-summary .settings-summary{margin:5px 0;font-size:13px}.result-summary #result_server{color:#91efc6}.replay-viewer{min-width:0;scroll-margin-top:var(--lab-scroll-offset)}.replay-playback{margin-top:0}.replay-playback #replay_readout{font-size:13px!important;line-height:1.45;margin:8px 0}.replay-playback #replay_status{font-size:12px;color:#a2b4c8;line-height:1.4;margin:6px 0}.replay-options{margin-top:8px;padding-top:5px}.replay-options>summary{font-size:12px;min-height:30px}.replay-options .replay-row{margin-top:8px}.replay-options label{font-size:12px}.recording-identity{font-size:13px;line-height:1.5;padding:8px 10px;background:#14362f;border:1px solid #3d7561;border-radius:7px;overflow-wrap:anywhere}.replay-row input[type=file]{font-size:12px;padding:5px;max-width:260px}.replay-row label[for=replay_import]{font-size:13px;margin:0}.replay-row label[for=replay_import] input{display:block}.replay-row button{min-height:40px}.replay-row input[type=range]{flex-basis:160px}.replay-time{white-space:normal}.replay-bar>details{margin-top:8px;padding-top:5px}.replay-bar>details>summary{font-size:12px;min-height:28px}.replay-bar>p.hint{font-size:12px;line-height:1.45;margin:8px 0}.replay-workbench{gap:16px}#drive.replay-focused .replay-viewer{position:sticky;top:var(--lab-scroll-offset)}#drive.replay-focused .map{position:static;min-height:0}#drive.replay-focused .map canvas{height:min(38vh,300px);max-height:300px}#drive.replay-focused .replay-workbench{grid-template-columns:minmax(0,1.2fr) minmax(320px,1fr)}
+@media(max-width:850px){#drive.replay-focused .replay-workbench{grid-template-columns:minmax(0,1fr)}#drive.replay-focused .replay-viewer{position:static}.result-summary{padding:14px}.result-actions>*{flex:1 1 160px}#drive.replay-focused .map canvas{height:auto;max-height:300px}}@media(max-width:600px){.quick-start>summary .hint{margin-left:0}.quick-steps{gap:10px}.quick-steps li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 8px;align-items:center}.quick-steps strong{grid-column:1}.quick-steps p{grid-column:1;margin:0}.quick-steps button{grid-column:2;grid-row:1 / 3;max-width:135px}.header-actions{width:auto}.header-actions>*{flex:initial}.help-link,#quick_start_toggle{font-size:13px;padding:7px 10px;min-height:38px}.lab-header h1{font-size:26px}.lab-header .intro{font-size:14px}.lab-utilities{gap:8px 18px}.replay-row label[for=replay_import]{width:100%}.replay-row label[for=replay_import] input{max-width:100%;width:100%}}
+</style>
+<dialog id="appConfirm" aria-labelledby="appConfirmTitle" aria-describedby="appConfirmMessage">
+  <h2 id="appConfirmTitle">Confirm action</h2>
+  <p id="appConfirmMessage"></p>
+  <div class="actions"><button id="appConfirmCancel" type="button">Cancel</button><button id="appConfirmAccept" type="button">Continue</button></div>
+</dialog>
+<script>
+(() => {
+  const dialog=document.getElementById('appConfirm'),title=document.getElementById('appConfirmTitle');
+  const message=document.getElementById('appConfirmMessage'),cancel=document.getElementById('appConfirmCancel');
+  const accept=document.getElementById('appConfirmAccept');
+  let finish=null,returnFocus=null;
+  dialog.addEventListener('close',()=>{
+    const resolve=finish;finish=null;
+    if(resolve)resolve(dialog.returnValue==='confirm');
+    if(returnFocus?.isConnected)returnFocus.focus();returnFocus=null;
+  });
+  cancel.addEventListener('click',()=>dialog.close('cancel'));
+  accept.addEventListener('click',()=>dialog.close('confirm'));
+  window.appConfirm=(text,{heading='Confirm action',confirmLabel='Continue',cancelLabel='Cancel',danger=false}={})=>{
+    if(finish) return Promise.resolve(false);
+    returnFocus=document.activeElement;title.textContent=heading;message.textContent=text;
+    accept.textContent=confirmLabel;cancel.textContent=cancelLabel;accept.classList.toggle('danger',danger);
+    return new Promise(resolve=>{finish=resolve;dialog.showModal();cancel.focus();});
+  };
+})();
+</script>
+<header class="lab-header"><div><div class="eyebrow">AI LEARNS TO DRIVE</div><h1>Training lab</h1><p class="intro">Build a driver, train it, inspect the result.</p></div><div class="header-actions"><button id="quick_start_toggle" type="button" aria-controls="firstRunGuide" aria-expanded="false">Quick start</button><a class="help-link" href="/help#start-here" target="_blank" rel="noopener">Help &amp; tutorial ↗</a></div></header>
+<div class="lab-utilities"><details class="about"><summary>About &amp; feedback</summary><p>Simulator by <a href="https://github.com/Zorro909/driving_sim_rs">Zorro909</a>; interface and hosting by <a href="https://github.com/seeker-cyber-maker/driving_sim_rs">TiGa</a>. Inspired by the <a href="https://store.steampowered.com/app/3312030/AI_Learns_To_Drive/">game by ActivationFunction</a>. Built-in tracks are reconstructed replicas. For supported conditions, the lab checks the run’s final fitness policy (or frozen input) with a bounded fresh replay. It predicts conditions only and does not award or accumulate original-game stars; opponent races and other unsupported conditions remain unchecked.</p><p>Uploaded files are used for the requested run. Results are held briefly in application memory and deleted after verified download or expiry. Browser recipes contain settings only. <a href="/policy" target="_blank" rel="noopener">Read the data policy</a>.</p><p>The map follows the selected track’s native centerline. Record a short CPU drive to watch an unchanged policy using real vehicle positions. A new recording can differ from an earlier training run. Native control commands and consumed sensor inputs appear in the black box. Ray-hit positions and neural activations are not recorded.</p><p><a id="feedbackLink" href="https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new" target="_blank" rel="noopener">Report a problem</a> · Opens an editable draft for you to review.</p><p id="buildLabel" class="hint">Build: connecting…</p></details>
+<details id="agent-interface" class="agent-utility"><summary>Agent tools</summary><p>Use the same local controls as the lab: read the current state, open a section, create a starter, or inspect the active driver. These tools do not submit jobs or save data. <a href="/agents" target="_blank" rel="noopener">Agent interface guide</a> · <a href="/agent-manifest.json" target="_blank" rel="noopener">Action manifest (JSON)</a></p><p id="agent_tools_status" role="status" aria-live="polite">Checking browser tool support…</p><p>The state below is also available to ordinary browser automation. Each listed action identifies a stable control in this page.</p><pre id="agent_state" aria-label="Current lab state (JSON)"></pre></details></div><details id="firstRunGuide" class="quick-start"><summary id="firstRunTitle">New here? Start a first run <span class="hint">Track → driver → settings → run</span></summary><ol class="quick-steps"><li><strong>Choose a track</strong><p>Built-in replica or your own track.</p><button id="first_run_track" type="button">Choose a track</button></li><li><strong>Create a driver</strong><p>Create a starter or upload a driver.</p><button type="button" data-open-tab="drive" data-focus="starter_create">Set up a network</button></li><li><strong>Review the settings</strong><p>Short first-run defaults are ready. Adjust them or save a recipe.</p><button id="first_run_settings" type="button">Review first-run settings</button></li><li><strong>Run and inspect</strong><p>Train, download and replay. A first run may not finish a lap.</p><button type="button" data-open-tab="drive" data-focus="run">Go to run controls</button></li></ol><div class="quick-footer"><a href="/help#start-here" target="_blank" rel="noopener">Read the full step-by-step tutorial ↗</a><button id="quick_start_close" type="button">Close quick start</button></div></details>
+<nav class="tabs" role="tablist" aria-label="Lab sections"><button type="button" id="tab-drive" role="tab" data-tab="drive" aria-controls="drive" aria-selected="true" tabindex="0">Run &amp; results</button><button type="button" id="tab-training" role="tab" data-tab="training" aria-controls="training" aria-selected="false" tabindex="-1">Training &amp; recipes</button><button type="button" id="tab-batch" role="tab" data-tab="batch" aria-controls="batch" aria-selected="false" tabindex="-1">Batches</button><button type="button" id="tab-editor" role="tab" data-tab="editor" aria-controls="editor" aria-selected="false" tabindex="-1">Network editor</button></nav><div id="drive" class="pane" role="tabpanel" aria-labelledby="tab-drive"><section id="resultSummary" class="card result-summary" hidden aria-labelledby="result_summary_title"><div class="section-heading"><h2 id="result_summary_title" tabindex="-1">Latest run</h2><span id="result_backend" class="pill"></span></div><h3 id="runState" role="status" aria-live="polite">READY — no run started</h3><p id="result_outcome" class="settings-summary"></p><p id="result_driver" class="settings-summary"></p><p id="result_server" class="settings-summary" role="status"></p><div class="result-actions"><button id="download" class="primary" disabled hidden>Download driver</button><button id="saveLocal" class="primary" disabled>Download received driver</button><button id="result_replay" type="button" disabled>Replay selected driver</button><button id="player_report_download" disabled>Download player report (.txt)</button></div><details class="result-exports"><summary>More downloads &amp; server controls</summary><div class="result-actions"><button id="analysis_download" type="button" disabled>Download full analysis archive</button><button id="run_export" disabled>Export run receipt</button><button id="history_csv_download" disabled>Download generation history (.csv)</button><button id="erase" disabled>Delete server-side job data now</button><button id="forgetLocal" disabled>Discard browser result</button></div><p class="privacy-note">The received driver and analysis stay in this page until discarded, replaced, or closed. Save downloads to keep them. Reports describe server-reported measurements; reward weights are configured values, not measured contributions.</p></details><details><summary>Run details</summary><pre id="runSummary" style="white-space:pre-wrap;line-height:1.7" aria-live="polite"></pre></details></section><div class="grid"><section class="card"><h2>Simulation</h2><div class="toolbar" aria-label="Create a starter network"><label for="starter_vehicle">Starter car</label><select id="starter_vehicle"><option value="0" selected>Formula</option><option value="1">Rally</option><option value="2">Snowmobile</option><option value="3">Truck</option></select><button id="starter_create" type="button">Create starter network</button></div><p id="starter_network_status" class="hint" role="status">Creates a small network in this page only. It does not start a run or change saved recipes.</p><label for="run_mode">Action</label><select id="run_mode"><option value="train" selected>Train a population</option><option value="evaluate">Frozen evaluation · one policy, unchanged weights</option></select><p id="run_mode_help" class="hint">Training uses the selected recipe. Frozen evaluation runs the selected policy in a fresh car without changing its weights.</p><button id="run" disabled>Run training</button><p id="starCheckNotice" class="hint">After each run, supported star challenges are checked with unchanged weights. Results are predictions, not game awards. <a href="/help#concepts" target="_blank" rel="noopener">How checks work</a>.</p><p id="setup_next_step" class="hint">Choose or create a driver, then review Training &amp; recipes and start a run.</p><p>Supports Formula, Rally, Snowmobile and Truck networks. Control outputs follow the original vehicle editor rules. Network shape and supported sensors are bounded by the original game contract.</p>
+<p id="computeBlock"><label for="backend">Compute</label><select id="backend" disabled><option value="cpu">CPU — no GPU allowance</option><option id="gpuOption" value="gpu" disabled>GPU — uses GPU allowance</option></select></p><p id="backendNote" class="hint">Checking available backends…</p>
+<div id="connectionRecovery" hidden><button id="retry" type="button">Reconnect to app</button><p class="hint">Checks server availability. Does not restart training, sign you in, or reset GPU allowance.</p></div>
+<div id="gpuAccount" aria-label="Optional GPU account"><p><button id="hfSignIn" type="button" disabled>Sign in with HF for account GPU allowance</button><span id="hfAccount" hidden></span> <button id="hfSignOut" type="button" disabled hidden>Disconnect account</button></p><p id="hfIdentity" role="status" class="hint">CPU needs no sign-in. Checking optional GPU account connection…</p>
+<details><summary>Account help &amp; troubleshooting</summary><p>CPU works without an account. HF sign-in identifies GPU requests; it does not guarantee available allowance. Sign in before choosing files: sign-in reloads this page and clears selected files and unsaved edits. Saved recipes remain.</p><p>Your account token stays in page memory. Refreshing or closing this page disconnects the app. Disconnecting here does not sign you out of the HF website or delete job data.</p><button id="hfVerify" type="button" disabled hidden>Check account connection — no GPU used</button><p class="hint">Checks which account the GPU submission service sees. Runs automatically before GPU training; it does not check your remaining allowance.</p></details></div>
+<p><label for="trackPresetDrive">Track selection</label><select id="trackPresetDrive" data-track-library disabled><option value="">Upload a custom track</option></select></p>
+<p data-track-status role="status" class="hint">Loading built-in replica tracks…</p>
+
+
+<p><label>Track (.track) <input id="track" type="file" accept=".track"></label></p>
+<p><label>Vehicle network (.evolution) <input id="network" type="file" accept=".evolution"></label></p>
+<p id="networkChoice" role="status">Choose an uploaded file or use a network from the browser editor.</p><p class="privacy-note">Uploads are processed for this run. By default, the server copy is deleted after the browser verifies the download.</p><details><summary>Optional repeat download</summary><label class="keep-result"><input id="keepServer" type="checkbox"> Keep this result on the server for up to five minutes so I can download it again</label><p class="privacy-note">This is optional and resets after each run. When bucket auto-save is on, verified receipt must delete the server copy first, so repeat download is disabled. All results expire after five minutes. <a href="/policy" target="_blank" rel="noopener">Data policy</a></p>
+</details></section><section class="card"><h2>Visual replay &amp; car black box</h2><p id="mapStatus" class="map-status" role="status">Loading selected track…</p><button type="button" id="replay_focus" aria-pressed="false">Expand replay workspace</button><div class="replay-bar" id="replayControls" tabindex="-1" aria-label="Recorded drive controls">
+<div class="replay-row"><button type="button" id="replay_record" disabled>Record selected policy</button><label for="replay_duration" style="margin:0">Length</label><select id="replay_duration"><option value="300" selected>5 seconds</option><option value="900">15 seconds</option></select><button type="button" id="replay_download" disabled>Download recording</button><label for="replay_import">Open recording<input type="file" id="replay_import" accept=".json,application/json" disabled></label></div>
+<p id="replay_policy" class="hint">Choose or create a network to record a drive.</p>
+<p class="hint">Fresh CPU drive, including for GPU-trained drivers · unchanged weights · 60 Hz decisions. Playback uses measured samples in your browser.</p>
+<p id="replay_loaded" class="recording-identity" role="status" aria-live="polite" hidden></p>
+<details><summary>What does this recording show?</summary><p>A single fresh CPU drive records native state, raw and normalized control commands, and the exact cached sensor inputs every 0.1 seconds. Physics and policy decisions run at 60 Hz. Playback starts paused and shows measured poses by default; optional pose smoothing only interpolates between adjacent measured samples. It does not simulate the car. Black-box values always remain at an actual recorded sample. Ray-hit positions, skid marks and hidden-layer activations are not recorded. This is a selected-policy CPU replay, including for GPU-trained policies; it is not a recording of the original training population.</p><p>The recording remains in this page until replaced, cleared by a changed selection, or the page is closed. Use Download recording to keep its measured samples.</p></details>
+</div><div class="replay-workbench" id="replay_workspace"><div class="replay-viewer"><div class="map"><canvas id="trackMap" width="1000" height="500" role="img" aria-label="Selected track tile layout and terrain"></canvas></div><div class="replay-bar replay-playback"><div class="replay-row" id="replay_transport" role="group" aria-label="Playback controls" tabindex="-1"><button type="button" id="replay_play" disabled>Play</button><button type="button" id="replay_reset" disabled>Restart</button><button type="button" id="replay_prev" disabled>Previous sample</button><button type="button" id="replay_next" disabled>Next sample</button><input type="range" id="replay_scrub" min="1" max="300" value="1" disabled aria-label="Replay tick scrubber"><span id="replay_time_label" class="replay-time">No recording</span></div>
+<details class="replay-options"><summary>Camera, speed &amp; recorded events</summary><div class="replay-row" style="margin-top:8px"><label for="replay_camera" style="margin:0">Camera</label><select id="replay_camera" aria-label="Replay camera mode" disabled><option value="full" selected>Full circuit</option><option value="follow">Follow car</option></select><label for="replay_speed" style="margin:0">Speed</label><select id="replay_speed" aria-label="Replay playback speed" disabled><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></div>
+<div class="replay-layers"><label><input type="checkbox" id="replay_layer_outline" checked disabled> Car outline</label><label><input type="checkbox" id="replay_layer_line" checked disabled> Recorded path</label><label><input type="checkbox" id="replay_layer_hud" checked disabled> Recorded telemetry</label></div>
+<div class="replay-row"><label><input type="checkbox" id="replay_interpolate" disabled> Smooth pose between measured samples</label><label for="replay_event">Contact / active-state interval</label><select id="replay_event" aria-label="Recorded event interval" disabled><option value="">No recording</option></select></div>
+
+</details><p id="replay_readout" style="font-size:16px;font-variant-numeric:tabular-nums" aria-live="off"></p>
+<p id="replay_status" role="status">No replay recorded. The map shows the selected track and its saved starting point.</p></div></div><section id="replay_blackbox" tabindex="-1" hidden aria-label="Recorded car black box"><div class="section-heading"><h3>Car black box</h3><a href="#replay_transport">Back to playback</a></div><p id="blackbox_phase" class="hint"></p>
+<p class="hint">All values below belong to the selected native sample. Sensor inputs were consumed before physics at the decision tick; vehicle state is captured after physics. Samples are 0.1 seconds apart. Contact events identify intervals, not exact impact ticks; the counter does not count unique crashes.</p>
+<details><summary>Recorded vehicle state</summary><div class="table-scroll"><table><thead><tr><th>Vehicle state</th><th>Recorded value</th></tr></thead><tbody id="blackbox_state"></tbody></table></div></details>
+<h4>Native control commands</h4><div class="table-scroll"><table><thead><tr><th>Control</th><th>Raw command</th><th>Applied after normalization</th><th>Source</th></tr></thead><tbody id="blackbox_controls"></tbody></table></div>
+<details><summary>Inputs consumed by the native network</summary><div class="table-scroll"><table><thead><tr><th>Input index</th><th>Sensor</th><th>Parameters</th><th>Native input value</th></tr></thead><tbody id="blackbox_inputs"></tbody></table></div><p class="hint">These are the input values the policy consumed. Ray inputs are not ray-hit positions. Hidden-layer activations are not recorded.</p></details>
+<details><summary>Recorded cumulative reward metrics</summary><p class="hint">Metrics accumulate at native statistics callbacks; they are not instantaneous forces or per-reward contributions.</p><div class="table-scroll"><table><thead><tr><th>Metric</th><th>Recorded cumulative value</th></tr></thead><tbody id="blackbox_metrics"></tbody></table></div></details><p><a href="#replay_transport">Back to playback</a></p></section></div><div class="map-legend"><span><i class="terrain asphalt"></i> Asphalt</span><span><i class="terrain dirt"></i> Dirt</span><span><i class="terrain ice"></i> Ice</span><span><i class="terrain start"></i> Start</span></div><p id="mapLegend" class="hint"></p><div id="runKpiStrip" class="kpi-strip" hidden><div class="kpi-tile"><div class="kpi-label">Best Fitness</div><div id="kpi_best_score" class="kpi-val">—</div><div id="kpi_best_sub" class="kpi-sub">Final generation</div></div><div class="kpi-tile"><div class="kpi-label">Mean Fitness</div><div id="kpi_mean_score" class="kpi-val" style="color:#58a6ff">—</div><div id="kpi_mean_sub" class="kpi-sub">Population mean</div></div><div class="kpi-tile"><div class="kpi-label">Best Lap Time</div><div id="kpi_best_lap" class="kpi-val" style="color:#ffd073">—</div><div id="kpi_lap_sub" class="kpi-sub">Fastest observed</div></div><div class="kpi-tile"><div class="kpi-label">Lapped Cars</div><div id="kpi_lapped_cars" class="kpi-val" style="color:#c792ea">—</div><div id="kpi_lapped_sub" class="kpi-sub">Completed lap</div></div></div>
+<div id="historyChartWrap" class="chart-box" hidden><canvas id="historyChartCanvas" width="920" height="185" role="img" aria-label="Generation fitness and lap time progression chart"></canvas></div>
+
+<section id="analysisPanel" hidden aria-labelledby="analysisTitle">
+<h2 id="analysisTitle">Winners and frozen evaluation</h2>
+<p id="analysisStatus" role="status" aria-live="polite">No complete analysis is available yet.</p>
+<div id="winnerTools" hidden>
+<p class="hint">A network can fill more than one winner role. Select roles to compare; duplicate policies run once. Fitness is final-generation population-relative and is not compared across generations or policy evaluations.</p>
+<div class="table-scroll"><table><thead><tr><th>Compare</th><th>Role</th><th>Candidate</th><th>Generation / car</th><th>Selection fitness</th><th>Best lap</th><th>Forward laps</th><th>Physical contacts</th><th>Distance (simulation units)</th><th>Action</th></tr></thead><tbody id="winnerRows"></tbody></table></div>
+<p><label for="winner_continue">Winner to continue or evaluate</label><select id="winner_continue"><option value="">Primary fitness result</option></select> <button id="winner_continue_train" type="button" disabled>Continue training</button> <button id="winner_use" type="button" disabled>Evaluate unchanged</button></p>
+<div class="toolbar"><button id="compare_winners" type="button" disabled>Compare selected winners</button></div><p class="hint">Comparison starts one frozen evaluation per distinct selected policy, in sequence. It uses the currently selected track, vehicle, tick limit, control rate and collision/idle settings, then holds those conditions fixed for the full comparison.</p>
+<details><summary>Inspect complete measurements for an evaluated car</summary><div class="row"><label for="descriptor_generation">Generation<input id="descriptor_generation" type="number" min="1" value="1"></label><label for="descriptor_car">Car index<input id="descriptor_car" type="number" min="0" value="0"></label></div><button id="descriptor_show" type="button" disabled>Show all descriptors</button><p id="descriptor_status" role="status"></p><div id="descriptor_tables"></div></details>
+</div>
+
+<div id="evaluationTools" hidden><p id="evaluationStatus" role="status" aria-live="polite"></p><p class="hint">Frozen evaluation does not select winners or compare population-relative fitness. Each comparison row keeps its network hash and must match the same track, vehicle, horizon, control rate, collision/idle rules, backend and engine build.</p><button id="compare_add" type="button">Add this frozen result to comparison</button><div class="table-scroll"><table><thead><tr><th>Policy</th><th>Vehicle</th><th>Track</th><th>Ticks</th><th>Best lap</th><th>Forward laps</th><th>Physical contacts</th><th>Distance (simulation units)</th><th>Comparison</th></tr></thead><tbody id="evaluationRows"></tbody></table></div><button id="compare_clear" type="button">Clear comparison</button></div>
+</section>
+<section id="starCheckPanel" class="card" hidden aria-labelledby="starCheckTitle"><h2 id="starCheckTitle">Star challenge check</h2><p id="starCheckStatus" role="status" aria-live="polite"></p><div id="starCheckDetails" hidden><p id="starCheckPolicy" class="hint"></p><p id="starCheckBasis" class="hint"></p><p id="starCheckConditions" class="hint"></p><div class="table-scroll"><table><thead><tr><th>Challenge</th><th>Result</th><th>Reason</th><th>Completion time</th></tr></thead><tbody id="starCheckRows"></tbody></table></div><p class="hint">This is an independent check of the named run policy. It does not grant or accumulate original-game stars; replica challenges may differ from the original game.</p></div></section>
+<label class="keep-result"><input id="leaderboard_opt_in" type="checkbox"> After a completed lap, check its position against the public Steam leaderboard</label><p class="privacy-note">Optional, read-only check for supported built-in tracks. It sends the track ID and best lap to this app server; Steam receives only a public leaderboard read. No score is submitted. The result is an estimate, not an official rank.</p><p id="leaderboard_status" role="status" aria-live="polite"></p>
+
+<details id="portableBundle"><summary>Portable bucket bundle</summary><p>Build, export, or restore one validated bundle. Bucket storage is optional. When connected, automatic save is on by default; turn it off here to keep saves manual. Disconnected runs never call bucket storage.</p><label><input id="bundle_track" type="checkbox"> Include the selected track</label><label><input id="bundle_recipe" type="checkbox"> Include the recipe in the selected slot, if saved</label><label><input id="bundle_receipt" type="checkbox"> Include a sanitized receipt for the selected completed result</label><div class="toolbar"><button id="bundle_export" type="button">Export portable bundle</button><label for="bundle_import">Restore portable bundle (.json)<input id="bundle_import" type="file" accept=".json,application/json"></label><button id="bundle_receipt_download" type="button" disabled>Download staged receipt</button></div><p id="bundle_status" role="status" aria-live="polite">No bucket action has been requested.</p>
+<details id="bucketStorage"><summary>Connect to an existing private bucket</summary><p>Bucket storage is optional. Authorizing storage also identifies your account for GPU requests; ordinary GPU sign-in remains available with the basic identity permission. Then enter your existing private bucket ID. Connected runs automatically save by default; uncheck this option to keep run saves manual. No personal token is requested or stored.</p><p id="bucket_scope_notice" class="privacy-note">HF describes the requested <code>write-repos</code> permission as read/write access to your personal repositories. That grant is broader than one selected bucket and is not a bucket-only permission; the app limits its own operations to the bucket you enter. The minimum current scope for bucket read/write has not been confirmed by HF.</p><button id="bucket_authorize" type="button" hidden disabled>Authorize bucket access with HF</button><p id="bucket_auth_unavailable" class="hint" hidden>HF bucket authorization is unavailable for this app. Local bundle export remains available.</p><p id="bucket_auth_status" role="status" aria-live="polite">Checking optional HF bucket authorization…</p><div id="bucketConnectForm" hidden><label for="bucket_id">Private bucket ID</label><input id="bucket_id" type="text" autocomplete="off" placeholder="username/bucket-name" disabled><button id="bucket_connect" type="button" disabled>Connect bucket</button></div><div id="bucketConnected" hidden><p id="bucket_account"></p><label class="keep-result"><input id="bucket_autosave" type="checkbox" checked> Automatically save every verified completed network and run log to this bucket</label><p class="hint">For each completed run, the browser fetches and verifies the network, then confirms server deletion before sending the network and sanitized log to your bucket. If deletion is not confirmed, no save occurs. If bucket saving is not confirmed, the verified local candidate stays available to download or retry; the remote save may have completed. Each batch step saves before the next starts, and a failed save stops the batch.</p><button id="bucket_disconnect" type="button">Disconnect bucket and clear HF authorization</button><div class="toolbar"><button id="bucket_save" type="button" disabled>Save selected bundle</button><button id="bucket_refresh" type="button" disabled>Refresh saved bundles</button></div><label for="bucket_items">Saved bundles from this app</label><select id="bucket_items" size="4" disabled><option value="">Refresh to list saved bundles</option></select><button id="bucket_restore" type="button" disabled>Restore selected bundle</button><hr><h3 id="bucketRecipeTitle" tabindex="-1">Recipe library (settings only)</h3><p class="hint">Save and import the validated recipes and batch definitions from this browser. This 32 KB library contains settings only; networks, tracks, run results and access tokens are never included. Import asks before replacing the local recipe library and never starts a run.</p><div class="toolbar"><button id="bucket_recipe_save" type="button" disabled>Save recipe library</button><button id="bucket_recipe_refresh" type="button" disabled>Refresh saved recipe libraries</button></div><label for="bucket_recipe_items">Saved recipe libraries</label><select id="bucket_recipe_items" size="4" disabled><option value="">Refresh to list saved recipe libraries</option></select><button id="bucket_recipe_import" type="button" disabled>Import selected recipe library</button><p id="bucket_recipe_status" role="status" aria-live="polite">No recipe library bucket action requested.</p></div><p id="bucket_status" role="status" aria-live="polite">Not connected. Bucket storage is optional.</p></details></details>
+<p id="deadline"></p><p id="status" role="status">Ready. Inputs remain on this device until you run the test.</p>
+<details><summary>Effective training settings</summary><pre id="effectiveSettings"></pre></details><details><summary>Generation results</summary><pre id="generationHistory"></pre></details><details><summary>About star challenge checks</summary><p>After a run, supported conditions are checked against its named policy with a bounded fresh replay. Results appear in the Star challenge check panel when available. These are predictions for the reconstructed replica track, not original-game awards; opponent races and unsupported conditions are left unchecked.</p></details></section></div>
+</div><section id="training" class="pane" role="tabpanel" aria-labelledby="tab-training" hidden><div class="card">
+<div class="section-heading"><h2 id="trainingTitle" tabindex="-1">Training &amp; recipes</h2><a href="/help#recipes" target="_blank" rel="noopener">How recipes work ↗</a></div><p class="section-intro">A recipe saves training settings and rewards. Apply one to this form, or adjust the settings below and save your own. Choose your track and starting network in Run &amp; results.</p>
+<div id="libraries" class="recipe-panel"><div class="row"><label for="recipe_slot">Recipe slot<select id="recipe_slot"><option value="A">A · Empty</option><option value="B">B · Empty</option><option value="C">C · Empty</option><option value="D">D · Empty</option><option value="E">E · Empty</option><option value="F">F · Empty</option><option value="G">G · Empty</option><option value="H">H · Empty</option><option value="I">I · Empty</option><option value="J">J · Empty</option></select></label><label for="recipe_name">Recipe name<input id="recipe_name" type="text" maxlength="80" value="First practice" placeholder="e.g. First laps"></label></div>
+<p id="recipe_state" class="form-state" role="status" aria-live="polite">Working settings · not saved yet</p><p id="recipe_summary" class="settings-summary"></p><div class="recipe-actions"><button id="recipe_load" type="button" disabled>Apply recipe</button><button id="recipe_save" type="button">Save settings to A</button><button type="button" data-open-tab="batch" data-focus="batch_add_recipe">Build a batch</button></div><p id="recipe_feedback" role="status" aria-live="polite"></p>
+<details><summary>Import, export &amp; manage recipes</summary><p class="muted-note">Recipes and batches are saved in this browser. Export a backup to move them to another browser or site. Clearing site data removes this library.</p><div class="manage-actions"><button id="recipe_export" type="button">Export recipe library</button><label for="recipe_import">Import recipe library (.json)<input id="recipe_import" type="file" accept=".json"></label><button id="recipe_bucket_nav" type="button">Bucket import / export</button></div><button id="recipe_clear" class="destructive-action" type="button">Clear saved recipes and batches on this device</button><p class="muted-note">The recipe library contains settings only. Saving a recipe does not start a run or upload tracks, networks, or results.</p></details>
+<details><summary>Advanced recipe JSON</summary><textarea id="recipe_draft" rows="12" aria-label="Recipe settings JSON"></textarea><button id="recipe_apply_draft" type="button">Apply JSON to form</button></details></div>
+<div class="section-heading"><h3>Settings for the next run</h3><button id="starter_settings_reset" type="button">Apply first-run settings to this form</button></div><p id="starter_settings_status" class="muted-note" role="status" aria-live="polite">Adjusting this form does not change a saved recipe until you save it.</p><div class="subtab-bar" id="trainingSubtabs" role="toolbar" aria-label="Filter training parameter sections"><button type="button" data-train-filter="all" aria-pressed="true">All sections</button><button type="button" data-train-filter="reward_settings" aria-pressed="false">Rewards (14 metrics)</button><button type="button" data-train-filter="native_settings" aria-pressed="false">Evolution &amp; mutation</button><button type="button" data-train-filter="run_settings" aria-pressed="false">Timing &amp; elimination</button><button type="button" data-train-filter="freeze_settings" aria-pressed="false">Selective freezing</button></div><div class="training-track"><label for="trackPresetTraining">Training track · shared with Run &amp; results</label><select id="trackPresetTraining" data-track-library disabled><option value="">Upload a custom track</option></select><p data-track-status role="status" class="hint">Loading built-in replica tracks…</p></div>
+<div id="training_controls"><label for="training_ticks">Simulated ticks per generation</label><input id="training_ticks" type="number" min="1" max="18000" value="900"><small>60 ticks = one simulated second. The first-run setting is 900 ticks (15 simulated seconds) per generation. Per-run limits: CPU 4,000,000 vehicle-ticks and 25 seconds; CUDA 8,000,000 vehicle-ticks and 45 seconds. Both allow up to 32,768 car-generation analysis rows.</small>
+<div class="row"><div><label for="population">Population</label><input id="population" type="number" min="1" max="1024" value="32" disabled><small>1–1,024 cars per generation. The first-run setting is 32.</small></div><div><label for="generations">Generations</label><input id="generations" type="number" min="1" max="2000" value="20" disabled><small>1–2,000; the first-run setting is 20.</small></div></div>
+<p id="work_budget" class="hint" role="status" aria-live="polite"></p>
+<label id="mutation_label" for="mutation">Mutation rate</label><input id="mutation" type="number" min="0" max="4.2" step="0.01" value="0.3" disabled><small>Use a positive mutation rate, including when continuing an uploaded network. A one-generation run still evaluates the uploaded parent.</small>
+
+
+<details id="native_settings"><summary>Native evolution settings</summary>
+<label for="preset">Recommended starting recipe</label><select id="preset" disabled><option value="custom">Custom / keep current settings</option><option value="starter" selected>First laps · mutation 0.3, no decay</option><option value="explore">Wide exploration · mutation 0.5, decay 0.0005</option><option value="refine">Established driver · mutation 0.1, decay 0.0001</option><option value="speed">Lap refinement · mutation 0.05, decay 0</option></select><small>Starting hypotheses, not proven optimums. Change stages after stable improvement.</small>
+<label for="schedule">Mutation schedule for this run</label><select id="schedule" disabled><option value="fixed">Fixed · change stages manually</option><option value="linear">Linear start → end</option><option value="geometric">Geometric start → end</option></select>
+<div id="end_rate_group" hidden><label for="mutation_end">End mutation rate</label><input id="mutation_end" type="number" min="0" max="4.2" step="0.01" value="0.3" disabled><small>Geometric schedules require positive start and end rates.</small></div>
+<label><input id="adaptive_mutation" type="checkbox" disabled> Adaptive mutation · normalize for network size</label><small>Architecture scaling, not progress-aware adjustment. Decay is fixed; adaptive decay isn't exposed by this CLI.</small>
+<label for="selection">Parent selection</label><select id="selection" disabled><option value="best">Best</option><option value="tournament">Tournament</option><option value="roulette">Roulette</option></select>
+<div class="row"><div><label for="parents">Selected parents</label><input id="parents" type="number" min="1" value="1" disabled><small>1–population; first-run setting is 1.</small></div><div><label for="elite">Preserved elites</label><input id="elite" type="number" min="0" value="1" disabled><small>0–population; start with 1.</small></div></div>
+<label for="crossover">Crossover</label><select id="crossover" disabled><option value="none">Off</option><option value="single_point">Single point</option><option value="uniform">Uniform</option></select>
+<label for="decay">Weight decay</label><input id="decay" type="number" min="0" max="1" step="0.0001" value="0" disabled><small>Allowed 0–1; suggested 0–0.001. Decay 0.05 shrinks children by 5%.</small>
+</details>
+<details id="freeze_settings"><summary>Selective freezing · optional</summary><p class="hint">Keep selected sensor inputs, hidden layers, or output controls unchanged while training. Choices follow the selected network and are saved with recipes. Frozen evaluation always uses an empty freeze selection.</p><div id="freeze_status" class="hint" role="status">Select a network to choose components.</div><div id="freeze_controls" class="row"></div></details>
+<details id="reward_settings"><summary>Rewards · presets and up to fourteen metrics</summary>
+<label for="reward_preset">Reward preset</label><select id="reward_preset" disabled><option value="custom">Custom</option><option value="distance" selected>First laps · distance only (+100 total score)</option><option value="center">Example mix · center, clearance, collisions</option><option value="clean">Clean driving · distance + collision penalty</option><option value="lap">Lap refinement · best lap only</option></select>
+<div id="rewards"></div><button id="add" disabled>+ Add reward</button><small>Weights −100…+100; absolute shares normalize to 100%. Fourteen distinct metrics maximum. The current vehicle runner accepts these metrics; choose them for the behavior you want to train.</small>
+</details></div>
+<details id="run_settings"><summary>Run settings · timing and elimination</summary><div class="row"><div><label for="control_hz">Decisions per second</label><select id="control_hz" disabled><option selected>60</option><option>30</option><option>15</option></select></div><div><label for="workers">Parallel simulations</label><select id="workers" disabled><option>1</option><option selected>1</option><option>2</option><option>3</option><option>4</option></select></div></div><small>Physics runs at 60 Hz. CPU jobs can use 1–4 worker threads.</small><div id="seed_group"><label for="seed">Random seed</label><input id="seed" type="number" min="0" max="2147483647" value="42105" disabled></div><label><input id="collision" type="checkbox" disabled> Eliminate on wall contact</label><label><input id="idle" type="checkbox" disabled> Eliminate when stuck</label><label for="clean_min_laps">Minimum forward laps for a clean-lap winner</label><input id="clean_min_laps" type="number" min="1" max="100" value="2"><small>Winner classification only. Zero physical contacts are required. This does not change your reward recipe.</small></details></div></div></section>
+<section id="batch" class="pane" role="tabpanel" aria-labelledby="tab-batch" hidden><div class="card"><div class="section-heading"><h2>Training batches</h2><a href="/help#batches" target="_blank" rel="noopener">How batches work ↗</a></div><p class="section-intro">Arrange saved recipes into a sequence of up to 20 training steps. Use the same recipe more than once to keep training with those settings.</p><div class="batch-layout"><div>
+<div class="row"><label for="batch_slot">Batch slot<select id="batch_slot" disabled><option value="A">A · Empty</option><option value="B">B · Empty</option><option value="C">C · Empty</option><option value="D">D · Empty</option><option value="E">E · Empty</option><option value="F">F · Empty</option><option value="G">G · Empty</option><option value="H">H · Empty</option><option value="I">I · Empty</option><option value="J">J · Empty</option></select></label><label for="batch_name">Batch name<input id="batch_name" type="text" maxlength="80" value="My training batch" disabled></label></div><p id="batch_draft_state" class="form-state" role="status" aria-live="polite">New batch · not saved yet</p><div class="batch-actions"><button id="batch_save" type="button" disabled>Save batch</button><button id="batch_load" type="button" disabled>Load saved batch</button></div>
+<label class="batch-mode"><input id="carry" type="checkbox" checked disabled> Use each step’s result to train the next step</label><p id="batch_carry_help" class="muted-note">Step 1 uses your selected network. Later steps continue from the previous step’s result.</p>
+<div class="sequence-heading"><h3>Training steps</h3><span id="batch_step_count" class="step-count">0 / 20 steps</span></div><div id="batch_empty" class="batch-empty"><p>Save a recipe in Training &amp; recipes, then add it here.</p><button type="button" data-open-tab="training" data-focus="recipe_name">Create a recipe</button></div><ol id="batch_steps" class="batch-steps" aria-label="Training steps"></ol>
+<div class="add-step"><label for="batch_add_recipe">Saved recipe<select id="batch_add_recipe"><option value="">Save a recipe first</option></select></label><button id="queue_add" type="button" disabled>Add step</button></div><p id="batch_add_summary" class="settings-summary"></p><p id="batch_sequence_error" class="form-state" data-state="invalid" role="status" aria-live="polite"></p>
+<details><summary>Advanced sequence · edit slot letters</summary><label for="batch_recipe_sequence">Recipe sequence (comma-separated slots)</label><input id="batch_recipe_sequence" type="text" value="" maxlength="300" placeholder="A, B, A" aria-describedby="batch_sequence_help batch_sequence_error"><p id="batch_sequence_help" class="muted-note">The same steps as the list above. Use saved slots A–J, separated by commas; repeated slots are allowed. Maximum 20 steps.</p></details>
+</div><aside class="batch-setup" aria-labelledby="batch_setup_title"><h3 id="batch_setup_title">Ready to run?</h3><dl class="batch-context"><div><dt>Track</dt><dd id="batch_context_track">Choose a track</dd></div><div><dt>Starting network</dt><dd id="batch_context_network">Choose or create a network</dd></div><div><dt>Compute</dt><dd id="batch_context_backend">CPU</dd></div></dl><button type="button" data-open-tab="drive" data-focus="trackPresetDrive">Change run setup</button><p id="batch_plan_summary" class="settings-summary">Add recipes to see the planned work.</p><p id="batch_ready" class="form-state" role="status" aria-live="polite">Save a recipe and add a step to begin.</p><div class="batch-actions"><button class="primary" id="batch_start" type="button" aria-describedby="batch_ready" disabled>Run batch</button></div><p class="muted-note">The settings shown in these steps are saved recipe values. They are fixed when you start; changing a saved recipe affects the next batch you start.</p><details><summary>Results &amp; run limits</summary><p class="muted-note">Each step uses the selected backend limit: CPU 4,000,000 or GPU 8,000,000 vehicle-ticks, and 32,768 analysis rows. Completed results are received automatically. The last candidate stays in page memory; connect a bucket in Run &amp; results to save every step. Server copies are deleted after verified receipt.</p></details></aside></div>
+<section class="batch-progress" aria-labelledby="batch_progress_title"><div class="section-heading"><h3 id="batch_progress_title">Batch progress</h3><button id="batch_stop" type="button" disabled>Stop after current step</button></div><p id="batch_status" role="status">No batch running.</p><div id="batch_history"></div><p id="batches_feedback" role="status" aria-live="polite"></p><details><summary>Batch receipt</summary><button id="batch_export" type="button" disabled>Export batch receipt</button></details></section></div></section>
+<section id="editor" class="pane" role="tabpanel" aria-labelledby="tab-editor" hidden><div class="card"><h2>Network editor</h2><p class="hint">An original editor inspired by <a href="https://the-mars-guy.github.io/AI-Learns-To-Drive-Tool/" target="_blank" rel="noopener">Mars’s network creator</a>. Create fresh networks with the selected vehicle’s game-legal controls, or use its largest original-game shape. Loaded networks keep their original vehicle, output order and sensor parameters. Unsupported files can still be inspected without changing the original.</p><div class="toolbar"><label for="editor_file">Load an existing .evolution file</label><input id="editor_file" type="file" accept=".evolution"><button id="editor_import" disabled>Inspect selected network</button><button id="editor_create" disabled>Create fresh network</button><button id="editor_apply" disabled>Use edited network</button><a id="editor_download" hidden download>Download .evolution</a></div><p id="editor_status" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" data-state="idle">Inspect the active driver, choose a file, or create a fresh network. Editor changes stay in this page until you use or export them.</p><div class="row"><div><label for="editor_name">Network name</label><input id="editor_name" type="text" maxlength="80" value="Fresh network" disabled><label for="editor_vehicle">Vehicle type for fresh networks</label><select id="editor_vehicle" disabled><option value="0">Formula</option><option value="1">Rally</option><option value="2">Snowmobile</option><option value="3">Truck</option></select><small>This selector applies only when you create a fresh network. Imported vehicle type is retained and shown with the current network.</small><label for="editor_preset">Fresh network preset</label><select id="editor_preset" disabled><option id="editor_small_label" value="small">Small starter · 6 inputs, 4 hidden nodes, 5 outputs</option><option id="editor_maximum_label" value="maximum">Largest game network · 20 inputs, 10 × 16 hidden nodes, 5 outputs</option><option value="custom">Custom</option></select><label for="editor_shape">Input and hidden layer sizes</label><input id="editor_shape" type="text" value="6,4" disabled><small id="editor_shape_hint">Enter 1–20 inputs, followed by 0–10 hidden layers of 1–16 nodes. Output width follows the selected controls. Maximum shape: 20 → ten layers of 16 → 5 (2,869 parameters).</small><fieldset id="editor_outputs" disabled><legend id="editor_output_legend">Fresh network outputs</legend><div class="output-options"><label><input id="editor_output_0" type="checkbox" value="0" checked disabled> Steering (0)</label><label><input id="editor_output_1" type="checkbox" value="1" checked disabled> Acceleration (1)</label><label><input id="editor_output_2" type="checkbox" value="2" checked disabled> Handbrake (2)</label><label><input id="editor_output_3" type="checkbox" value="3" checked disabled> Brake (3)</label><label><input id="editor_output_4" type="checkbox" value="4" checked disabled> Boost (4)</label></div><small id="editor_output_hint">Steering and Acceleration are required. Fresh output IDs preserve this order.</small></fieldset></div><div><label for="editor_seed">Initialization seed</label><input id="editor_seed" type="number" min="0" max="2147483647" value="42105" disabled><label><input id="editor_xavier" type="checkbox" checked disabled> Seeded Xavier uniform weights (browser algorithm)</label><label><input id="editor_bias" type="checkbox" disabled> Xavier uniform biases</label><small>Unchecked: zeros. Biases default to zero.</small><label><input id="show_native_outline" type="checkbox" checked> Show 2D vehicle white outline &amp; raycast sensor cone</label></div></div><p id="editor_metadata" class="hint"></p><p id="editor_legality" class="hint"></p><details id="editor_history_panel"><summary>Training history · recorded generations</summary><div class="table-scroll"><table><thead><tr><th>Record</th><th>Time</th><th>Mutation</th><th>Best score</th><th>Best lap</th></tr></thead><tbody id="editor_history"></tbody></table></div><details><summary>Full saved training metadata</summary><pre id="editor_stats"></pre></details></details><div class="editor-visual-grid"><canvas aria-label="2D vehicle outline and raycast sensor fan preview" id="sensor_fan_map" width="420" height="450"></canvas><canvas aria-label="Network architecture preview" id="network_map" width="1100" height="450"></canvas></div><details id="weight_values"><summary>Individual weight and bias values</summary><div class="table-scroll" style="max-height:420px;overflow:auto"><table><thead><tr><th>Connection / bias</th><th>Value</th></tr></thead><tbody id="editor_parameters"></tbody></table></div></details><details><summary>Weights, biases and input contract</summary><pre id="editor_contract"></pre><label for="editor_json">NeuralNetwork JSON · editable weights and biases</label><textarea id="editor_json" rows="16" style="width:100%;box-sizing:border-box;background:#0c1725;color:#e5edf5" disabled></textarea></details></div></section><script>/* Settings-only recipe contract. Storage is injected; no network or job data. */
+(function(root){
+  const KEY='tiga.ald.recipes.v1';
+  const defaults={population:4,generations:1,ticks:60,mutation:0.01,seed:42,
+    mutation_end:0.01,schedule:'fixed',selection:'best',parents:1,elite:1,crossover:'none',
+    decay:0,adaptive_mutation:false,control_hz:60,workers:1,collision:false,idle:false,
+    rewards:[{metric:'total_score',type:'default',weight:100}],freeze:{layers:[],inputs:[],outputs:[]}};
+  const metrics=['total_score','total_speed','total_abs_steering','total_actual_distance',
+    'total_drifting_amount','total_momentum_change_frequency','total_throttle_change_frequency',
+    'total_braking_frequency','total_distance_from_wall','total_distance_from_center',
+    'network_novelty','collision_count','best_lap_performance','total_racing_line_efficiency'];
+  function exact(value,keys){
+    if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).sort().join()!==[...keys].sort().join())throw Error('Unexpected recipe fields');
+  }
+  function settings(value){
+    if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).some(k=>!Object.hasOwn(defaults,k)))throw Error('Unexpected settings fields');
+    const clean={...defaults,...value};
+    for(const [key,min,max,integer] of [['population',1,1024,true],['generations',1,2000,true],['ticks',1,18000,true],['mutation',0,4.2,false],['mutation_end',0,4.2,false],['seed',0,2147483647,true],['parents',1,1024,true],['elite',0,1024,true],['decay',0,1,false],['workers',1,4,true]]){
+      const v=clean[key];if(typeof v!=='number'||!Number.isFinite(v)||v<min||v>max||(integer&&!Number.isInteger(v)))throw Error('Invalid '+key);
+    }
+    for(const [key,choices] of [['schedule',['fixed','linear','geometric']],['selection',['best','tournament','roulette']],['crossover',['none','single_point','uniform']],['control_hz',[60,30,15]]])if(!choices.includes(clean[key]))throw Error('Invalid '+key);
+    for(const key of ['adaptive_mutation','collision','idle'])if(typeof clean[key]!=='boolean')throw Error('Invalid '+key);
+    if(!clean.freeze||typeof clean.freeze!=='object'||Array.isArray(clean.freeze)||Object.keys(clean.freeze).sort().join()!=='inputs,layers,outputs')throw Error('Invalid freeze settings');
+    for(const [key,max] of [['layers',10],['inputs',19],['outputs',4]]){const values=clean.freeze[key];if(!Array.isArray(values)||values.some(v=>!Number.isInteger(v)||v<(key==='layers'?1:0)||v>max)||new Set(values).size!==values.length)throw Error('Invalid frozen '+key);clean.freeze[key]=[...values].sort((a,b)=>a-b);}
+    if(clean.parents>clean.population||clean.elite>clean.population)throw Error('Parents/elites exceed population');
+    if(clean.mutation<=0||(clean.schedule!=='fixed'&&clean.mutation_end<=0))throw Error('This training runner requires positive mutation rates, including when continuing an uploaded network');
+    if(!Array.isArray(clean.rewards)||!clean.rewards.length||clean.rewards.length>api.metrics.length)throw Error('Use one to fourteen distinct rewards');
+    const seen=new Set();
+    clean.rewards=clean.rewards.map(r=>{
+      exact(r,['metric','type','weight']);
+      if(!metrics.includes(r.metric)||!['default','average'].includes(r.type)||seen.has(r.metric)||!Number.isInteger(r.weight)||Math.abs(r.weight)>100)throw Error('Invalid reward');
+      seen.add(r.metric);return {...r};
+    });
+    if(clean.rewards.every(r=>!r.weight))throw Error('At least one reward weight must be nonzero');
+    return clean;
+  }
+  function validate(book){
+    exact(book,Object.hasOwn(book||{},'batches')?['version','recipes','batches']:['version','recipes']);
+    if(book.version!==1||!Array.isArray(book.recipes)||book.recipes.length>10)throw Error('Unsupported recipe library');
+    const seen=new Set();
+    const recipes=book.recipes.map(r=>{
+      exact(r,['slot','name','settings']);
+      if(!/^[A-J]$/.test(r.slot)||seen.has(r.slot))throw Error('Invalid or duplicate slot');seen.add(r.slot);
+      if(typeof r.name!=='string'||!r.name.trim()||r.name.length>80)throw Error('Recipe name required (80 characters maximum)');
+      return {slot:r.slot,name:r.name.trim(),settings:settings(r.settings)};
+    });
+    const batches=book.batches||[];if(!Array.isArray(batches)||batches.length>10)throw Error('Invalid batch library');
+    const batchSlots=new Set();
+    const cleanBatches=batches.map(b=>{
+      exact(b,['slot','name','carry','runs']);
+      if(!/^[A-J]$/.test(b.slot)||batchSlots.has(b.slot)||typeof b.name!=='string'||!b.name.trim()||b.name.length>80||typeof b.carry!=='boolean'||!Array.isArray(b.runs)||!b.runs.length||b.runs.length>100||b.runs.some(r=>!seen.has(r)))throw Error('Invalid batch or missing recipe reference');
+      batchSlots.add(b.slot);return {slot:b.slot,name:b.name.trim(),carry:b.carry,runs:[...b.runs]};
+    });
+    return {version:1,recipes:recipes.sort((a,b)=>a.slot.localeCompare(b.slot)),batches:cleanBatches};
+  }
+  function parse(text){if(typeof text!=='string'||new TextEncoder().encode(text).byteLength>32768)throw Error('Recipe library exceeds 32 KB');return validate(JSON.parse(text));}
+  function createStore(storage){return {
+    load(){const text=storage.getItem(KEY);return text===null?{version:1,recipes:[],batches:[]}:parse(text);},
+    save(book){const clean=validate(book),text=JSON.stringify(clean);if(new TextEncoder().encode(text).byteLength>32768)throw Error('Recipe library exceeds 32 KB');storage.setItem(KEY,text);return clean;},
+    clear(){storage.removeItem(KEY);},
+  };}
+  const api={KEY,defaults,metrics,settings,validate,parse,createStore};
+  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.RecipeLibrary=api;
+})(typeof window!=='undefined'?window:globalThis);
+</script><script>/* Frozen settings-only plans; execution and stop checks are injected. */
+(function(root){
+  const recipes=typeof module!=='undefined'&&module.exports?require('./recipes.cjs'):root.RecipeLibrary;
+  function plan(book,slot,workLimit=4000000){
+    const library=recipes.validate(book),batch=library.batches.find(b=>b.slot===slot);
+    if(!batch)throw Error('Save or load a batch first');
+    if(batch.runs.length>20)throw Error('Execution limit: 20 runs per batch');
+    const runs=batch.runs.map(slot=>JSON.parse(JSON.stringify(library.recipes.find(r=>r.slot===slot))));
+    const work=runs.reduce((n,r)=>n+r.settings.population*r.settings.generations*r.settings.ticks,0);
+    if(runs.some(r=>r.settings.population*r.settings.generations*r.settings.ticks>workLimit||r.settings.population*r.settings.generations>32768))throw Error('A batch step exceeds this backend’s vehicle-tick or analysis-row limit; split that recipe into shorter runs');
+    return {slot:batch.slot,name:batch.name,carry:batch.carry,runs,work};
+  }
+  async function execute(plan,original,process,{stopped=()=>false,onStep=()=>{}}={}){
+    let candidate=null;const history=[];
+    for(let i=0;i<plan.runs.length;i++){
+      if(stopped())return {state:'stopped',candidate,history};
+      const recipe=plan.runs[i],source=plan.carry&&candidate!==null?candidate:original;
+      const result=await process(source,recipe.settings,i);
+      if(!result||!result.candidate)throw Error('No validated batch candidate');
+      candidate=result.candidate;
+      history.push({step:i+1,slot:recipe.slot,name:recipe.name,...result.receipt});
+      onStep(history[history.length-1]);
+    }
+    return {state:'completed',candidate,history};
+  }
+  const api={plan,execute};
+  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.BatchTraining=api;
+})(typeof window!=='undefined'?window:globalThis);
+</script><script>/* Pure browser/Node structural checks and deterministic fresh initialization. */
+(function(root){
+  const scalarTypes=['speed','velocityFront','velocitySide','angularVelocity','wheelAngle','boostCapacity','correctDirection'];
+  const vehicleNames=['Formula','Rally','Snowmobile','Truck'];
+  const outputsValid=outputs=>Array.isArray(outputs)&&outputs.length>=1&&outputs.length<=5&&outputs.every(x=>Number.isInteger(x)&&x>=0&&x<=4)&&new Set(outputs).size===outputs.length;
+  function neural(value){
+    if(!value||!Array.isArray(value.Shape)||value.Shape.length<2||value.Shape.length>12||value.Shape.some(n=>!Number.isInteger(n)||n<1||n>20))throw Error('Shape must contain 2–12 layers with 1–20 inputs');
+    if(value.Shape.slice(1,-1).some(n=>n>16))throw Error('Hidden layers allow at most 16 nodes');
+    const {Shape:shape,Weights:weights,Biases:biases}=value;
+    if(!Array.isArray(weights)||!Array.isArray(biases)||weights.length!==shape.length-1||biases.length!==weights.length)throw Error('Invalid layer counts');
+    let count=0;
+    weights.forEach((matrix,i)=>{
+      if(!Array.isArray(matrix)||matrix.length!==shape[i]||!Array.isArray(biases[i])||biases[i].length!==shape[i+1])throw Error('Invalid dimensions');
+      for(const row of matrix){if(!Array.isArray(row)||row.length!==shape[i+1]||row.some(n=>typeof n!=='number'||!Number.isFinite(n)||Math.abs(n)>1e6))throw Error('Invalid weights');count+=row.length;}
+      if(biases[i].some(n=>typeof n!=='number'||!Number.isFinite(n)||Math.abs(n)>1e6))throw Error('Invalid biases');count+=biases[i].length;
+    });
+    if(count>2869)throw Error('Network exceeds the original-game maximum of 2,869 parameters');
+    return {Shape:[...shape],InputShape:shape[0],OutputShape:shape.at(-1),NeuronsCount:shape.reduce((sum,width)=>sum+width,0),TotalParams:count,Weights:weights.map(m=>m.map(r=>[...r])),Biases:biases.map(r=>[...r])};
+  }
+  function parameter(value,name,{positive=false,float32=false}={}){
+    if(typeof value!=='number'||!Number.isFinite(value)||Math.abs(value)>1e6||(positive&&value<=0)||(float32&&Math.fround(value)===0))throw Error('Invalid '+name+' sensor parameter');
+  }
+  function compatible(value){
+    const n=neural(value?.NeuralNetwork),s=value.Sensors;
+    if(!Number.isInteger(value.Type)||value.Type<0||value.Type>=vehicleNames.length)throw Error('Vehicle Type must be Formula (0), Rally (1), Snowmobile (2), or Truck (3)');
+    if(!outputsValid(value.Outputs)||n.Shape.at(-1)!==value.Outputs.length)throw Error('Outputs must be a unique ordered subset of IDs 0–4 matching the output width');
+    if(value.Type!==0&&(!value.Outputs.includes(0)||!value.Outputs.includes(1)))throw Error(vehicleNames[value.Type]+' networks require Steering and Acceleration outputs');
+    if(value.Type===2&&value.Outputs.includes(2))throw Error('Snowmobile Handbrake output is unavailable in the original game editor; the imported network is inspect-only');
+    if(n.Shape[0]>20||n.Shape.slice(1,-1).some(x=>x>16)||n.Shape.length>12)throw Error('Shape exceeds the original-game limits');
+    if(!Array.isArray(s)||s.length!==n.Shape[0])throw Error('Sensor count does not match input shape');
+    let rays=0,other=0;
+    for(const x of s){
+      if(!x||typeof x!=='object'||Array.isArray(x)||typeof x.$type!=='string')throw Error('Invalid sensor');
+      if(x.$type==='raycast'){
+        rays++;if(typeof x.Degrees!=='number'||!Number.isFinite(x.Degrees)||x.Degrees < -360||x.Degrees>360||typeof x.Length!=='number'||!Number.isFinite(x.Length)||x.Length<1||x.Length>10000)throw Error('Raycasts require degrees −360…360 and length 1…10,000');
+      }else{
+        other++;
+        if(scalarTypes.includes(x.$type))continue;
+        if(x.$type==='accelerationFront'||x.$type==='accelerationSide'){
+          const key='MaxAcceleration';if(x[key]!==undefined)parameter(x[key],key,{positive:true,float32:true});continue;
+        }
+        if(x.$type==='distanceFromWall'){
+          if(x.MaxDistance!==undefined)parameter(x.MaxDistance,'MaxDistance',{positive:true,float32:true});continue;
+        }
+        if(x.$type==='trackCurvature'){
+          for(const key of ['MinLookaheadDistance','MaxLookaheadDistance'])if(x[key]!==undefined)parameter(x[key],key);continue;
+        }
+        if(x.$type==='grip'){
+          const pos=x.PositionOffset;if(pos===undefined)continue;
+          if(Array.isArray(pos)){if(pos.length!==2)throw Error('Grip PositionOffset array must contain exactly two values');pos.forEach((v,i)=>parameter(v,'PositionOffset['+i+']'));}
+          else if(pos&&typeof pos==='object'&&!Array.isArray(pos)){for(const key of ['X','Y'])if(pos[key]!==undefined)parameter(pos[key],'PositionOffset.'+key);}
+          else throw Error('Grip PositionOffset must be a two-value array or coordinate object');continue;
+        }
+        throw Error('Unsupported sensor type: '+x.$type);
+      }
+    }
+    if(rays>13||other>7)throw Error('Original game supports at most 13 raycasts and 7 other sensors');
+    return true;
+  }
+  function edited(source,n,name){
+    const network=neural(n),shape=network.Shape;
+    if(!Array.isArray(source.Sensors)||source.Sensors.length!==shape[0]||!outputsValid(source.Outputs)||source.Outputs.length!==shape.at(-1))throw Error('Editing must preserve the sensor/output contract');
+    if(typeof name!=='string'||!name.trim()||name.length>80)throw Error('Network name required (80 characters maximum)');
+    const idPattern=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const id=typeof source.Id==='string'&&idPattern.test(source.Id)?source.Id:(root.crypto&&typeof root.crypto.randomUUID==='function'?root.crypto.randomUUID():null);
+    if(!id)throw Error('Secure GUID generation is unavailable');
+    return {Id:id,Name:name.trim(),Type:source.Type,Stats:{Generations:[]},Snapshots:[],Outputs:[...source.Outputs],Sensors:JSON.parse(JSON.stringify(source.Sensors)),NeuralNetwork:network};
+  }
+  function fresh({type=0,shape,outputs,seed,xavier=true,bias=false,name='Fresh network'}){
+    if(!Number.isInteger(type)||type<0||type>=vehicleNames.length)throw Error('Choose Formula, Rally, Snowmobile, or Truck');
+    if(outputs===undefined)outputs=type===2?[0,1,3,4]:[0,1,2,3,4];
+    if(!Array.isArray(shape)||shape.length<1||shape.length>11||shape.some(n=>!Number.isInteger(n)||n<1)||shape[0]>20||shape.slice(1).some(n=>n>16))throw Error('Fresh shape: 1–20 inputs and 0–10 hidden layers of 1–16 nodes');
+    if(!outputsValid(outputs))throw Error('Choose one to five unique output IDs from 0–4');
+    if(!outputs.includes(0)||!outputs.includes(1))throw Error(vehicleNames[type]+' fresh networks require Steering and Acceleration outputs');
+    if(type===2&&outputs.includes(2))throw Error('Snowmobile Handbrake output is unavailable in the original game editor');
+    const fullShape=[...shape,outputs.length];if(fullShape.length>12)throw Error('Fresh networks allow at most 12 layers');
+    if(!Number.isInteger(seed)||seed<0||seed>2147483647)throw Error('Seed must be 0–2147483647');
+    if(typeof xavier!=='boolean'||typeof bias!=='boolean')throw Error('Invalid initialization switches');
+    let state=seed>>>0;
+    const uniform=()=>{state=(state+0x6D2B79F5)>>>0;let x=state;x=Math.imul(x^(x>>>15),x|1);x^=x+Math.imul(x^(x>>>7),x|61);return ((x^(x>>>14))>>>0)/4294967296;};
+    const n={Shape:fullShape,Weights:[],Biases:[]};
+    for(let i=0;i<fullShape.length-1;i++){
+      const a=fullShape[i],b=fullShape[i+1],bound=Math.sqrt(6/(a+b)),draw=()=> (2*uniform()-1)*bound;
+      n.Weights.push(Array.from({length:a},()=>Array.from({length:b},()=>xavier?draw():0)));
+      n.Biases.push(Array.from({length:b},()=>bias?draw():0));
+    }
+    const rays=Math.min(13,shape[0]-1),extra=shape[0]-1-rays;
+    const sensors=[{$type:'speed'},...scalarTypes.slice(1,1+extra).map($type=>({$type}))];
+    for(let i=0;i<rays;i++)sensors.push({$type:'raycast',Degrees:rays===1?0:-90+180*i/(rays-1),Length:800});
+    return edited({Type:type,Outputs:[...outputs],Sensors:sensors},n,name);
+  }
+  const api={neural,compatible,edited,fresh,outputsValid,vehicleNames};
+  if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.NetworkEditor=api;
+})(typeof window!=='undefined'?window:globalThis);
+</script><script>(() => {
+  const q=id=>document.getElementById(id),api=window.RecipeLibrary;
+  let refreshWorkspace=()=>{},libraryBusy=false;
+  const message=text=>{q('recipe_feedback').textContent=text;q('batches_feedback').textContent=text;};
+  const fields=['population','generations','mutation','seed','mutation_end','schedule','selection','parents','elite','crossover','decay','adaptive_mutation','control_hz','workers','collision','idle'];
+  const booleans=['adaptive_mutation','collision','idle'];
+  const strings=['schedule','selection','crossover'];
+  let freezeNetwork=null;
+  const freezeLabels={outputs:['Steering','Acceleration','Handbrake','Brake','Boost']};
+  function freezeValue(){const f=api.settings({...api.defaults,freeze:{layers:[],inputs:[],outputs:[]}}).freeze;return f;}
+  function includeUnavailableFreezeSelections(kind,items,selectedIds){
+    const available=new Set(items.map(item=>item.id)),noun=kind==='layers'?'hidden layer':kind==='inputs'?'sensor input':'output';
+    const unavailable=selectedIds.filter(id=>!available.has(id)).map(id=>({id,unavailable:true,label:'Unavailable '+noun+' index '+id}));
+    return [...items,...unavailable];
+  }
+  function renderFreeze(){
+    const box=q('freeze_controls'),status=q('freeze_status'),openGroups=new Map([...box.querySelectorAll('details.freeze-group')].map(group=>[group.dataset.freezeGroup,group.open]));box.replaceChildren();
+    if(!freezeNetwork){status.textContent='Select a network to choose components.';return;}
+    const {shape,sensors,outputs}=freezeNetwork;
+    const groups=[['layers',Array.from({length:Math.max(0,shape.length-2)},(_,i)=>({id:i+1,label:'Hidden layer '+(i+1)+' · '+shape[i+1]+' nodes'}))],
+      ['inputs',sensors.map((sensor,i)=>({id:i,label:'Input '+i+' · '+(sensor.$type==='raycast'?'Raycast '+sensor.Degrees+'°':sensor.$type.replaceAll('_',' '))}))],
+      ['outputs',outputs.map((output,i)=>({id:i,label:'Output '+i+' · '+(freezeLabels.outputs[output]||('Control '+output))}))]];
+    for(const [kind,availableItems] of groups){const items=includeUnavailableFreezeSelections(kind,availableItems,selectedFreeze[kind]);const field=document.createElement('details');field.className='freeze-group';field.dataset.freezeGroup=kind;field.open=openGroups.get(kind)??false;const summary=document.createElement('summary');summary.textContent=(kind==='layers'?'Hidden layers':kind==='inputs'?'Sensor inputs':'Outputs')+' ('+items.length+')';field.append(summary);
+      for(const item of items){const label=document.createElement('label'),input=document.createElement('input');input.type='checkbox';input.dataset.freezeKind=kind;input.value=String(item.id);input.checked=selectedFreeze[kind].includes(item.id);label.append(input,document.createTextNode(' '+item.label));field.append(label);}
+      box.append(field);
+    }
+    const invalid=['layers','inputs','outputs'].flatMap(kind=>selectedFreeze[kind].filter(id=>!itemsFor(kind).includes(id)).map(id=>kind+' '+id));
+    status.textContent=invalid.length?'Some saved selections are unavailable. Uncheck their visible “Unavailable” entries before starting training.':'Selected network: '+shape.join(' → ')+' · '+sensors.length+' inputs · '+outputs.length+' outputs.';
+  }
+  const selectedFreeze=freezeValue();
+  function itemsFor(kind){if(!freezeNetwork)return[];if(kind==='layers')return Array.from({length:freezeNetwork.shape.length-2},(_,i)=>i+1);if(kind==='inputs')return freezeNetwork.sensors.map((_,i)=>i);return freezeNetwork.outputs.map((_,i)=>i);}
+  window.setFreezeNetwork=network=>{freezeNetwork=network?{shape:[...network.NeuralNetwork.Shape],sensors:network.Sensors.map(x=>({...x})),outputs:[...network.Outputs]}:null;renderFreeze();};
+  q('freeze_controls').addEventListener('change',event=>{const input=event.target;if(!input.matches('input[data-freeze-kind]'))return;const kind=input.dataset.freezeKind,id=Number(input.value);selectedFreeze[kind]=input.checked?[...selectedFreeze[kind],id].sort((a,b)=>a-b):selectedFreeze[kind].filter(x=>x!==id);q('preset').value='custom';renderFreeze();});
+  function rewards(){return [...q('rewards').children].map(row=>({metric:row.children[0].value,type:row.children[1].value,weight:Number(row.children[2].value)}));}
+  function rewardRow(r){
+    const row=document.createElement('div');row.className='reward';
+    const metric=document.createElement('select'),type=document.createElement('select'),weight=document.createElement('input'),remove=document.createElement('button');
+    metric.setAttribute('aria-label','Reward metric');type.setAttribute('aria-label','Reward aggregation');weight.setAttribute('aria-label','Reward weight');
+    for(const name of api.metrics)metric.add(new Option(name.replaceAll('_',' '),name));metric.value=r.metric;
+    for(const name of ['default','average'])type.add(new Option(name,name));type.value=r.type;
+    weight.type='number';weight.min=-100;weight.max=100;weight.step=1;weight.value=r.weight;
+    const custom=()=>{q('reward_preset').value='custom';};
+    metric.onchange=custom;type.onchange=custom;weight.oninput=custom;
+    remove.textContent='×';remove.setAttribute('aria-label','Remove reward');remove.onclick=()=>{row.remove();custom();};
+    row.append(metric,type,weight,remove);q('rewards').append(row);
+  }
+  function currentSettings(){
+    const data={};for(const name of fields)data[name]=booleans.includes(name)?q(name).checked:strings.includes(name)?q(name).value:Number(q(name).value);
+    data.ticks=Number(q('training_ticks').value);data.rewards=rewards();data.freeze={layers:[...selectedFreeze.layers],inputs:[...selectedFreeze.inputs],outputs:[...selectedFreeze.outputs]};return api.settings(data);
+  }
+  function updateWorkBudget(){
+    const p=Number(q('population').value),g=Number(q('generations').value),t=Number(q('training_ticks').value),box=q('work_budget');
+    if(q('run_mode')?.value==='evaluate'){box.textContent='Frozen evaluation uses one car and one generation; the training population and generation count do not apply.';box.style.color='';return;}
+    if(![p,g,t].every(n=>Number.isInteger(n)&&n>0)){box.textContent='Enter positive whole numbers to see the run size.';box.style.color='';return;}
+    const work=p*g*t,rows=p*g,maximum=q('backend')?.value==='gpu'?8000000:4000000,maxGenerations=Math.min(Math.floor(maximum/(p*t)),Math.floor(32768/p));
+    box.textContent='Planned work: '+work.toLocaleString()+' / '+maximum.toLocaleString()+' vehicle-ticks; '+rows.toLocaleString()+' / 32,768 car-generation rows'+(work>maximum||rows>32768?'. Too large; at '+p+' cars and '+t+' ticks, '+(maxGenerations?'use at most '+maxGenerations+' generations':'reduce cars or ticks first')+'.':'.');
+    box.style.color=work>maximum||rows>32768?'#ffb5a2':'';
+  }
+  function executableSettings(){
+    const data=currentSettings(),work=data.population*data.generations*data.ticks,rows=data.population*data.generations,maximum=q('backend')?.value==='gpu'?8000000:4000000;
+    if(q('run_mode')?.value!=='evaluate'&&(work>maximum||rows>32768)){
+      const maxGenerations=Math.min(Math.floor(maximum/(data.population*data.ticks)),Math.floor(32768/data.population));
+      throw Object.assign(Error('This recipe needs '+work.toLocaleString()+' vehicle-ticks and '+rows.toLocaleString()+' car-generation rows (limits '+maximum.toLocaleString()+' and 32,768). At '+data.population+' cars and '+data.ticks+' ticks, '+(maxGenerations?'use at most '+maxGenerations+' generations':'reduce cars or ticks first')+'.'),{code:'TRAINING_WORK_LIMIT'});
+    }
+    return data;
+  }
+  function applySettings(value){
+    const data=api.settings(value);
+    for(const name of fields){if(booleans.includes(name))q(name).checked=data[name];else q(name).value=data[name];}
+    q('training_ticks').value=data.ticks;q('rewards').replaceChildren();data.rewards.forEach(rewardRow);
+    for(const kind of ['layers','inputs','outputs'])selectedFreeze[kind]=[...data.freeze[kind]];renderFreeze();
+    q('recipe_draft').value=JSON.stringify(data,null,2);updateWorkBudget();refreshWorkspace();
+  }
+  const editable=[...fields,'training_ticks','add','reward_preset','preset','starter_settings_reset'];
+  for(const id of editable)q(id).disabled=false;
+  q('end_rate_group').hidden=false;
+  const firstRunSettings={...api.defaults,population:32,generations:20,ticks:900,mutation:0.3,mutation_end:0.3,parents:1,elite:1,decay:0,workers:1,collision:false,idle:false,rewards:[{metric:'total_score',type:'default',weight:100}]};
+  applySettings(firstRunSettings);q('preset').value='starter';q('reward_preset').value='distance';
+  window.getTrainingSettings=()=>{const data=executableSettings();if(q('run_mode')?.value==='evaluate')data.freeze={layers:[],inputs:[],outputs:[]};else if(freezeNetwork){for(const kind of ['layers','inputs','outputs'])if(data.freeze[kind].some(id=>!itemsFor(kind).includes(id)))throw Error('Remove frozen selections that do not exist on the selected network');}else if(data.freeze.layers.length||data.freeze.inputs.length||data.freeze.outputs.length)throw Error('Select a network before using selective freezing');return data;};
+  let stagedPortableRecipe=false;
+  window.getPortableRecipe=()=>{
+    if(stagedPortableRecipe)return {slot:q('recipe_slot').value,name:q('recipe_name').value,settings:currentSettings()};
+    const slot=q('recipe_slot').value;return read().recipes.find(r=>r.slot===slot)||null;
+  };
+  window.stagePortableRecipe=recipe=>{
+    if(!recipe||! /^[A-J]$/.test(recipe.slot)||typeof recipe.name!=='string'||!recipe.name.trim()||recipe.name.length>80)throw Error('Invalid selected recipe');
+    const settings=api.settings(recipe.settings);q('recipe_slot').value=recipe.slot;q('recipe_name').value=recipe.name.trim();
+    applySettings(settings);q('preset').value='custom';q('reward_preset').value='custom';stagedPortableRecipe=true;
+    message('Imported recipe staged in the training form. Save it explicitly to add it to this browser’s recipe library. No run started.');
+  };
+  q('recipe_slot').addEventListener('change',()=>{stagedPortableRecipe=false;});
+  window.setTrainingBusy=(settingsBusy,controlsBusy=settingsBusy)=>{
+    libraryBusy=controlsBusy;
+    for(const id of editable)q(id).disabled=settingsBusy;
+    for(const node of q('rewards').querySelectorAll('input,select,button'))node.disabled=settingsBusy;
+    for(const id of ['recipe_save','recipe_load','recipe_apply_draft','recipe_slot','recipe_name','recipe_import','recipe_clear','batch_save','batch_load','batch_slot','batch_name','batch_recipe_sequence','carry','queue_add','batch_add_recipe'])q(id).disabled=controlsBusy;
+    refreshWorkspace(false);
+  };
+  for(const id of ['population','generations','training_ticks'])q(id).addEventListener('input',updateWorkBudget);
+  q('run_mode')?.addEventListener('change',updateWorkBudget);
+  q('backend')?.addEventListener('change',updateWorkBudget);
+  q('add').onclick=()=>{if(q('rewards').children.length>=api.metrics.length)return;const used=rewards().map(r=>r.metric);rewardRow({metric:api.metrics.find(m=>!used.includes(m)),type:'default',weight:1});q('reward_preset').value='custom';};
+  q('reward_preset').onchange=()=>{
+    const key=q('reward_preset').value;if(key==='custom')return;
+    const rows={distance:[['total_score',100]],center:[['total_score',100],['total_distance_from_center',-60],['total_distance_from_wall',10],['collision_count',-100],['best_lap_performance',5]],clean:[['total_score',100],['collision_count',-30]],lap:[['best_lap_performance',100]]};
+    q('rewards').replaceChildren();rows[key].forEach(([metric,weight])=>rewardRow({metric,type:'default',weight}));
+  };
+  q('preset').onchange=()=>{
+    const k=q('preset').value;if(k==='custom')return;
+    const data=currentSettings();data.mutation={starter:.3,explore:.5,refine:.1,speed:.05}[k];data.mutation_end=data.mutation;
+    data.decay={starter:0,explore:.0005,refine:.0001,speed:0}[k];applySettings(data);
+  };
+  for(const id of ['mutation','mutation_end','decay'])q(id).addEventListener('input',()=>{q('preset').value='custom';});
+  let store;
+  try{store=api.createStore(window.localStorage);store.load();message('Recipes are saved in this browser.');}
+  catch(error){message('Local library unavailable: '+error.message+'. Existing data was not changed.');}
+  const read=()=>{if(!store)throw Error('Browser storage unavailable');return store.load();};
+  let renderedSteps='',batchContext={available:false,reason:'Connecting to the training service…',track:'Choose a track',network:'Choose or create a network',backend:'CPU'};
+  const batchMessage=text=>{q('batches_feedback').textContent=text;};
+  function describeSettings(settings){
+    return settings.population+' cars × '+settings.generations+' generations · '+Number((settings.ticks/60).toFixed(2))+' s per generation · mutation '+settings.mutation+' · '+settings.control_hz+' Hz';
+  }
+  function sequence(){const text=q('batch_recipe_sequence').value.trim();return text?text.split(',').map(slot=>slot.trim().toUpperCase()):[];}
+  function draftBatch(){return {slot:q('batch_slot').value,name:q('batch_name').value.trim(),carry:q('carry').checked,runs:sequence()};}
+  function sameBatch(a,b){return !!a&&!!b&&a.name===b.name&&a.carry===b.carry&&JSON.stringify(a.runs)===JSON.stringify(b.runs);}
+  function draftIssue(book,draft){
+    if(!draft.runs.length)return book.recipes.length?'Add a saved recipe to begin.':'Save a recipe in Training & recipes, then add it here.';
+    if(draft.runs.length>20)return 'This batch has '+draft.runs.length+' steps. Remove '+(draft.runs.length-20)+' to reach the 20-step limit.';
+    for(let i=0;i<draft.runs.length;i++){
+      const slot=draft.runs[i];
+      if(!/^[A-J]$/.test(slot))return 'Step '+(i+1)+' needs one recipe slot from A to J. Separate steps with commas.';
+      if(!book.recipes.some(recipe=>recipe.slot===slot))return 'Step '+(i+1)+' uses empty slot '+slot+'. Save a recipe there or choose a different recipe.';
+    }
+    if(!draft.name||draft.name.length>80)return 'Give this batch a name of 1–80 characters.';
+    return '';
+  }
+  function batchReadiness(){
+    try{
+      const book=read(),draft=draftBatch(),issue=draftIssue(book,draft);
+      if(issue)return {ready:false,message:issue};
+      const saved=book.batches.find(batch=>batch.slot===draft.slot);
+      if(!saved)return {ready:false,message:'Save this batch before running it.'};
+      if(!sameBatch(draft,saved))return {ready:false,message:'Unsaved changes. Save this batch to run the version shown, or load the saved batch.'};
+      const maximum=q('backend')?.value==='gpu'?8000000:4000000;
+      for(let i=0;i<draft.runs.length;i++){
+        const recipe=book.recipes.find(item=>item.slot===draft.runs[i]),settings=recipe.settings,work=settings.population*settings.generations*settings.ticks,rows=settings.population*settings.generations;
+        if(work>maximum||rows>32768)return {ready:false,message:'Step '+(i+1)+' · '+recipe.slot+' · '+recipe.name+' exceeds this compute limit ('+work.toLocaleString()+' vehicle-ticks; '+rows.toLocaleString()+' analysis rows). Shorten that recipe in Training & recipes.'};
+      }
+      return {ready:true,message:'Saved batch matches the steps shown. Ready to run '+draft.runs.length+' '+(draft.runs.length===1?'step':'steps')+'.'};
+    }catch(error){return {ready:false,message:'Recipe library unavailable: '+error.message};}
+  }
+  window.getBatchReadiness=batchReadiness;
+  window.getBatchPlan=()=>{
+    const readiness=batchReadiness();if(!readiness.ready)throw Error(readiness.message);
+    return window.BatchTraining.plan(read(),q('batch_slot').value,q('backend')?.value==='gpu'?8000000:4000000);
+  };
+  function renderRunContext(){
+    q('batch_context_track').textContent=batchContext.track||'Choose a track';
+    q('batch_context_network').textContent=batchContext.network||'Choose or create a network';
+    q('batch_context_backend').textContent=batchContext.backend||'CPU';
+    const readiness=batchReadiness(),ready=readiness.ready&&batchContext.available&&!libraryBusy;
+    q('batch_ready').textContent=libraryBusy?'Finish the current operation before starting another batch.':!readiness.ready?readiness.message:batchContext.available?readiness.message:batchContext.reason;
+    q('batch_ready').dataset.state=ready?'saved':'draft';
+    q('batch_start').disabled=!ready;
+  }
+  window.setBatchRunContext=context=>{batchContext={...batchContext,...context};renderRunContext();};
+  function slotLabels(select,entries){
+    for(const option of select.options){const item=entries.find(entry=>entry.slot===option.value);option.textContent=option.value+' · '+(item?item.name:'Empty');}
+  }
+  function focusStep(index,action='recipe'){
+    const row=q('batch_steps').children[index];if(!row)return;
+    const target=action==='recipe'?row.querySelector('select'):row.querySelector('[data-step-action="'+action+'"]');
+    (target&&!target.disabled?target:row.querySelector('select'))?.focus();
+  }
+  function writeSequence(runs,focusIndex,focusAction){
+    q('batch_recipe_sequence').value=runs.join(', ');refreshWorkspace();
+    if(focusIndex!==undefined)focusStep(Math.max(0,Math.min(focusIndex,runs.length-1)),focusAction);
+    else q('queue_add').focus();
+  }
+  function renderSteps(book,runs){
+    const signature=JSON.stringify([runs,book.recipes,libraryBusy,q('backend')?.value]);
+    if(signature===renderedSteps)return;renderedSteps=signature;
+    q('batch_steps').replaceChildren();
+    runs.forEach((slot,index)=>{
+      const recipe=book.recipes.find(item=>item.slot===slot),row=document.createElement('li');row.className='batch-step';row.dataset.index=String(index);row.dataset.invalid=String(!recipe);
+      const header=document.createElement('div');header.className='step-header';
+      const number=document.createElement('span');number.className='step-number';number.textContent=String(index+1);number.setAttribute('aria-hidden','true');
+      const select=document.createElement('select');select.setAttribute('aria-label','Recipe for step '+(index+1));select.disabled=libraryBusy;
+      if(!recipe)select.add(new Option((slot||'?')+' · Choose a saved recipe',slot));
+      for(const item of book.recipes)select.add(new Option(item.slot+' · '+item.name,item.slot));select.value=slot;
+      select.addEventListener('change',()=>{const next=sequence();next[index]=select.value;writeSequence(next,index);});
+      header.append(number,select);row.append(header);
+      const summary=document.createElement('p');summary.className='step-summary';summary.textContent=recipe?describeSettings(recipe.settings):'This step needs a saved recipe.';row.append(summary);
+      const actions=document.createElement('div');actions.className='step-actions';
+      for(const [action,label,aria,disabled] of [['up','Move up','Move step '+(index+1)+' up',index===0],['down','Move down','Move step '+(index+1)+' down',index===runs.length-1],['duplicate','Duplicate','Duplicate step '+(index+1),runs.length>=20],['remove','Remove','Remove step '+(index+1),false]]){
+        const button=document.createElement('button');button.type='button';button.textContent=label;button.dataset.stepAction=action;button.setAttribute('aria-label',aria);button.disabled=libraryBusy||disabled;
+        button.addEventListener('click',()=>{
+          if(libraryBusy)return;const next=sequence();let destination=index;
+          if(action==='up'&&index>0){[next[index-1],next[index]]=[next[index],next[index-1]];destination--;}
+          else if(action==='down'&&index<next.length-1){[next[index+1],next[index]]=[next[index],next[index+1]];destination++;}
+          else if(action==='duplicate'&&next.length<20){next.splice(index+1,0,next[index]);destination++;}
+          else if(action==='remove'){next.splice(index,1);}
+          else return;
+          writeSequence(next,destination,action==='remove'||action==='duplicate'?'recipe':action);
+          if(!next.length)q('batch_add_recipe').focus();
+        });actions.append(button);
+      }
+      row.append(actions);q('batch_steps').append(row);
+    });
+  }
+  refreshWorkspace=(notify=true)=>{
+    let book;
+    try{book=read();}
+    catch(error){
+      q('recipe_state').textContent='Recipe library unavailable: '+error.message;q('recipe_state').dataset.state='invalid';
+      for(const id of ['recipe_save','recipe_load','batch_save','batch_load','queue_add'])q(id).disabled=true;
+      renderRunContext();return;
+    }
+    slotLabels(q('recipe_slot'),book.recipes);slotLabels(q('batch_slot'),book.batches);
+    const savedRecipe=book.recipes.find(recipe=>recipe.slot===q('recipe_slot').value);
+    let formSettings=null,formError='';try{formSettings=currentSettings();}catch(error){formError=error.message;}
+    const sameRecipe=!!savedRecipe&&formSettings&&JSON.stringify(savedRecipe.settings)===JSON.stringify(formSettings)&&savedRecipe.name===q('recipe_name').value.trim();
+    q('recipe_state').textContent=formError?'Check settings: '+formError:sameRecipe?'Saved recipe '+savedRecipe.slot+' matches this form.':savedRecipe?'Unsaved changes · this form differs from recipe '+savedRecipe.slot+'.':'Working settings · not saved yet';
+    q('recipe_state').dataset.state=formError?'invalid':sameRecipe?'saved':'draft';
+    q('recipe_summary').textContent=savedRecipe?'Saved in '+savedRecipe.slot+': '+describeSettings(savedRecipe.settings):formSettings?describeSettings(formSettings):'';
+    q('recipe_load').disabled=libraryBusy||!savedRecipe;
+    q('recipe_save').textContent='Save settings to '+q('recipe_slot').value;
+    q('recipe_save').disabled=libraryBusy||!!formError||!q('recipe_name').value.trim();
+    const draft=draftBatch(),savedBatch=book.batches.find(batch=>batch.slot===draft.slot),issue=draftIssue(book,draft),same=sameBatch(draft,savedBatch);
+    q('batch_draft_state').textContent=same?'Saved batch '+draft.slot+' matches this editor.':savedBatch?'Unsaved changes · save to run this version.':'New batch · save when your steps are ready.';
+    q('batch_draft_state').dataset.state=same?'saved':'draft';
+    q('batch_save').disabled=libraryBusy||!!issue||same;
+    q('batch_load').disabled=libraryBusy||!savedBatch;
+    q('batch_step_count').textContent=draft.runs.length+' / 20 steps';
+    q('batch_empty').hidden=!!draft.runs.length;
+    q('batch_empty').querySelector('p').textContent=book.recipes.length?'Choose a saved recipe below and add your first step.':'Save a recipe in Training & recipes, then add it here.';
+    q('batch_empty').querySelector('button').hidden=!!book.recipes.length;
+    q('batch_sequence_error').textContent=draft.runs.length?issue:'';
+    q('batch_recipe_sequence').setAttribute('aria-invalid',String(!!draft.runs.length&&!!draftIssue(book,{...draft,name:'Batch'})));
+    q('batch_name').setAttribute('aria-invalid',String(!draft.name||draft.name.length>80));
+    q('batch_carry_help').textContent=draft.carry?'Step 1 uses your selected network. Later steps continue from the previous step’s result.':'Every step starts from the same original selected network. Results are not carried into the next step.';
+    const chooser=q('batch_add_recipe'),chosen=chooser.value,choices=book.recipes.map(recipe=>[recipe.slot,recipe.name]);
+    if(chooser.dataset.choices!==JSON.stringify(choices)){
+      chooser.replaceChildren();if(!book.recipes.length)chooser.add(new Option('Save a recipe first',''));
+      for(const recipe of book.recipes)chooser.add(new Option(recipe.slot+' · '+recipe.name,recipe.slot));
+      if(book.recipes.some(recipe=>recipe.slot===chosen))chooser.value=chosen;
+      chooser.dataset.choices=JSON.stringify(choices);
+    }
+    chooser.disabled=libraryBusy||!book.recipes.length;
+    q('queue_add').disabled=libraryBusy||!book.recipes.length||draft.runs.length>=20;
+    const addedRecipe=book.recipes.find(recipe=>recipe.slot===chooser.value);
+    q('batch_add_summary').textContent=draft.runs.length>=20?'20-step limit reached. Remove a step before adding another.':addedRecipe?describeSettings(addedRecipe.settings):'';
+    renderSteps(book,draft.runs);
+    const complete=draft.runs.length&&draft.runs.every(slot=>book.recipes.some(recipe=>recipe.slot===slot));
+    const work=complete?draft.runs.reduce((total,slot)=>{const settings=book.recipes.find(recipe=>recipe.slot===slot).settings;return total+settings.population*settings.generations*settings.ticks;},0):0;
+    q('batch_plan_summary').textContent=complete?draft.runs.length+' '+(draft.runs.length===1?'step':'steps')+' · '+work.toLocaleString()+' total vehicle-ticks across the batch. Limits apply to each step.':'Add saved recipes to see the planned work.';
+    renderRunContext();
+    if(notify)window.dispatchEvent(new Event('ald:batch-draft-change'));
+  };
+  window.recipeLibraryText=()=>{const text=JSON.stringify(api.validate(read()));if(new TextEncoder().encode(text).byteLength>32768)throw Error('Recipe library exceeds 32 KB');return text;};
+  window.importRecipeLibraryText=async(text,{source='selected file',isCurrent=()=>true}={})=>{
+    const book=api.parse(text);
+    if(!(await window.appConfirm('Replace this browser’s recipe library with '+book.recipes.length+' recipes and '+book.batches.length+' batches from '+source+'? Export a backup first if needed.',{heading:'Import recipe library',confirmLabel:'Replace library'})))return false;
+    if(!isCurrent())throw Error('Bucket connection changed before import; the local recipe library was not changed.');
+    if(!store)throw Error('Browser storage unavailable');store.save(book);refreshWorkspace();
+    message('Imported '+book.recipes.length+' recipes and '+book.batches.length+' batches from '+source+'. No run was started.');return true;
+  };
+  const action=(fn,surface='recipe')=>async()=>{try{await fn();}catch(error){(surface==='batch'?batchMessage:message)('Not completed: '+error.message);}finally{refreshWorkspace();}};
+  q('starter_settings_reset').onclick=action(async()=>{
+    if(!(await window.appConfirm('Replace the current form settings and reward mix with the first-run starter? Saved recipes will not change.',{heading:'Apply first-run settings',confirmLabel:'Apply starter'})))return;
+    applySettings(firstRunSettings);q('preset').value='starter';q('reward_preset').value='distance';q('starter_settings_status').textContent='First-run settings applied to this form. Saved recipes are unchanged; no run started.';
+  });
+  q('recipe_apply_draft').onclick=action(()=>{applySettings(JSON.parse(q('recipe_draft').value));q('preset').value='custom';q('reward_preset').value='custom';message('JSON applied to the training form. No run started.');});
+  q('recipe_save').onclick=action(async()=>{
+    const book=read(),slot=q('recipe_slot').value;
+    const next=api.validate({...book,recipes:[...book.recipes.filter(recipe=>recipe.slot!==slot),{slot,name:q('recipe_name').value,settings:currentSettings()}]});
+    if(book.recipes.some(recipe=>recipe.slot===slot)&&!(await window.appConfirm('Replace recipe '+slot+' with the settings in this form? Batches using '+slot+' will use these settings the next time they start.',{heading:'Replace saved recipe',confirmLabel:'Save recipe'})))return;
+    store.save(next);stagedPortableRecipe=false;message('Saved '+slot+' · '+q('recipe_name').value.trim()+'. You can use it in a batch.');
+  });
+  q('recipe_load').onclick=action(()=>{
+    const recipe=read().recipes.find(item=>item.slot===q('recipe_slot').value);if(!recipe)throw Error('Choose a saved recipe first.');
+    q('recipe_name').value=recipe.name;applySettings(recipe.settings);q('preset').value='custom';q('reward_preset').value='custom';stagedPortableRecipe=false;
+    message('Applied '+recipe.slot+' · '+recipe.name+' to this form. No run started.');
+  });
+  q('recipe_slot').addEventListener('change',()=>{try{const recipe=read().recipes.find(item=>item.slot===q('recipe_slot').value);q('recipe_name').value=recipe?.name||'My recipe';}catch{}refreshWorkspace();});
+  q('recipe_export').onclick=action(()=>{
+    const blob=new Blob([JSON.stringify(read())],{type:'application/json'}),url=URL.createObjectURL(blob);
+    const link=document.createElement('a');link.href=url;link.download='ald-recipes.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    message('Recipe library export requested. It contains recipes and batches, without tracks, networks or results.');
+  });
+  q('recipe_import').onchange=action(async()=>{
+    const input=q('recipe_import'),file=input.files[0];if(!file)return;input.value='';if(file.size>32768)throw Error('Recipe file exceeds 32 KB');
+    await window.importRecipeLibraryText(await file.text(),{source:'selected file'});
+  });
+  q('recipe_clear').onclick=action(async()=>{
+    if(!(await window.appConfirm('Clear saved recipes and batches for this app on this device? Server run data and downloaded files are unaffected.',{heading:'Clear local recipes and batches',confirmLabel:'Clear local data',danger:true})))return;
+    if(!store)throw Error('Browser storage unavailable');store.clear();message('Saved recipes and batches cleared. Current form values and downloaded files are unchanged.');
+  });
+  for(const id of ['batch_name','batch_slot','carry'])q(id).disabled=false;
+  q('queue_add').onclick=()=>{
+    if(libraryBusy)return;const runs=sequence(),slot=q('batch_add_recipe').value;
+    if(runs.length>=20||!read().recipes.some(recipe=>recipe.slot===slot))return;
+    runs.push(slot);writeSequence(runs,runs.length-1);batchMessage('Added step '+runs.length+'. Save the batch when it is ready.');
+  };
+  q('batch_save').onclick=action(async()=>{
+    const book=read(),draft=draftBatch(),issue=draftIssue(book,draft);if(issue)throw Error(issue);
+    const next=api.validate({...book,batches:[...book.batches.filter(batch=>batch.slot!==draft.slot),draft]});
+    if(book.batches.some(batch=>batch.slot===draft.slot)&&!(await window.appConfirm('Replace saved batch '+draft.slot+' with these '+draft.runs.length+' steps?',{heading:'Save batch changes',confirmLabel:'Save changes'})))return;
+    store.save(next);q('batch_name').value=draft.name;q('batch_recipe_sequence').value=draft.runs.join(', ');batchMessage('Saved '+draft.slot+' · '+draft.name+'. Run batch will use the steps shown.');
+  },'batch');
+  q('batch_load').onclick=action(()=>{
+    const batch=read().batches.find(item=>item.slot===q('batch_slot').value);if(!batch)throw Error('Choose a saved batch first.');
+    q('batch_name').value=batch.name;q('carry').checked=batch.carry;q('batch_recipe_sequence').value=batch.runs.join(', ');
+    batchMessage('Loaded '+batch.slot+' · '+batch.name+'. No run started.');
+  },'batch');
+  for(const id of ['batch_name','batch_recipe_sequence'])q(id).addEventListener('input',()=>refreshWorkspace());
+  for(const id of ['batch_slot','carry','batch_add_recipe','backend'])q(id).addEventListener('change',()=>refreshWorkspace());
+  q('training').addEventListener('input',event=>{if(event.target.id!=='recipe_draft')refreshWorkspace();});
+  q('training').addEventListener('change',()=>refreshWorkspace());
+  q('training_controls').addEventListener('click',event=>{if(event.target.closest('button'))queueMicrotask(()=>refreshWorkspace());});
+  window.addEventListener('storage',event=>{if(event.key===api.KEY||event.key===null)refreshWorkspace();});
+  try{const recipe=read().recipes.find(item=>item.slot===q('recipe_slot').value);if(recipe)q('recipe_name').value=recipe.name;}catch{}
+  refreshWorkspace();
+})();
+</script><script>/* Read-only public reference library. No cookies or browser-persistent storage. */
+(function(root,factory){
+  if(typeof module==='object'&&module.exports)module.exports=factory();
+  else root.TrackLibrary=factory();
+})(typeof window==='undefined'?this:window,function(){
+  function create({fetch,digest,upload}){
+    let entries=[],selected='',cached=null;
+    return {
+      async load(){
+        const response=await fetch('/api/tracks',{cache:'no-store',credentials:'same-origin'});
+        if(!response.ok)throw Error('Built-in track catalog unavailable');
+        const catalog=await response.json();
+        if(!Array.isArray(catalog.tracks)||catalog.tracks.length>128)throw Error('Invalid track catalog');
+        const ids=new Set();
+        for(const entry of catalog.tracks){
+          if(!/^[a-z0-9-]{1,80}$/.test(entry.id)||ids.has(entry.id)||
+             typeof entry.display_name!=='string'||!entry.display_name.length||entry.display_name.length>100||
+             !Number.isInteger(entry.bytes)||entry.bytes<1||entry.bytes>1048576||
+             !/^[a-f0-9]{64}$/.test(entry.sha256))throw Error('Invalid track catalog');
+          ids.add(entry.id);
+        }
+        entries=catalog.tracks.map(entry=>({...entry}));
+        return this.entries();
+      },
+      entries:()=>entries.map(entry=>({...entry})),
+      selected:()=>selected,
+      select(id){
+        if(id&&!entries.some(entry=>entry.id===id))throw Error('Unknown built-in track');
+        if(id!==selected)cached=null;
+        selected=id;
+      },
+      info(){const entry=entries.find(entry=>entry.id===selected);return entry?{source:'builtin',...entry}:{source:'upload'};},
+      async file(){
+        if(!selected)return upload();
+        const entry=entries.find(entry=>entry.id===selected);
+        if(cached?.id===selected)return cached.blob;
+        const response=await fetch('/api/tracks/'+encodeURIComponent(selected)+'/file',
+                                   {cache:'no-store',credentials:'same-origin'});
+        if(!response.ok)throw Error('Built-in track unavailable; retry or choose an upload');
+        const bytes=await response.arrayBuffer();
+        if(bytes.byteLength!==entry.bytes||await digest(bytes)!==entry.sha256)
+          throw Error('Built-in track validation failed');
+        const blob=new Blob([bytes],{type:'application/octet-stream'});
+        cached={id:entry.id,blob};return blob;
+      }
+    };
+  }
+  function mount({document,fetch,digest}){
+    const selects=Array.from(document.querySelectorAll('[data-track-library]'));
+    const statuses=Array.from(document.querySelectorAll('[data-track-status]'));
+    const input=document.getElementById('track');
+    const picker=create({fetch,digest,upload:()=>input.files[0]});
+    let ready=false,busy=false;
+    function changed(){
+      if(typeof document.dispatchEvent==='function'&&document.defaultView?.Event)
+        document.dispatchEvent(new document.defaultView.Event('track-library-change'));
+    }
+    function render(message){
+      for(const select of selects){select.value=picker.selected();select.disabled=busy||!ready;}
+      const info=picker.info();
+      for(const status of statuses)status.textContent=message??(info.source==='builtin'?
+        info.display_name+' selected. It remains selected after a run.':
+        'Upload mode selected. Built-in replicas can be selected instead.');
+    }
+    for(const select of selects)select.addEventListener('change',()=>{
+      picker.select(select.value);if(select.value)input.value='';render();changed();
+    });
+    input.addEventListener('change',()=>{picker.select('');render();changed();});
+    picker.setBusy=value=>{busy=value;render();};
+    picker.load().then(()=>{
+      for(const select of selects){
+        for(const entry of picker.entries()){
+          const option=document.createElement('option');option.value=entry.id;
+          option.textContent=entry.display_name;select.append(option);
+        }
+      }
+      ready=picker.entries().length>0;
+      if(ready)picker.select(picker.entries()[0].id);
+      render(ready?undefined:'No built-in tracks in this installation. Custom uploads still work.');
+      changed();
+    }).catch(()=>render('Built-in catalog unavailable. Custom uploads still work.'));
+    return picker;
+  }
+  return {create,mount};
+});
+</script><script src="/track-map.js"></script><script>/* Explicit local portable-bundle format. This module never stores or sends data. */
+(function(root,factory){
+  if(typeof module==='object'&&module.exports)module.exports=factory();
+  else root.PortableBundle=factory();
+})(typeof window==='undefined'?globalThis:window,function(){
+  const SCHEMA='ald.portable-bundle',LIMITS={network:4*1024*1024,track:1024*1024,recipe:32768,receipt:524288,analysis:32*1024*1024,bundleV1:8*1024*1024,bundle:48*1024*1024};
+  const exact=(value,keys)=>{
+    if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).sort().join()!==[...keys].sort().join())throw Error('Unexpected portable bundle fields');
+  };
+  const utf8=value=>new TextEncoder().encode(value);
+  const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
+  function b64(bytes){let text='';for(let i=0;i<bytes.length;i+=8192)text+=String.fromCharCode(...bytes.subarray(i,i+8192));return btoa(text);}
+  function unb64(text){
+    if(typeof text!=='string'||text.length>Math.ceil(LIMITS.analysis/3)*4+8)throw Error('Invalid portable artifact encoding');
+    let binary;try{binary=atob(text);}catch{throw Error('Invalid portable artifact encoding');}
+    const bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));if(b64(bytes)!==text)throw Error('Non-canonical portable artifact encoding');return bytes;
+  }
+  async function artifact(format,kind,bytes){
+    const data=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);
+    const limit=format==='evolution'?LIMITS.network:LIMITS.track;
+    if(!data.length||data.byteLength>limit)throw Error(format==='evolution'?'Network exceeds 4 MiB bundle limit':'Track exceeds 1 MiB bundle limit');
+    return {format,kind,bytes:data.byteLength,sha256:await sha(data),data_base64:b64(data)};
+  }
+  async function analysisSlot(bytes){const data=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes);if(!data.length||data.length>LIMITS.analysis)throw Error('Analysis archive exceeds 32 MiB');return {format:'ald.run-analysis-archive+gzip',bytes:data.length,sha256:await sha(data),data_base64:b64(data)};}
+  async function pack(artifacts){
+    if(!artifacts||!artifacts.selected_network)throw Error('A selected network is required');
+    const version=artifacts.analysis_archive?2:1;
+    if(version===2){const a=artifacts.analysis_archive;exact(a,['format','bytes','sha256','data_base64']);if(a.format!=='ald.run-analysis-archive+gzip'||!Number.isInteger(a.bytes)||a.bytes<1||a.bytes>LIMITS.analysis||!/^[a-f0-9]{64}$/.test(a.sha256))throw Error('Invalid analysis archive slot');const bytes=unb64(a.data_base64);if(bytes.length!==a.bytes||await sha(bytes)!==a.sha256)throw Error('Analysis archive bytes or SHA-256 do not match');}
+    const clean={schema:SCHEMA,version,artifacts};
+    const text=JSON.stringify(clean,null,2);if(utf8(text).byteLength>(version===1?LIMITS.bundleV1:LIMITS.bundle))throw Error('Portable bundle exceeds its version size limit');
+    return text;
+  }
+  async function parse(text){
+    if(typeof text!=='string'||utf8(text).byteLength>LIMITS.bundle)throw Error('Portable bundle exceeds 48 MiB');
+    let bundle;try{bundle=JSON.parse(text);}catch{throw Error('Portable bundle is not valid JSON');}
+    exact(bundle,['schema','version','artifacts']);if(bundle.schema!==SCHEMA||![1,2].includes(bundle.version))throw Error('Unsupported portable bundle version');
+    if(bundle.version===1&&utf8(text).byteLength>LIMITS.bundleV1)throw Error('Version 1 portable bundle exceeds 8 MiB');
+    const allowed=['selected_network','selected_track','selected_recipe','run_receipt',...(bundle.version===2?['analysis_archive']:[])];
+    if(!bundle.artifacts||typeof bundle.artifacts!=='object'||Array.isArray(bundle.artifacts)||Object.keys(bundle.artifacts).some(k=>!allowed.includes(k))||!bundle.artifacts.selected_network)throw Error('Portable bundle needs a selected network and fixed artifact slots');
+    const a=bundle.artifacts,networkMeta=a.selected_network,networkBytes=await checkArtifact(networkMeta,'evolution',['format','kind','bytes','sha256','data_base64'],LIMITS.network);
+    if(!['input','result'].includes(networkMeta.kind))throw Error('Invalid selected network kind');
+    let track=null,recipe=null,receipt=null,analysisArchive=null;
+    if(Object.hasOwn(a,'selected_track')){
+      const t=a.selected_track;if(!t||typeof t!=='object')throw Error('Invalid selected track');
+      const builtin=t.source==='builtin';
+      exact(t,builtin?['format','source','track_id','display_name','bytes','sha256','data_base64']:['format','source','bytes','sha256','data_base64']);
+      if(!['builtin','upload'].includes(t.source)||t.format!=='track')throw Error('Invalid selected track metadata');
+      if(builtin&&(!/^[a-z0-9-]{1,80}$/.test(t.track_id)||typeof t.display_name!=='string'||!t.display_name.length||t.display_name.length>100))throw Error('Invalid built-in track identity');
+      track={metadata:t,bytes:await checkArtifact(t,'track',Object.keys(t),LIMITS.track)};
+    }
+    if(Object.hasOwn(a,'selected_recipe')){
+      const r=a.selected_recipe;exact(r,['version','slot','name','settings']);
+      if(r.version!==1||! /^[A-J]$/.test(r.slot)||typeof r.name!=='string'||!r.name.trim()||r.name.length>80)throw Error('Invalid selected recipe');
+      const text=JSON.stringify(r);if(utf8(text).byteLength>LIMITS.recipe)throw Error('Recipe exceeds 32 KiB bundle limit');
+      recipe=r;
+    }
+    if(Object.hasOwn(a,'run_receipt')){
+      const r=a.run_receipt;exact(r,['version','kind','state','build_id','backend','output_sha256','report']);
+      if(r.version!==1||r.kind!=='run'||r.state!=='completed'||typeof r.build_id!=='string'||r.build_id.length>128||!['cpu','gpu'].includes(r.backend)||! /^[a-f0-9]{64}$/.test(r.output_sha256)||!r.report||typeof r.report!=='object'||Array.isArray(r.report))throw Error('Invalid sanitized run receipt');
+      const text=JSON.stringify(r);if(utf8(text).byteLength>LIMITS.receipt)throw Error('Run receipt exceeds 512 KiB bundle limit');
+      receipt=r;
+    }
+    if(Object.hasOwn(a,'analysis_archive')){
+      if(bundle.version!==2)throw Error('Analysis archive requires portable bundle version 2');
+      const x=a.analysis_archive;exact(x,['format','bytes','sha256','data_base64']);if(x.format!=='ald.run-analysis-archive+gzip'||!Number.isInteger(x.bytes)||x.bytes<1||x.bytes>LIMITS.analysis||!/^[a-f0-9]{64}$/.test(x.sha256))throw Error('Invalid analysis archive metadata');
+      const bytes=unb64(x.data_base64);if(bytes.length!==x.bytes||await sha(bytes)!==x.sha256)throw Error('Analysis archive bytes or SHA-256 do not match');analysisArchive={...x,bytes};
+    }
+    return {bundle,network:{...networkMeta,bytes:networkBytes},track,recipe,receipt,analysisArchive};
+  }
+  async function checkArtifact(value,format,keys,limit){
+    exact(value,keys);if(value.format!==format||!Number.isInteger(value.bytes)||value.bytes<1||value.bytes>limit||! /^[a-f0-9]{64}$/.test(value.sha256))throw Error('Invalid '+format+' artifact metadata');
+    const bytes=unb64(value.data_base64);if(bytes.byteLength!==value.bytes||await sha(bytes)!==value.sha256)throw Error(format+' bytes or SHA-256 do not match');
+    return bytes;
+  }
+  return {SCHEMA,LIMITS,sha,artifact,analysisSlot,pack,parse};
+});</script><script src="/client.js"></script><script src="/hf-auth.js"></script><script>'use strict';
+// Navigation and help preference only; these controls never start a run.
+(() => {
+  const tabs=[...document.querySelectorAll('.tabs [data-tab]')];
+  const navigation=document.querySelector('.tabs');
+  function syncNavigationOffset(){
+    const height=Math.ceil(navigation.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--lab-nav-height',height+'px');
+  }
+  syncNavigationOffset();
+  if(typeof ResizeObserver==='function')new ResizeObserver(syncNavigationOffset).observe(navigation);
+  window.addEventListener('resize',syncNavigationOffset);
+  document.fonts?.ready?.then(syncNavigationOffset);
+  function activate(button,{focusPanel=true}={}){
+    syncNavigationOffset();
+    document.querySelectorAll('.pane').forEach(pane=>pane.hidden=pane.id!==button.dataset.tab);
+    tabs.forEach(tab=>{const active=tab===button;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});
+    const heading=[...(document.getElementById(button.dataset.tab)?.querySelectorAll('h2')??[])].find(node=>node.getClientRects().length);
+    if(heading){heading.tabIndex=-1;heading.scrollIntoView({block:'start',behavior:'instant'});if(focusPanel)heading.focus({preventScroll:true});}
+    window.dispatchEvent(new CustomEvent('ald:section-change'));
+  }
+  window.LabNavigation=Object.freeze({openSection(id){
+    const button=tabs.find(tab=>tab.dataset.tab===id);if(!button)throw Error('Unknown lab section');
+    activate(button);
+  }});
+  tabs.forEach((button,index)=>{
+    button.addEventListener('click',()=>activate(button));
+    button.addEventListener('keydown',event=>{
+      let next;if(event.key==='ArrowRight'||event.key==='ArrowDown')next=(index+1)%tabs.length;
+      else if(event.key==='ArrowLeft'||event.key==='ArrowUp')next=(index+tabs.length-1)%tabs.length;
+      else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;
+      event.preventDefault();activate(tabs[next],{focusPanel:false});tabs[next].focus({preventScroll:true});
+    });
+  });
+  document.querySelectorAll('[data-open-tab]').forEach(button=>button.addEventListener('click',()=>{
+    const tab=tabs.find(item=>item.dataset.tab===button.dataset.openTab);if(!tab)return;activate(tab);
+    const requested=document.getElementById(button.dataset.focus);
+    const target=requested&&!requested.matches(':disabled')&&!requested.closest('[hidden]')?requested:tab;
+    target.scrollIntoView({block:'center'});target.focus();
+  }));
+  const guide=document.getElementById('firstRunGuide'),toggle=document.getElementById('quick_start_toggle'),key='tiga.ald.quick-start.v2';
+  try{guide.open=window.localStorage.getItem(key)==='open';}catch{}
+  const syncHelp=()=>toggle.setAttribute('aria-expanded',String(guide.open));syncHelp();
+  guide.addEventListener('toggle',()=>{syncHelp();try{window.localStorage.setItem(key,guide.open?'open':'closed');}catch{}});
+  toggle.addEventListener('click',()=>{guide.open=!guide.open;syncHelp();if(guide.open)guide.querySelector('summary').focus();});
+  document.getElementById('quick_start_close').addEventListener('click',()=>{guide.open=false;syncHelp();toggle.focus();});
+  document.getElementById('recipe_bucket_nav').addEventListener('click',()=>{
+    activate(tabs.find(tab=>tab.dataset.tab==='drive'));
+    document.getElementById('portableBundle').open=true;
+    const storage=document.getElementById('bucketStorage');storage.open=true;
+    const connected=document.getElementById('bucketConnected'),recipeTitle=document.getElementById('bucketRecipeTitle');
+    const target=connected&&!connected.hidden&&recipeTitle?recipeTitle:storage.querySelector('summary');
+    target?.scrollIntoView({behavior:'smooth',block:'center'});target?.focus({preventScroll:true});
+  });
+  const filterBtns=[...document.querySelectorAll('#trainingSubtabs [data-train-filter]')];
+  const trainDetails=['reward_settings','native_settings','run_settings','freeze_settings'];
+  filterBtns.forEach(btn=>btn.addEventListener('click',()=>{
+    const mode=btn.dataset.trainFilter;
+    filterBtns.forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));
+    trainDetails.forEach(id=>{
+      const el=document.getElementById(id);if(!el)return;
+      if(mode==='all'){el.hidden=false;}
+      else{el.hidden=id!==mode;if(id===mode)el.open=true;}
+    });
+  }));
+})();
+</script><script>// Browser-only editor; upload is controlled by the separate training client.
+(() => {
+  const q=id=>document.getElementById(id),api=window.NetworkEditor;
+  function status(text,error=false){
+    const node=q('editor_status');
+    node.setAttribute('role',error?'alert':'status');node.setAttribute('aria-live',error?'assertive':'polite');
+    node.dataset.state=error?'error':'success';node.textContent=text;
+    node.scrollIntoView({block:'nearest',behavior:'instant'});
+    if(error)node.focus({preventScroll:true});
+    window.dispatchEvent(new CustomEvent('ald:editor-status'));
+  }
+  let source=null,exportURL=null;
+  window.hasUnsavedNetworkDraft=()=>!!source||q('editor_name').value!=='Fresh network'||q('editor_vehicle').value!=='0'||q('editor_shape').value!=='6,4'||q('editor_seed').value!=='42105'||!q('editor_xavier').checked||q('editor_bias').checked;
+  for(const id of ['editor_name','editor_vehicle','editor_preset','editor_shape','editor_seed','editor_xavier','editor_bias','editor_create','editor_import','editor_outputs',...Array.from({length:5},(_,i)=>'editor_output_'+i)])q(id).disabled=false;
+  const outputIds=[0,1,2,3,4],outputName=id=>'editor_output_'+id;
+  function setOutputs(ids){for(const id of outputIds)q(outputName(id)).checked=ids.includes(id);}
+  const freshType=()=>Number(q('editor_vehicle').value),allowedOutputs=type=>type===2?[0,1,3,4]:outputIds,defaultOutputs=type=>allowedOutputs(type);
+  function refreshOutputRules(reset=false){
+    const type=freshType(),allowed=allowedOutputs(type);
+    if(reset)setOutputs(defaultOutputs(type));
+    for(const id of outputIds){const input=q(outputName(id)),required=id===0||id===1,unavailable=!allowed.includes(id);input.disabled=required||unavailable;if(required)input.checked=true;if(unavailable)input.checked=false;}
+    q('editor_small_label').textContent='Small starter · 6 inputs, 4 hidden nodes, '+allowed.length+' outputs';
+    q('editor_shape_hint').textContent='Enter 1–20 inputs, followed by 0–10 hidden layers of 1–16 nodes. Output width follows the selected controls. Maximum shape: 20 → ten layers of 16 → '+allowed.length+' ('+(2784+17*allowed.length).toLocaleString()+' parameters).';
+    q('editor_maximum_label').textContent='Largest game network · 20 inputs, 10 × 16 hidden nodes, '+allowed.length+' outputs ('+(2784+17*allowed.length).toLocaleString()+' parameters)';
+    q('editor_output_legend').textContent='Fresh network outputs · '+api.vehicleNames[type];
+    q('editor_output_hint').textContent=type===2?'Steering and Acceleration are required. Snowmobile Handbrake is unavailable; at most four outputs.':'Steering and Acceleration are required. Fresh output IDs preserve this order; up to five outputs.';
+  }
+  function preset(value){if(value==='small'){q('editor_shape').value='6,4';refreshOutputRules(true);}else if(value==='maximum'){q('editor_shape').value=[20,...Array(10).fill(16)].join(',');refreshOutputRules(true);}}
+  q('editor_preset').onchange=()=>preset(q('editor_preset').value);
+  q('editor_vehicle').onchange=()=>{refreshOutputRules(q('editor_preset').value!=='custom');renderSensorFan(source);};
+  q('editor_shape').oninput=()=>{q('editor_preset').value='custom';renderSensorFan(source);};
+  if(q('show_native_outline'))q('show_native_outline').onchange=()=>renderSensorFan(source);
+  for(const id of outputIds)q(outputName(id)).onchange=()=>{q('editor_preset').value='custom';refreshOutputRules(false);};
+  refreshOutputRules(false);
+  window.setEditorBusy=busy=>{q('editor_apply').disabled=busy||!source;};
+  function renderSensorFan(netValue){
+    const c=q('sensor_fan_map');if(!c||typeof c.getContext!=='function')return;
+    const ctx=c.getContext('2d');if(!ctx||typeof ctx.save!=='function')return;
+    const w=c.width,h=c.height;ctx.clearRect(0,0,w,h);
+    ctx.fillStyle='#09111b';ctx.fillRect(0,0,w,h);
+    const vType=Number.isInteger(netValue?.Type)?netValue.Type:freshType();
+    const showOutline=q('show_native_outline')?q('show_native_outline').checked:true;
+    const cx=w*0.5,cy=h*0.72;
+    let sensors=netValue?.Sensors;
+    if(!Array.isArray(sensors)){
+      const inCount=Math.max(1,Math.min(20,Number((q('editor_shape')?.value||'6').split(',')[0])||6));
+      const rays=Math.min(13,Math.max(1,inCount-1));
+      sensors=Array.from({length:rays},(_,i)=>({$type:'raycast',Degrees:rays===1?0:-90+180*i/(rays-1),Length:800}));
+    }
+    // Corridor walls + range rings
+    ctx.save();
+    ctx.strokeStyle='rgba(73,98,124,0.25)';ctx.lineWidth=1;
+    for(const r of [90,170,250]){ctx.beginPath();ctx.arc(cx,cy,r,Math.PI*1.05,Math.PI*1.95);ctx.stroke();}
+    ctx.strokeStyle='#cbd7d9';ctx.lineWidth=3;
+    ctx.beginPath();ctx.moveTo(cx-135,30);ctx.lineTo(cx-135,h-20);ctx.moveTo(cx+135,30);ctx.lineTo(cx+135,h-20);ctx.stroke();
+    // Raycast beams (facing upward -PI/2)
+    for(const s of sensors){
+      if(s?.$type!=='raycast')continue;
+      const rad=-Math.PI/2+(s.Degrees||0)*Math.PI/180;
+      const maxLen=Math.min(265,Math.max(50,(s.Length||800)*0.28));
+      const dx=Math.cos(rad),dy=Math.sin(rad);
+      let dist=maxLen;
+      if(Math.abs(dx)>1e-4){
+        const wallX=dx>0?cx+135:cx-135;
+        const t=(wallX-cx)/dx;
+        if(t>0&&t<dist)dist=t;
+      }
+      const hx=cx+dx*dist,hy=cy+dy*dist;
+      ctx.strokeStyle=dist<maxLen*0.95?'#ffd073':'#62dfb1';
+      ctx.globalAlpha=0.65;ctx.lineWidth=1.8;
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(hx,hy);ctx.stroke();
+      ctx.globalAlpha=1;ctx.fillStyle=ctx.strokeStyle;
+      ctx.beginPath();ctx.arc(hx,hy,3.2,0,Math.PI*2);ctx.fill();
+    }
+    // 2D Vehicle Silhouette with white shader outline
+    ctx.translate(cx,cy);ctx.rotate(-Math.PI/2);ctx.scale(2.1,2.1);
+    ctx.fillStyle='#101820';ctx.strokeStyle=showOutline?'#ffffff':'#2a3d52';ctx.lineWidth=showOutline?1.2:0.7;
+    if(vType===2){
+      for(const wy of [-5.2,5.2]){ctx.beginPath();ctx.roundRect(4,-1.3+wy,9,2.6,1);ctx.fill();ctx.stroke();}
+    }else{
+      for(const [wx,wy] of [[-10.5,-6.2],[-10.5,6.2],[5.2,-6.2],[5.2,6.2]]){ctx.beginPath();ctx.roundRect(wx,wy-1.7,6.4,3.4,1);ctx.fill();ctx.stroke();}
+    }
+    ctx.fillStyle='#62dfb1';ctx.strokeStyle=showOutline?'#ffffff':'#0c1926';ctx.lineWidth=showOutline?2.2:1.1;
+    ctx.beginPath();
+    if(vType===0){
+      ctx.moveTo(-13.5,-6.2);ctx.lineTo(-9.5,-6.2);ctx.lineTo(-9.5,-3.6);ctx.lineTo(-6.5,-5.5);ctx.lineTo(3.5,-4.8);ctx.lineTo(8.5,-2.0);
+      ctx.lineTo(13.5,-5.8);ctx.lineTo(15.2,-5.8);ctx.lineTo(15.2,5.8);ctx.lineTo(13.5,5.8);ctx.lineTo(8.5,2.0);ctx.lineTo(3.5,4.8);
+      ctx.lineTo(-6.5,5.5);ctx.lineTo(-9.5,3.6);ctx.lineTo(-9.5,6.2);ctx.lineTo(-13.5,6.2);ctx.closePath();
+    }else if(vType===1){ctx.roundRect(-12.5,-6.3,25,12.6,3.4);}
+    else if(vType===2){ctx.moveTo(-11.5,-4.6);ctx.lineTo(5.5,-5.0);ctx.lineTo(13.5,0);ctx.lineTo(5.5,5.0);ctx.lineTo(-11.5,4.6);ctx.closePath();}
+    else{ctx.roundRect(-14,-7.0,28,14.0,2.4);}
+    ctx.fill();ctx.stroke();
+    ctx.fillStyle='#0c1725';ctx.beginPath();ctx.roundRect(-4.5,-3.6,8.5,7.2,2);ctx.fill();
+    ctx.restore();
+    if(typeof ctx.fillText==='function'){
+      ctx.fillStyle='#c6d9e9';ctx.font='700 12px system-ui,sans-serif';
+      ctx.fillText((api.vehicleNames[vType]||'Vehicle')+' · 2D Outline & Sensor Cone',14,22);
+    }
+  }
+  function graph(n){
+    const canvas=q('network_map'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
+    const points=n.Shape.map((count,l)=>Array.from({length:count},(_,i)=>[45+l*(canvas.width-90)/(n.Shape.length-1),35+(i+.5)*(canvas.height-70)/count]));
+    n.Weights.forEach((matrix,l)=>matrix.forEach((row,i)=>row.forEach((v,j)=>{
+      ctx.strokeStyle=v<0?'#f27676':'#62dfb1';ctx.globalAlpha=Math.min(.7,.08+Math.abs(v)*.35);
+      ctx.beginPath();ctx.moveTo(...points[l][i]);ctx.lineTo(...points[l+1][j]);ctx.stroke();
+    })));
+    ctx.globalAlpha=1;points.flat().forEach(([x,y])=>{ctx.fillStyle='#62dfb1';ctx.beginPath();ctx.arc(x,y,4,0,2*Math.PI);ctx.fill();});
+    renderSensorFan(source);
+  }
+  function show(value){
+    const n=api.neural(value.NeuralNetwork);source=value;
+    if(Number.isInteger(value.Type)&&value.Type>=0&&value.Type<api.vehicleNames.length){q('editor_vehicle').value=String(value.Type);refreshOutputRules(false);}
+    const count=n.Weights.reduce((sum,m)=>sum+m.reduce((s,r)=>s+r.length,0),0)+n.Biases.reduce((s,r)=>s+r.length,0);
+    q('editor_json').value=JSON.stringify(n,null,2);q('editor_json').disabled=false;
+    q('editor_name').value=value.Name||'Edited network';q('editor_shape').value=n.Shape.slice(0,-1).join(',');q('editor_preset').value='custom';setOutputs((Array.isArray(value.Outputs)?value.Outputs:[]).filter(id=>allowedOutputs(freshType()).includes(id)));refreshOutputRules(false);
+    q('editor_metadata').textContent='Current network: '+(api.vehicleNames[value.Type]||'Unknown vehicle')+' (Type '+String(value.Type)+') · '+n.Shape.join(' → ')+' · '+count+' parameters. Structure checked; no game/leaderboard validation claimed.';
+    q('editor_contract').textContent=JSON.stringify({sensors:value.Sensors,outputs:value.Outputs,vehicle:value.Type},null,2);
+    try{api.compatible(value);q('editor_legality').textContent='Supported by the current training worker.';}
+    catch(error){q('editor_legality').textContent='Inspection/export only: '+error.message;}
+    q('editor_history').replaceChildren();q('editor_stats').textContent=JSON.stringify(value.Stats??{},null,2);
+    const rows=Array.isArray(value.Stats?.Generations)?value.Stats.Generations:[];
+    rows.slice(-100).forEach((r,i)=>{const tr=document.createElement('tr');for(const v of [i+1,r.Time??'Not recorded',r.MutationRate??'Not recorded',r.BestScore??'Not recorded',r.BestLap??'Not recorded']){const td=document.createElement('td');td.textContent=String(v);tr.append(td);}q('editor_history').append(tr);});
+    q('editor_history_panel').hidden=!rows.length;
+    q('editor_parameters').replaceChildren();
+    const add=(label,value)=>{
+      const tr=document.createElement('tr'),name=document.createElement('td'),cell=document.createElement('td');name.textContent=label;
+      const input=document.createElement('input');input.type='number';input.step='any';input.value=value;input.dataset.initial=String(value);input.dataset.parameter=label;input.setAttribute('aria-label',label);
+      input.onchange=()=>{
+        try{const next=api.neural(JSON.parse(q('editor_json').value));updateParameter(next,input);api.neural(next);q('editor_json').value=JSON.stringify(next,null,2);input.dataset.initial=input.value;status('Draft changed. Apply or export to validate it; no training started.');}catch(error){status(error.message,true);}
+      };
+      cell.append(input);tr.append(name,cell);q('editor_parameters').append(tr);
+    };
+    // Bound the visible table; all values remain editable in JSON.
+    let visible=0;
+    n.Weights.forEach((m,l)=>m.forEach((row,i)=>row.forEach((v,j)=>{if(visible++<2048)add('Weight '+l+' '+i+' '+j,v);})));n.Biases.forEach((r,l)=>r.forEach((v,j)=>{if(visible++<2048)add('Bias '+l+' '+j,v);}));
+    graph(n);window.setEditorBusy(window.TrainingClient?.isBusy?.()??false);
+    q('editor_download').hidden=false;q('editor_download').href='#';q('editor_download').textContent='Validate and download edited .evolution';
+  }
+  renderSensorFan(null);
+  function updateParameter(next,input){
+    if(!input.value.trim()||!Number.isFinite(Number(input.value)))throw Error('Parameter value must be a finite number');
+    const label=input.dataset.parameter,parts=label.match(/\d+/g).map(Number);
+    if(label.startsWith('Weight'))next.Weights[parts[0]][parts[1]][parts[2]]=Number(input.value);else next.Biases[parts[0]][parts[1]]=Number(input.value);
+  }
+  async function load(file){
+    try{
+      if(!file)throw Error('Choose or create a driver in Run & results, or select an .evolution file here.');
+      if(file.size>1048576)throw Error('File exceeds 1 MB inspection limit');
+      let bytes=new Uint8Array(await file.arrayBuffer());
+      if(bytes[0]===31&&bytes[1]===139){
+        const reader=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')).getReader();const chunks=[];let length=0;
+        try{while(true){const {value,done}=await reader.read();if(done)break;length+=value.length;if(length>4194304)throw Error('Expanded file exceeds 4 MB');chunks.push(value);}}
+        finally{await reader.cancel();}
+        bytes=new Uint8Array(length);let offset=0;for(const chunk of chunks){bytes.set(chunk,offset);offset+=chunk.length;}
+      }
+      const value=JSON.parse(new TextDecoder().decode(bytes));show(value);status('Inspected '+(file.name||'latest received result')+' in this page. Original weights and the active driver were not changed.');
+    }catch(error){status('Inspection failed: '+error.message,true);}
+  }
+  async function artifact(){
+    if(!source)throw Error('Load or create a network first');
+    const next=JSON.parse(q('editor_json').value);
+    for(const input of q('editor_parameters').querySelectorAll('input'))if(input.value!==input.dataset.initial)updateParameter(next,input);
+    const value=api.edited(source,next,q('editor_name').value);api.compatible(value);
+    const blob=await new Response(new Blob([JSON.stringify(value)]).stream().pipeThrough(new CompressionStream('gzip'))).blob();
+    if(blob.size>1048576)throw Error('Export exceeds 1 MB');
+    return {value,file:new File([blob],'edited-network.evolution',{type:'application/octet-stream'})};
+  }
+  const inspectSelected=()=>load(window.TrainingClient?.getSelectedNetwork?.()||q('editor_file').files[0]);
+  q('editor_file').onchange=()=>load(q('editor_file').files[0]);
+  q('editor_import').onclick=inspectSelected;
+  window.NetworkEditorUI=Object.freeze({inspectSelected});
+  q('editor_create').onclick=()=>{try{const outputs=outputIds.filter(id=>q(outputName(id)).checked);show(api.fresh({type:freshType(),shape:q('editor_shape').value.split(',').map(Number),outputs,seed:Number(q('editor_seed').value),xavier:q('editor_xavier').checked,bias:q('editor_bias').checked,name:q('editor_name').value}));status('Fresh '+api.vehicleNames[freshType()]+' network created. No training history, upload or storage.');}catch(error){status('Not created: '+error.message,true);}};
+  q('editor_apply').onclick=async()=>{try{const {value,file}=await artifact();api.compatible(value);window.TrainingClient.useNetwork(file);show(value);status('Edited network selected for the next run. No upload yet.');}catch(error){status('Not applied: '+error.message,true);}};
+  q('editor_download').onclick=async event=>{
+    event.preventDefault();try{const {file}=await artifact();if(exportURL)URL.revokeObjectURL(exportURL);exportURL=URL.createObjectURL(file);const a=document.createElement('a');a.href=exportURL;a.download=file.name;a.click();status('Export requested. This is a new edited artifact with no inherited training scores.');}catch(error){status('Not exported: '+error.message,true);}
+  };
+})();
+</script><script src="/agent-tools.js"></script></html>
+
+

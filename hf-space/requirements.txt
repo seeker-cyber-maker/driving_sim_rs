@@ -1,0 +1,4 @@
+fastapi==0.141.1
+uvicorn==0.52.1
+spaces==0.51.3
+huggingface_hub==1.33.0

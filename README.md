@@ -1,5 +1,11 @@
 # altd-sim
 
+## ALD Training Lab release
+
+The verified hosted GPU/CPU lab is published in [hf-space/](hf-space/) with native replay and a car black box. [Open the app](https://tiga-rce-ald-tao-gpu.hf.space/), read the [portable usage guide](docs/HF_LAB.md), or use the [agent experiment skill](skills/ald-run-experiment/SKILL.md).
+
+The [ALD release notes](docs/releases/ald-lab-2026.10.23/RELEASE_NOTES.md) identify the exact HF build and its four-vehicle qualification. The root Rust simulator below remains a separate source tree; it does not replace the custom native snapshot bundled with the HF app.
+
 [![CI](https://github.com/Zorro909/driving_sim_rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Zorro909/driving_sim_rs/actions/workflows/ci.yml)
 
 `altd-sim` is a Rust vehicle simulator and neural-network trainer for AI Learns To Drive. It runs headless on the CPU, through a runtime-loaded AMD HIP library, or in WebAssembly. It reproduces the game's floating-point arithmetic, contact ordering, sensors and evolution behavior against captured regression fixtures. Exactness claims apply to the tested inputs; [fidelity](docs/fidelity.md) records the limits.

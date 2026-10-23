@@ -1,0 +1,14 @@
+{
+  "schema": "ald-physics-build/1",
+  "base_revision": "b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0",
+  "applied_upstream_delta": "65810f5..ab3ec67 (release/build delta; HF feature branch retained)",
+  "physics_revision": "ald-parity-20261017",
+  "source_archive_sha256": "6abefb234de18dee58d69758c6cc8900f259993663ac37f90ce39aa114a30718",
+  "binaries": {
+    "bin/extract_saved_track": "3a7733c45b4301a786fcbfe92660a1c484749272da5f608d62f34878bd4ff31a",
+    "bin/altd-sim": "792139f30bcfecf25f2d78595d2611234d30b0a254b5ece0ec587f1d27a80df2",
+    "bin/libaltd_gpu.so": "e5e9a61d863bc3b429af69a13cd8d50f63cad8984b3e6a9001ae342fc5981e05"
+  },
+  "original_engine_cases_passed": 57,
+  "hosted_vehicle_checks_passed": 8
+}

@@ -1,0 +1,24 @@
+{
+  "commit": "b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0",
+  "importer_source_revision": "d8ab74c25df70b6a86ed101080e33d5fb785ea6f",
+  "math_profile": "proton",
+  "native_build": {
+    "build_receipt_path": "native/blackbox-build-receipt.json",
+    "build_receipt_sha256": "de3eea6c45a5ae4897287a97b0e2822fdae552a0655250bf940cef20d9b60d96",
+    "cuda_library_origin": "newly compiled library; 57 original-engine cases passed on HF ZeroGPU",
+    "simulator_origin": "Retained physics branch plus read-only cached decision telemetry and bounded single-pass recorder",
+    "source_revision": "b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0",
+    "source_snapshot_path": "native/blackbox-source.tar.gz",
+    "source_snapshot_sha256": "56b43430c68b95bf7ac0d8312975c366c920f99b1653d790fb15b59453728e28"
+  },
+  "open_prs_not_included": [
+    19,
+    21
+  ],
+  "repository": "https://github.com/Zorro909/driving_sim_rs",
+  "role": "gpu",
+  "ui_refresh_date": "2026-10-12",
+  "physics_revision": "ald-parity-20261017",
+  "applied_upstream_delta": "65810f5..ab3ec67 (release/build delta; HF feature branch retained)",
+  "replay_revision": "native-blackbox-v2-20261023"
+}

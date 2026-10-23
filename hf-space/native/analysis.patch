@@ -1,0 +1,861 @@
+--- a/src/bin/altd-sim/args.rs
++++ b/src/bin/altd-sim/args.rs
+@@ -290,6 +290,18 @@
+         /// Export the final complete batch fitness leader before reproduction.
+         #[arg(long)]
+         save_final_candidate: bool,
++        /// Record every evaluated car and the three distinct winner roles.
++        #[arg(long)]
++        analysis: bool,
++        /// Evaluate the exact init-network once without initializing an optimizer population.
++        #[arg(long, requires = "init_network")]
++        evaluate_frozen: bool,
++        /// Observe every game statistics callback of a fresh fixed-policy evaluation.
++        #[arg(long, requires = "evaluate_frozen")]
++        challenge_observations: bool,
++        /// Forward laps required for the zero-physical-contact winner.
++        #[arg(long, default_value_t = 2)]
++        clean_min_laps: u64,
+         /// Stop after a generation whose best total_score reaches this value.
+         #[arg(long)]
+         stop_score_above: Option<f64>,
+--- a/src/bin/altd-sim/main.rs
++++ b/src/bin/altd-sim/main.rs
+@@ -161,6 +161,10 @@
+             batch_count,
+             checkpoint_every,
+             save_final_candidate,
++            analysis,
++            evaluate_frozen,
++            challenge_observations,
++            clean_min_laps,
+             resume,
+             eliminate_on_wall,
+             no_eliminate_on_wall,
+@@ -203,6 +207,10 @@
+                 batch_count,
+                 checkpoint_every,
+                 save_final_candidate,
++                analysis,
++                evaluate_frozen,
++                challenge_observations,
++                clean_min_laps,
+                 resume,
+                 stop,
+                 eliminate_on_wall: flag(eliminate_on_wall, no_eliminate_on_wall),
+--- /dev/null
++++ b/src/bin/altd-sim/scratch/analysis.rs
+@@ -0,0 +1,253 @@
++//! Read-only generation-boundary observations and immutable winner snapshots.
++use altd_sim::training::{
++    evolution::{reward_descriptors, METRIC_NAMES},
++    TrainingRunner,
++};
++use serde_json::{json, Value};
++use std::{
++    fs::File,
++    io::{BufWriter, Write},
++    path::{Path, PathBuf},
++};
++
++const MAX_DESCRIPTOR_BYTES: usize = 256 * 1024 * 1024;
++
++pub(super) struct Analysis {
++    dir: PathBuf,
++    output: BufWriter<File>,
++    bytes: usize,
++    rows: usize,
++    clean_min_laps: u64,
++    frozen: bool,
++    fitness: Option<Value>,
++    fastest: Option<Value>,
++    clean: Option<Value>,
++    evaluation: Option<Value>,
++}
++
++fn weight_hash(params: &[f64]) -> String {
++    let bytes: Vec<u8> = params.iter().flat_map(|p| p.to_le_bytes()).collect();
++    altd_sim::training::evaluation::sha256(&bytes)
++}
++
++fn eligible(row: &Value, clean_min_laps: Option<u64>) -> bool {
++    row["objectives"]["best_lap_seconds"]
++        .as_f64()
++        .is_some_and(|v| v.is_finite() && v > 0.0)
++        && row["objectives"]["forward_laps"]
++            .as_u64()
++            .is_some_and(|laps| laps >= clean_min_laps.unwrap_or(1))
++        && (clean_min_laps.is_none() || row["objectives"]["physical_contacts"].as_u64() == Some(0))
++}
++
++fn better_lap(row: &Value, previous: Option<&Value>) -> bool {
++    previous.is_none_or(|old| {
++        row["objectives"]["best_lap_seconds"].as_f64().unwrap()
++            < old["objectives"]["best_lap_seconds"].as_f64().unwrap()
++    })
++}
++
++impl Analysis {
++    pub(super) fn new(dir: &Path, clean_min_laps: u64, frozen: bool) -> Self {
++        assert!((1..=100).contains(&clean_min_laps), "clean minimum laps must be 1..100");
++        let dir = dir.join("analysis");
++        std::fs::create_dir_all(dir.join("winners")).expect("analysis directory");
++        let output = BufWriter::new(File::create(dir.join("descriptors.jsonl")).expect("analysis descriptors"));
++        Self {
++            dir,
++            output,
++            bytes: 0,
++            rows: 0,
++            clean_min_laps,
++            frozen,
++            fitness: None,
++            fastest: None,
++            clean: None,
++            evaluation: None,
++        }
++    }
++
++    fn snapshot(&self, role: &str, row: &Value, runner: &TrainingRunner, index: usize, network_data: &Value) {
++        let mut network = runner.agents[index].network.to_json();
++        network["inputs"] = network_data["inputs"].clone();
++        network["outputs"] = network_data["outputs"].clone();
++        network["observation"] = row.clone();
++        std::fs::write(
++            self.dir.join(format!("winners/{role}.json")),
++            serde_json::to_vec(&network).unwrap(),
++        )
++        .expect("immutable selected weight snapshot");
++    }
++
++    pub(super) fn record(&mut self, runner: &TrainingRunner, generation: usize, fitness: &[f64], network_data: &Value) {
++        assert_eq!(fitness.len(), runner.agents.len());
++        let channels = reward_descriptors(&runner.results());
++        assert_eq!(channels.len(), 18);
++        let leader = if self.frozen {
++            0
++        } else {
++            super::runner::final_candidate_leader(fitness)
++        };
++        for (index, agent) in runner.agents.iter().enumerate() {
++            let raw: serde_json::Map<String, Value> = METRIC_NAMES
++                .iter()
++                .zip(agent.stats.metrics())
++                .map(|(name, value)| ((*name).into(), json!(value.filter(|v| v.is_finite()))))
++                .collect();
++            let channel_values: Vec<Value> = channels.iter().map(|c| c["values"][index].clone()).collect();
++            let channel_ranks: Vec<Value> = channels
++                .iter()
++                .map(|c| c["population_relative"][index].clone())
++                .collect();
++            let reasons: Vec<Value> = channels
++                .iter()
++                .map(|column| {
++                    if !column["values"][index].is_null() {
++                        Value::Null
++                    } else if column["metric"] == "best_lap_performance" {
++                        json!("no_completed_lap")
++                    } else if column["type"] == "average" && agent.stats.update_count == 0 {
++                        json!("no_statistics_updates")
++                    } else {
++                        json!("not_observed")
++                    }
++                })
++                .collect();
++            let row = json!({"schema":1, "generation":generation + 1, "car":index,
++                "candidate_id":format!("g{:06}-c{:06}", generation + 1, index),
++                "ticks_elapsed":runner.tick, "stats_update_count":agent.stats.update_count,
++                "raw_metrics":raw, "channels":{"values":channel_values, "population_relative":channel_ranks, "unavailable_reasons":reasons},
++                "selection_fitness":if self.frozen {Value::Null} else {json!(fitness[index])},
++                "objectives":{"best_lap_seconds":agent.stats.best_lap_time.filter(|v| v.is_finite() && *v > 0.0),
++                    "forward_laps":agent.stats.score.lap_count, "physical_contacts":agent.car.collision_count,
++                    "collision_updates":agent.stats.collision_count, "total_actual_distance":agent.stats.total_actual_distance,
++                    "active":agent.car.active},
++                "weights_sha256":weight_hash(&agent.network.params)});
++            let text = serde_json::to_vec(&row).expect("finite descriptor");
++            self.bytes += text.len() + 1;
++            assert!(
++                self.bytes <= MAX_DESCRIPTOR_BYTES,
++                "complete analysis exceeds 256 MiB; no descriptors truncated"
++            );
++            self.output
++                .write_all(&text)
++                .and_then(|_| self.output.write_all(b"\n"))
++                .expect("descriptor write");
++            self.rows += 1;
++            if self.frozen {
++                self.evaluation = Some(row);
++                continue;
++            }
++            // Replacing only on a strictly better lap retains the earliest generation/car tie.
++            if eligible(&row, None) && better_lap(&row, self.fastest.as_ref()) {
++                self.snapshot("fastest_lap", &row, runner, index, network_data);
++                self.fastest = Some(row.clone());
++            }
++            if eligible(&row, Some(self.clean_min_laps)) && better_lap(&row, self.clean.as_ref()) {
++                self.snapshot("clean_laps", &row, runner, index, network_data);
++                self.clean = Some(row.clone());
++            }
++            // Fitness ranks belong to this population. Always overwrite with this generation's leader.
++            if index == leader {
++                self.snapshot("fitness", &row, runner, index, network_data);
++                self.fitness = Some(row);
++            }
++        }
++        self.output.flush().expect("flush complete descriptors before turnover");
++    }
++
++    pub(super) fn finish(mut self) {
++        self.output.flush().expect("flush analysis");
++        let data = json!({"schema":"ald.native-analysis", "version":1, "rows":self.rows,
++            "mode":if self.frozen {"evaluate"} else {"train"}, "clean_min_laps":self.clean_min_laps,
++            "winners":{"fitness":self.fitness, "fastest_lap":self.fastest, "clean_laps":self.clean},
++            "evaluation":self.evaluation, "metric_names":METRIC_NAMES});
++        std::fs::write(self.dir.join("analysis.json"), serde_json::to_vec(&data).unwrap()).expect("analysis summary");
++    }
++}
++
++#[cfg(test)]
++#[path = "../../../../examples/support/generated.rs"]
++mod generated;
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    fn row(laps: u64, contacts: u64, lap: Option<f64>) -> Value {
++        json!({"objectives":{"forward_laps":laps,"physical_contacts":contacts,"best_lap_seconds":lap}})
++    }
++    #[test]
++    fn distinct_roles_keep_global_laps_but_final_population_fitness_and_old_weights() {
++        use altd_sim::{
++            math::profile::MathProfile,
++            nn::network::Network,
++            track::world::{vector, World},
++            training::{evolution::EvolutionSettings, pyrandom::PyRandom, SensorLayout},
++        };
++        use std::sync::Arc;
++        let scene = generated::scene("formula", 0);
++        let network_data = json!({"inputs":["Speed"], "outputs":["Acceleration"]});
++        let layout = SensorLayout::from_ordered(&json!({"names":["Speed"], "sensors":[{"$type":"speed"}]})).unwrap();
++        let mut runner = TrainingRunner::new(
++            Arc::new(World::from_scene_with(&scene, MathProfile::Proton)),
++            vector(&scene["reset_position"]),
++            scene["reset_rotation"].as_f64().unwrap(),
++            layout,
++            &["Acceleration".into()],
++            EvolutionSettings::default(),
++            PyRandom::new(42),
++            2,
++            0,
++            false,
++            false,
++        );
++        let networks: Vec<_> = (0..3)
++            .map(|i| Network::from_vector(&[1, 1], vec![i as f64, 0.0]))
++            .collect();
++        runner.resume(&networks, 0);
++        for (i, agent) in runner.agents.iter_mut().enumerate() {
++            agent.stats.update_count = 10;
++            agent.stats.best_lap_time = [None, Some(5.0), Some(8.0)][i];
++            agent.stats.score.lap_count = [0, 1, 2][i];
++            // Reward collision updates cannot disqualify a physically clean car.
++            agent.stats.collision_count = if i == 2 { 9 } else { 0 };
++        }
++        let dir = std::env::temp_dir().join(format!("ald-distinct-winners-{}", std::process::id()));
++        std::fs::create_dir(&dir).unwrap();
++        let mut writer = Analysis::new(&dir, 2, false);
++        writer.record(&runner, 0, &[0.9, 0.7, 0.1], &network_data);
++        assert_eq!(writer.clean.as_ref().unwrap()["car"], 2);
++        for (i, agent) in runner.agents.iter_mut().enumerate() {
++            agent.network.params = vec![10.0 + i as f64, 0.0];
++            agent.stats.best_lap_time = [Some(6.0), Some(5.0), None][i];
++            agent.stats.score.lap_count = [2, 2, 0][i];
++            agent.car.collision_count = if i == 0 { 1 } else { 0 };
++        }
++        writer.record(&runner, 1, &[0.0, 0.5, 0.2], &network_data);
++        assert_eq!(writer.fastest.as_ref().unwrap()["generation"], 1);
++        assert_eq!(writer.fastest.as_ref().unwrap()["car"], 1);
++        assert_eq!(writer.clean.as_ref().unwrap()["generation"], 2);
++        assert_eq!(writer.fitness.as_ref().unwrap()["generation"], 2);
++        assert_eq!(writer.fitness.as_ref().unwrap()["selection_fitness"], 0.5);
++        let fastest: Value =
++            serde_json::from_slice(&std::fs::read(dir.join("analysis/winners/fastest_lap.json")).unwrap()).unwrap();
++        assert_eq!(fastest["weights"][0][0][0], 1.0);
++        writer.finish();
++        std::fs::remove_dir_all(dir).unwrap();
++    }
++
++    #[test]
++    fn clean_requires_forward_laps_and_physical_contacts_not_reward_updates() {
++        assert!(!eligible(&row(0, 0, None), None));
++        assert!(eligible(&row(1, 3, Some(10.0)), None));
++        assert!(!eligible(&row(1, 0, Some(10.0)), Some(2)));
++        assert!(!eligible(&row(2, 1, Some(10.0)), Some(2)));
++        assert!(eligible(&row(2, 0, Some(10.0)), Some(2)));
++    }
++    #[test]
++    fn lap_ties_keep_earlier_snapshot_and_rank_fitness_is_not_a_tiebreaker() {
++        let old = row(2, 0, Some(10.0));
++        assert!(!better_lap(&old, Some(&old)));
++        assert!(better_lap(&row(2, 0, Some(9.0)), Some(&old)));
++    }
++}
+--- /dev/null
++++ b/src/bin/altd-sim/scratch/challenge.rs
+@@ -0,0 +1,57 @@
++//! Fresh-policy statistics callback telemetry only; no challenge predicates.
++use altd_sim::training::TrainingRunner;
++use serde_json::json;
++use std::{fs::File, io::{BufWriter, Write}, path::{Path, PathBuf}};
++
++pub(super) struct ChallengeObservations {
++    output: BufWriter<File>,
++    dir: PathBuf,
++    requested_ticks: u64,
++    lap_score: f64,
++    backend: &'static str,
++    frames: u64,
++}
++
++impl ChallengeObservations {
++    pub(super) fn new(dir: &Path, requested_ticks: u64, lap_score: f64, backend: &'static str) -> Self {
++        assert!(lap_score.is_finite() && lap_score > 0.0, "challenge observations require a positive native lap score");
++        Self { output: BufWriter::new(File::create(dir.join("challenge-observations.jsonl")).expect("create callback observations")),
++            dir: dir.to_owned(), requested_ticks, lap_score, backend, frames: 0 }
++    }
++
++    pub(super) fn sample(&mut self, runner: &TrainingRunner, callback_active: bool) {
++        assert_eq!(runner.agents.len(), 1);
++        assert_eq!(runner.tick % 6, 0);
++        let agent = &runner.agents[0];
++        let stats = &agent.stats;
++        // An active callback updates previous_speed before driving. An inactive
++        // terminal callback stops before driving and its car speed is exact.
++        let velocity = altd_sim::math::godot_math::F2::from(agent.car.velocity);
++        let speed = if callback_active { stats.previous_speed }
++            else { velocity.dot(velocity).sqrt() as f64 };
++        let row = json!({"tick":runner.tick, "game_time":((runner.tick - 6) / 6) as f64 * 0.1,
++            "stats_update_count":stats.update_count, "current_score":stats.score.total_score,
++            "current_best_score":stats.score.total_score, "worst_score":stats.score.total_score,
++            "went_backwards":stats.score.went_backwards, "forward_laps":stats.score.lap_count,
++            "drift_cumulative":stats.total_drifting_amount,
++            "continuous_drift_time":stats.continuous_drift_time,
++            "max_continuous_drift_time":stats.max_continuous_drift_time,
++            "speed_kph":speed / 15.0 * 3.6, "collision_count":stats.collision_count,
++            "active":callback_active, "best_lap_seconds":stats.best_lap_time});
++        serde_json::to_writer(&mut self.output, &row).expect("write callback observation");
++        self.output.write_all(b"\n").expect("write callback newline");
++        self.frames += 1;
++    }
++
++    pub(super) fn finish(mut self) {
++        self.output.flush().expect("flush all callback observations");
++        let meta = json!({"schema":"ald.challenge-observations", "version":1, "mode":"evaluate",
++            "lap_score":self.lap_score, "stats_interval_seconds":0.1, "first_stats_tick":6,
++            "requested_ticks":self.requested_ticks, "frames":self.frames, "execution_backend":self.backend,
++            "active_semantics":"after_statistics_before_drive",
++            "collision_semantics":"AgentStats collision update count, not physical contact count",
++            "score_semantics":"Signed path score; single-car current_best_score and worst_score equal current_score"});
++        std::fs::write(self.dir.join("challenge-observations-meta.json"), serde_json::to_vec(&meta).unwrap())
++            .expect("write callback metadata");
++    }
++}
+--- a/src/bin/altd-sim/scratch/mod.rs
++++ b/src/bin/altd-sim/scratch/mod.rs
+@@ -1,5 +1,7 @@
+ //! Scratch training configuration, checkpoints, and stopping rules.
+ 
++mod analysis;
++mod challenge;
+ mod checkpoint;
+ mod runner;
+ mod stop;
+@@ -37,6 +39,10 @@
+     pub(super) batch_count: usize,
+     pub(super) checkpoint_every: usize,
+     pub(super) save_final_candidate: bool,
++    pub(super) analysis: bool,
++    pub(super) evaluate_frozen: bool,
++    pub(super) challenge_observations: bool,
++    pub(super) clean_min_laps: u64,
+     pub(super) stop: StopRules,
+     pub(super) eliminate_on_wall: Option<bool>,
+     pub(super) idle_eliminate: Option<bool>,
+--- a/src/bin/altd-sim/scratch/runner.rs
++++ b/src/bin/altd-sim/scratch/runner.rs
+@@ -74,7 +74,7 @@
+         "population, generations, and ticks must be positive"
+     );
+     assert!(
+-        config.mutation_start > 0.0 && config.mutation_end > 0.0,
++        config.evaluate_frozen || (config.mutation_start > 0.0 && config.mutation_end > 0.0),
+         "mutation rates must be positive"
+     );
+ 
+@@ -110,6 +110,19 @@
+         .validate_algorithm()
+         .unwrap_or_else(|e| panic!("settings: {e}"));
+ 
++    assert!(
++        !config.analysis || (track_count_guard(config) && !config.resume && config.init_population.is_none()),
++        "analysis requires a fresh fixed-track run"
++    );
++    assert!(
++        !config.evaluate_frozen
++            || (config.analysis && config.population == 1 && config.generations == 1 && config.checkpoint_every == 0),
++        "frozen evaluation requires analysis, one exact policy, one generation, and no checkpoint turnover"
++    );
++    assert!(
++        !config.challenge_observations || (config.evaluate_frozen && config.ticks <= 18_000),
++        "challenge observations require a bounded fresh frozen evaluation"
++    );
+     let dir = &config.out_dir;
+     let best_dir = dir.join("best_laps");
+     std::fs::create_dir_all(&best_dir).unwrap_or_else(|e| panic!("{}: {e}", best_dir.display()));
+@@ -338,7 +351,11 @@
+         );
+         generation as usize
+     } else {
+-        runner.start(seed_network.as_ref().unwrap());
++        if config.evaluate_frozen {
++            runner.resume(&[seed_network.as_ref().unwrap().clone()], 0);
++        } else {
++            runner.start(seed_network.as_ref().unwrap());
++        }
+         std::fs::write(&log_path, "").expect("log file");
+         0
+     };
+@@ -370,6 +387,14 @@
+         started.elapsed().as_secs_f64()
+     );
+ 
++    let frozen_params = config.evaluate_frozen.then(|| runner.agents[0].network.params.clone());
++    let mut analysis = config
++        .analysis
++        .then(|| super::analysis::Analysis::new(dir, config.clean_min_laps, config.evaluate_frozen));
++    let mut challenge = config.challenge_observations.then(|| super::challenge::ChallengeObservations::new(
++        dir, config.ticks, runner.world.track.path_length() * (5.0 / 384.0),
++        if gpu_sim.is_some() { "cuda" } else { "cpu" },
++    ));
+     let fmt_lap = |lap: Option<f64>| lap.map_or("   -   ".to_string(), |t| format!("{t:7.2}"));
+     let mut stop_state = StopState {
+         best_lap: None,
+@@ -422,12 +447,22 @@
+             let track_config = current_track.as_ref().map(|track| track.track.config.clone());
+             match (&mut gpu_sim, &gpu_world) {
+                 (Some(sim), Some(world)) => {
+-                    runner
+-                        .advance_generation_gpu(sim, world, config.ticks)
+-                        .unwrap_or_else(|e| panic!("--gpu: {e}"));
++                    if let Some(observer) = &mut challenge {
++                        runner.advance_generation_gpu_observed(sim, world, config.ticks,
++                            |runner, active| observer.sample(runner, active))
++                            .unwrap_or_else(|e| panic!("--gpu: {e}"));
++                    } else {
++                        runner.advance_generation_gpu(sim, world, config.ticks)
++                            .unwrap_or_else(|e| panic!("--gpu: {e}"));
++                    }
+                 }
+                 _ => {
+-                    runner.advance_generation(config.ticks);
++                    if let Some(observer) = &mut challenge {
++                        runner.advance_generation_observed(config.ticks,
++                            |runner, active| observer.sample(runner, active));
++                    } else {
++                        runner.advance_generation(config.ticks);
++                    }
+                 }
+             }
+             simulated_ticks += runner.tick;
+@@ -493,6 +528,18 @@
+         }
+         let simulate_seconds = generation_started.elapsed().as_secs_f64();
+         let summary = batch.finish();
++        if let Some(params) = &frozen_params {
++            assert!(
++                params
++                    .iter()
++                    .zip(&runner.agents[0].network.params)
++                    .all(|(a, b)| a.to_bits() == b.to_bits()),
++                "frozen weights changed during evaluation"
++            );
++        }
++        if let Some(writer) = &mut analysis {
++            writer.record(&runner, generation, &summary.fitness, &network_data);
++        }
+         let best_score = summary.mean_scores.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+         let mean_score = py_sum(summary.mean_scores.iter().copied()) / config.population as f64;
+         let mean_lap = (lap_count > 0).then(|| lap_time_sum / lap_count as f64);
+@@ -521,7 +568,7 @@
+         }
+         let last = stop_reason.is_some();
+         let final_checkpoint = last && config.checkpoint_every > 0;
+-        let candidate = if last && config.save_final_candidate {
++        let candidate = if last && config.save_final_candidate && !config.evaluate_frozen {
+             let leader = final_candidate_leader(&summary.fitness);
+             let mut export = runner.agents[leader].network.to_json();
+             export["schema_version"] = json!(1);
+@@ -606,6 +653,12 @@
+             break;
+         }
+     }
++    if let Some(writer) = analysis {
++        writer.finish();
++    }
++    if let Some(writer) = challenge {
++        writer.finish();
++    }
+     let _ = std::fs::remove_file(dir.join("progress.json"));
+     println!(
+         "done: best lap {} (generation {}), {:.1} h",
+@@ -614,3 +667,7 @@
+         started.elapsed().as_secs_f64() / 3600.0
+     );
+ }
++
++fn track_count_guard(config: &ScratchConfig) -> bool {
++    config.tracks.settings().is_none()
++}
+--- a/src/training/evolution.rs
++++ b/src/training/evolution.rs
+@@ -397,6 +397,42 @@
+         }
+     }
+     result
++}
++
++/// Observe every game reward channel without altering selection or drawing RNG.
++/// The unsigned ranks use the native selection normalization, but missing
++/// measurements remain null instead of exposing selection's zero fallback.
++pub fn reward_descriptors(agents: &[AgentResult]) -> Vec<Value> {
++    let mut channels = Vec::new();
++    for metric in METRIC_NAMES {
++        for kind in ["default", "average"] {
++            if (kind == "default" && AVERAGE_ONLY_METRICS.contains(&metric))
++                || (kind == "average" && !AVERAGE_METRICS.contains(&metric))
++            {
++                continue;
++            }
++            let spec = RewardSpec {
++                metric: metric.into(),
++                weight: 100,
++                kind: kind.into(),
++            };
++            let values: Vec<Option<f64>> = agents
++                .iter()
++                .map(|agent| {
++                    if kind == "average" && agent.update_count == 0 {
++                        None
++                    } else {
++                        agent.value(&spec).filter(|v| v.is_finite())
++                    }
++                })
++                .collect();
++            let ranks = rank_normalize(&values);
++            channels.push(json!({"metric": metric, "type": kind, "values": values,
++                "population_relative": ranks.iter().zip(&values)
++                    .map(|(rank, value)| value.map(|_| *rank)).collect::<Vec<_>>() }));
++        }
++    }
++    channels
+ }
+ 
+ /// The adaptive mutation scale; its log is the C runtime's (.NET Math.Log).
+--- a/src/training/runner/gpu.rs
++++ b/src/training/runner/gpu.rs
+@@ -96,6 +96,37 @@
+     ) -> Result<u64, String> {
+         let (ticks, time_limit) = self.gpu_generation_window(time_limit_ticks)?;
+         self.advance_window_gpu(sim, world, ticks, true, Some(time_limit))
++    }
++
++    /// Observe every existing statistics callback while keeping device state
++    /// resident. Readback is observation only; never re-upload rounded host state.
++    #[cfg(not(target_arch = "wasm32"))]
++    pub fn advance_generation_gpu_observed<F>(
++        &mut self,
++        sim: &mut crate::gpu::simulation::GpuSim,
++        world: &crate::gpu::hip::GpuWorld,
++        time_limit_ticks: u64,
++        mut observe: F,
++    ) -> Result<u64, String>
++    where F: FnMut(&Self, bool) {
++        assert_eq!(self.agents.len(), 1, "callback observations require one fixed policy");
++        let start = self.tick;
++        let (remaining, limit) = self.gpu_generation_window(time_limit_ticks)?;
++        let end = start + remaining;
++        self.upload_state_gpu(sim, world)?;
++        while self.tick < end {
++            let previous_updates = self.agents[0].stats.update_count;
++            let count = (6 - self.tick % 6).min(end - self.tick);
++            let executed = self.window_gpu(sim, count, true, Some(limit))?;
++            self.download_state_gpu(sim, world)?;
++            if self.tick % 6 == 0 {
++                let callback_active = self.statistics_callback_active(previous_updates);
++                observe(self, callback_active);
++                if !callback_active || ((self.tick - 6) / 6) as f64 * 0.1 >= limit { break; }
++            }
++            if executed == 0 { break; }
++        }
++        Ok(self.tick - start)
+     }
+ 
+     /// The window length and time limit (seconds) of `advance_generation_gpu`.
+--- a/src/training/runner/schedule.rs
++++ b/src/training/runner/schedule.rs
+@@ -112,6 +112,37 @@
+     pub fn advance_generation(&mut self, time_limit_ticks: u64) -> u64 {
+         let (ticks, time_limit) = self.generation_window(time_limit_ticks);
+         self.advance_window(ticks, true, Some(time_limit))
++    }
++
++    /// Observe one fixed-policy car at each existing statistics callback.
++    /// Windows retain the absolute physics and inference cursors. No optimizer runs.
++    pub fn advance_generation_observed<F>(&mut self, time_limit_ticks: u64, mut observe: F) -> u64
++    where F: FnMut(&Self, bool) {
++        assert_eq!(self.agents.len(), 1, "callback observations require one fixed policy");
++        assert!(!self.user_paused, "callback observations require an unpaused evaluation");
++        let start = self.tick;
++        let (remaining, limit) = self.generation_window(time_limit_ticks);
++        let end = start + remaining;
++        while self.tick < end {
++            let previous_updates = self.agents[0].stats.update_count;
++            let count = (6 - self.tick % 6).min(end - self.tick);
++            let executed = self.advance_window(count, true, Some(limit));
++            if self.tick % 6 == 0 {
++                let callback_active = self.statistics_callback_active(previous_updates);
++                observe(self, callback_active);
++                if !callback_active || ((self.tick - 6) / 6) as f64 * 0.1 >= limit { break; }
++            }
++            if executed == 0 { break; }
++        }
++        self.tick - start
++    }
++
++    /// Stats precede driving. A drive-step wall contact may already have changed
++    /// car.active at readback; the update counter and idle rule recover the
++    /// callback's actual post-statistics/pre-drive state without altering it.
++    pub fn statistics_callback_active(&self, previous_updates: u64) -> bool {
++        let stats = &self.agents[0].stats;
++        stats.update_count > previous_updates && !(self.eliminate_when_idle && stats.idle_ticks > 80)
+     }
+ 
+     /// The remaining window of a generation with `time_limit_ticks`: the tick
+--- a/src/training/runner/tests.rs
++++ b/src/training/runner/tests.rs
+@@ -382,3 +382,34 @@
+         );
+     }
+ }
++
++
++#[test]
++fn challenge_callbacks_preserve_idle_and_inactive_cutoffs() {
++    let seed = Network::from_vector(&[20, 5], vec![0.0; 105]);
++    for inactive in [false, true] {
++        let mut plain = generated_runner(1);
++        let mut observed = generated_runner(1);
++        plain.resume(&[seed.clone()], 0);
++        observed.resume(&[seed.clone()], 0);
++        if inactive {
++            plain.agents[0].car.deactivate();
++            observed.agents[0].car.deactivate();
++        } else {
++            plain.agents[0].stats.idle_ticks = 79;
++            observed.agents[0].stats.idle_ticks = 79;
++        }
++        let expected = plain.advance_generation(600);
++        let mut frames = Vec::new();
++        let actual = observed.advance_generation_observed(600, |runner, active| {
++            frames.push((runner.tick, active, runner.agents[0].stats.update_count));
++        });
++        assert_eq!(expected, actual, "callback mode must stop at the same pre-drive frame");
++        assert_same_agents(&plain, &observed);
++        if inactive {
++            assert_eq!(frames, vec![(6, false, 0)]);
++        } else {
++            assert_eq!(frames, vec![(6, true, 1), (12, false, 2)]);
++        }
++    }
++}
+--- /dev/null
++++ b/tests/winner_analysis.rs
+@@ -0,0 +1,179 @@
++//! Native boundary checks: observations preserve evolution and frozen policies.
++use altd_sim::nn::network::Network;
++use serde_json::{json, Value};
++use std::{fs, path::Path, process::Command};
++#[path = "../examples/support/generated.rs"]
++mod generated;
++fn load(path: impl AsRef<Path>) -> Value {
++    serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
++}
++fn run(root: &Path, name: &str, extra: &[&str]) {
++    let mut command = Command::new(env!("CARGO_BIN_EXE_altd-sim"));
++    command
++        .args([
++            "--threads",
++            "1",
++            "--math-profile",
++            "proton",
++            "train-scratch",
++            "--shape",
++            "20,5",
++            "--population",
++            if extra.contains(&"--evaluate-frozen") { "1" } else { "4" },
++            "--generations",
++            if extra.contains(&"--evaluate-frozen") { "1" } else { "2" },
++            "--ticks",
++            "60",
++            "--mutation-start",
++            "0.2",
++            "--mutation-end",
++            "0.2",
++            "--seed",
++            "42",
++            "--checkpoint-every",
++            "0",
++            "--save-final-candidate",
++            "--no-idle-eliminate",
++            "--no-eliminate-on-wall",
++        ])
++        .arg("--scene")
++        .arg(root.join("scene.json"))
++        .arg("--spawn-trace")
++        .arg(root.join("spawn.json"))
++        .arg("--network")
++        .arg(root.join("seed.json"))
++        .arg("--init-network")
++        .arg(root.join("seed.json"))
++        .arg("--model")
++        .arg(concat!(env!("CARGO_MANIFEST_DIR"), "/assets/models/rally.json"))
++        .arg("--settings")
++        .arg(root.join("settings.json"))
++        .arg("--out-dir")
++        .arg(root.join(name))
++        .args(extra);
++    let output = command.output().unwrap();
++    assert!(output.status.success(), "{}", String::from_utf8_lossy(&output.stderr));
++}
++fn workspace(tag: &str) -> std::path::PathBuf {
++    let root = std::env::temp_dir().join(format!("ald-winner-analysis-{}-{tag}", std::process::id()));
++    fs::create_dir(&root).unwrap();
++    let scene = generated::scene("rally", 0);
++    let metadata = generated::network("rally");
++    let mut seed = Network::from_vector(&[20, 5], vec![0.1; 105]).to_json();
++    seed["inputs"] = metadata["inputs"].clone();
++    seed["outputs"] = metadata["outputs"].clone();
++    for (name, value) in [
++        ("scene.json", scene.clone()),
++        ("seed.json", seed),
++        ("spawn.json", json!({"frames":[generated::spawn(&scene)]})),
++        (
++            "settings.json",
++            json!({"selection_algorithm":"best","selection_size":1,"preserve_parents":"on_custom",
++            "preserve_parents_size":1,"weight_decay":0.8,"rewards":[{"metric":"total_actual_distance","weight":100,"type":"default"}]}),
++        ),
++    ] {
++        fs::write(root.join(name), value.to_string()).unwrap();
++    }
++    root
++}
++
++#[test]
++fn challenge_callbacks_preserve_frozen_schedule_and_capture_every_statistics_update() {
++    let root = workspace("challenge-callbacks");
++    run(&root, "plain", &["--analysis", "--evaluate-frozen"]);
++    run(&root, "observed", &["--analysis", "--evaluate-frozen", "--challenge-observations"]);
++    let plain = fs::read(root.join("plain/analysis/descriptors.jsonl")).unwrap();
++    let observed = fs::read(root.join("observed/analysis/descriptors.jsonl")).unwrap();
++    assert_eq!(plain, observed, "callback readback must not alter any final physical/statistical measurement or weights");
++    let rows: Vec<Value> = fs::read_to_string(root.join("observed/challenge-observations.jsonl"))
++        .unwrap().lines().map(|line| serde_json::from_str(line).unwrap()).collect();
++    assert_eq!(rows.len(), 11, "60 requested ticks use callbacks 6 through 66 inclusive");
++    let final_row: Value = serde_json::from_slice(&observed).unwrap();
++    for (index, row) in rows.iter().enumerate() {
++        assert_eq!(row["tick"], (index + 1) * 6);
++        assert_eq!(row["game_time"].as_f64().unwrap(), index as f64 * 0.1);
++        assert_eq!(row["stats_update_count"], index + 1);
++        assert_eq!(row["current_score"], row["worst_score"]);
++        assert_eq!(row["current_score"], row["current_best_score"]);
++        assert_eq!(row["active"], true);
++        assert!(row["speed_kph"].as_f64().unwrap().is_finite());
++    }
++    let speed_sum: f64 = rows.iter().map(|row| row["speed_kph"].as_f64().unwrap() / 3.6 * 15.0).sum();
++    assert!((speed_sum - final_row["raw_metrics"]["total_speed"].as_f64().unwrap()).abs() < 1e-8,
++        "every speed sample must describe the statistics callback, not its following drive step");
++    assert_eq!(rows.last().unwrap()["current_score"], final_row["raw_metrics"]["total_score"]);
++    assert_eq!(rows.last().unwrap()["collision_count"], final_row["objectives"]["collision_updates"]);
++    let meta = load(root.join("observed/challenge-observations-meta.json"));
++    assert_eq!(meta["frames"], rows.len());
++    assert!(meta["lap_score"].as_f64().unwrap() > 0.0);
++    fs::remove_dir_all(root).unwrap();
++}
++#[test]
++fn observation_is_rng_neutral_and_final_winner_matches_exact_pre_turnover_parameters() {
++    let root = workspace("neutral");
++    run(&root, "plain", &[]);
++    run(&root, "observed", &["--analysis"]);
++    assert_eq!(
++        load(root.join("plain/candidate.json")),
++        load(root.join("observed/candidate.json"))
++    );
++    let plain: Vec<Value> = fs::read_to_string(root.join("plain/log.jsonl"))
++        .unwrap()
++        .lines()
++        .map(|l| serde_json::from_str(l).unwrap())
++        .collect();
++    let observed: Vec<Value> = fs::read_to_string(root.join("observed/log.jsonl"))
++        .unwrap()
++        .lines()
++        .map(|l| serde_json::from_str(l).unwrap())
++        .collect();
++    for (a, b) in plain.iter().zip(&observed) {
++        for key in [
++            "best_score",
++            "mean_score",
++            "best_fitness",
++            "mean_fitness",
++            "total_metric_values",
++            "simulated_ticks",
++        ] {
++            assert_eq!(a[key], b[key], "{key}");
++        }
++    }
++    let summary = load(root.join("observed/analysis/analysis.json"));
++    assert_eq!(summary["rows"], 8);
++    assert_eq!(summary["winners"]["fitness"]["generation"], 2);
++    let selected = load(root.join("observed/analysis/winners/fitness.json"));
++    let candidate = load(root.join("observed/candidate.json"));
++    assert_eq!(selected["weights"], candidate["weights"]);
++    assert_eq!(selected["biases"], candidate["biases"]);
++    assert!(summary["winners"]["fastest_lap"].is_null());
++    assert!(summary["winners"]["clean_laps"].is_null());
++    let rows: Vec<Value> = fs::read_to_string(root.join("observed/analysis/descriptors.jsonl"))
++        .unwrap()
++        .lines()
++        .map(|l| serde_json::from_str(l).unwrap())
++        .collect();
++    assert_eq!(rows.len(), 8);
++    assert_eq!(rows[0]["raw_metrics"].as_object().unwrap().len(), 14);
++    assert_eq!(rows[0]["channels"]["values"].as_array().unwrap().len(), 18);
++    assert!(rows.iter().any(|row| row == &selected["observation"]));
++    fs::remove_dir_all(root).unwrap();
++}
++#[test]
++fn frozen_evaluation_never_breeds_or_decays_and_has_no_parent_candidate() {
++    let root = workspace("frozen");
++    run(&root, "evaluated", &["--analysis", "--evaluate-frozen"]);
++    let summary = load(root.join("evaluated/analysis/analysis.json"));
++    assert_eq!(summary["rows"], 1);
++    assert!(summary["winners"]["fitness"].is_null());
++    assert!(summary["evaluation"]["selection_fitness"].is_null());
++    let seed = Network::from_game_export(&load(root.join("seed.json")));
++    let bytes: Vec<u8> = seed.params.iter().flat_map(|p| p.to_le_bytes()).collect();
++    assert_eq!(
++        summary["evaluation"]["weights_sha256"],
++        altd_sim::training::evaluation::sha256(&bytes)
++    );
++    assert!(!root.join("evaluated/candidate.json").exists());
++    assert!(!root.join("evaluated/checkpoint.json").exists());
++    fs::remove_dir_all(root).unwrap();
++}

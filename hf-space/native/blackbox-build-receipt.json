@@ -1,0 +1,70 @@
+{
+  "schema": "ald-native-blackbox-build/1",
+  "source_archive_sha256": "56b43430c68b95bf7ac0d8312975c366c920f99b1653d790fb15b59453728e28",
+  "base_source_archive_sha256": "6abefb234de18dee58d69758c6cc8900f259993663ac37f90ce39aa114a30718",
+  "build": {
+    "command": [
+      "/Users/tiga/.cargo/bin/cargo",
+      "+1.95.0",
+      "build",
+      "--manifest-path",
+      "/Volumes/PATRIOT/Codex/2026-10-17/c/work/hf-ald-release-20261023/native-source/Cargo.toml",
+      "--target",
+      "x86_64-unknown-linux-gnu",
+      "--release",
+      "--locked",
+      "--offline",
+      "--no-default-features",
+      "--features",
+      "cli",
+      "--bin",
+      "altd-sim"
+    ],
+    "environment": {
+      "CARGO_TARGET_DIR": "/Volumes/PATRIOT/Codex/2026-10-17/c/work/hf-ald-release-20261023/linux-target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_PROFILE_RELEASE_LTO": "false",
+      "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "16",
+      "CARGO_PROFILE_RELEASE_DEBUG": "0",
+      "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/cross-tools/linux-linker",
+      "RUSTFLAGS": "--sysroot /Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/cross-sysroot -C target-cpu=x86-64"
+    },
+    "exit_code": 0,
+    "seconds": 8.920037874951959,
+    "scope": "Isolated cross-target; existing official Rust target and linker/sysroot read only",
+    "sha256": "225de9c2b7dd0d9cb11c2578f50fff8a34f4cf6223580035ab0fa64e700beac8",
+    "bytes": 3661976
+  },
+  "binary_sha256": "225de9c2b7dd0d9cb11c2578f50fff8a34f4cf6223580035ab0fa64e700beac8",
+  "native_library_tests": {
+    "passed": 88,
+    "ignored": 2
+  },
+  "cpu_recording_validation": {
+    "status": "pass",
+    "cases": [
+      {
+        "ticks": 300,
+        "samples": 51,
+        "seconds": 0.7552870421204716,
+        "old_physical_fields_exact": true,
+        "inference_ticks_current": true
+      },
+      {
+        "ticks": 900,
+        "samples": 151,
+        "seconds": 2.2923885830678046,
+        "old_physical_fields_exact": true,
+        "inference_ticks_current": true
+      }
+    ],
+    "five_second_prefix_exact": true,
+    "constant_commands_verified": true,
+    "constant_contacts": 743,
+    "scope": "Actual Linux x86_64 native binary in network-isolated Docker; exact comparison against previously downloaded hosted native states"
+  },
+  "cuda_library_changed": false,
+  "gpu_abi_changed": false,
+  "hosted_gpu_execution": "Not run for this candidate; requires separate quota-checked acceptance",
+  "scope": "Actual cached CPU inference telemetry and bounded single-pass CLI recording. Physics and evolution algorithms unchanged."
+}

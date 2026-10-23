@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>AI Learns to Drive — Help</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e8eef6;background:#101923;line-height:1.6}*{box-sizing:border-box}body{margin:0}.wrap{width:min(920px,100% - 32px);margin:0 auto;padding:28px 0 56px}header,.section{background:#172330;border:1px solid #304255;border-radius:14px;padding:22px;margin:0 0 16px}h1,h2{line-height:1.2;margin-top:0}h1{font-size:clamp(1.8rem,5vw,2.6rem);margin-bottom:.45rem}h2{font-size:1.35rem;margin-bottom:.6rem}p,ul,ol{max-width:74ch}a{color:#8dc8ff}a:focus-visible{outline:3px solid #ffd166;outline-offset:3px;border-radius:3px}.eyebrow{color:#a8c9e8;font-size:.8rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase}.lead{font-size:1.08rem}.callout{border-left:4px solid #62c7a5;padding:.65rem 1rem;background:#112b2b;border-radius:0 8px 8px 0}nav ul{display:flex;flex-wrap:wrap;gap:.45rem 1.1rem;padding-left:1.2rem}.steps li{margin:.6rem 0}.pill{display:inline-block;background:#24364a;border-radius:999px;padding:.15rem .55rem;font-size:.9rem}.small{color:#bdc8d5;font-size:.94rem}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#d8e8fb}footer{padding:8px 4px;color:#bdc8d5}.table-scroll{overflow-x:auto;margin:16px 0}table{width:100%;border-collapse:collapse;text-align:left;font-size:.95rem}caption{text-align:left;font-weight:700;margin-bottom:8px}th,td{padding:10px 12px;border-bottom:1px solid #304255;vertical-align:top}th{color:#d8e8fb}tbody th{width:31%;font-weight:600}section{scroll-margin-top:16px}@media(max-width:600px){.wrap{width:min(100% - 20px,920px);padding-top:10px}header,.section{padding:16px;border-radius:10px}nav ul{display:block}nav li{margin:.25rem 0}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+<p class="eyebrow">AI Learns to Drive · Training lab</p>
+<h1>From a first run to a repeatable experiment</h1>
+<p class="lead">A guide to this Space’s driving task, training controls, and results.</p>
+<p class="small">Use <strong>Quick start</strong> in the app for the short checklist; <strong>Help &amp; tutorial</strong> opens this guide. Close this tab to return to your existing run and unsaved choices.</p>
+<nav aria-label="Help topics"><ul>
+<li><a href="#start-here">Start here</a></li><li><a href="#first-run">First run</a></li><li><a href="#results">Read results</a></li><li><a href="#continue">Next experiment</a></li><li><a href="#compare">Compare</a></li><li><a href="#recipes">Recipes</a></li><li><a href="#batches">Batches</a></li><li><a href="#concepts">Challenge checks</a></li><li><a href="#freeze">Freezing</a></li><li><a href="#storage">Storage</a></li><li><a href="#limits">Limits</a></li><li><a href="#game-reference">Game wiki</a></li>
+</ul></nav>
+</header>
+
+<section class="section" id="start-here">
+<h2>What you are optimizing</h2>
+<p>The task is to drive a vehicle around a track. Your controller maps its configured sensor observations—such as raycast distances and velocity—to controls such as steering, acceleration, and braking. The network file includes the vehicle type, sensors, and output order; changing those changes the policy’s interface.</p>
+<p>Training uses evolutionary search: simulate a population, score candidates, select parents, then generate variations through mutation and optional crossover. The <strong>mutation rate controls the scale of parameter perturbations</strong>; it is not an SGD learning rate. Reward settings determine the selection objective without changing the physics. Game reference: <a href="https://ai-learns-to-drive.fandom.com/wiki/Training_Process" target="_blank" rel="noopener">Training Process</a>.</p>
+<p class="callout">This lab is headless. The map previews the track and terrain; it does not animate the cars. Inspect behavior through reported measurements and fresh evaluations. Built-in tracks are reconstructed replicas, usable without installing the original game. The lab does not award official stars or change game progress.</p>
+</section>
+
+<section class="section" id="first-run">
+<h2>Run one small baseline</h2>
+<ol class="steps">
+<li>On <strong>Run &amp; results</strong>, choose <strong>Replica A01 Beginner</strong>. Set <strong>Starter car</strong> to <strong>Formula</strong>, then click <strong>Create starter network</strong>. This creates the small <strong>6-input → 4-hidden-unit → 5-output</strong> controller in the page; training has not started.</li>
+<li>Open <strong>Training &amp; recipes</strong>. Keep the current starter settings below. If you have edited the form, use <strong>Apply first-run settings to this form</strong> to restore them. You do not need to save a recipe first.</li>
+<li>Return to <strong>Run &amp; results</strong>. Choose <strong>CPU — no GPU allowance</strong> to run without signing in, and <strong>Action → Train a population</strong>, then click <strong>Run training</strong>.</li>
+<li>When it finishes, click <strong>Download result</strong>. Read the laps, lap time, and contacts as explained below, and retain the downloaded <code>.evolution</code> as your checkpoint. To keep a different winner, use <strong>Download weights</strong> in that winner’s row.</li>
+</ol>
+<div class="table-scroll"><table>
+<caption>Current starter settings</caption>
+<tbody>
+<tr><th scope="row">Controller interface</th><td>Speed and five raycast distances in; Steering, Acceleration, Handbrake, Brake, and Boost out</td></tr>
+<tr><th scope="row">Population and generations</th><td>32 candidates × 20 generations</td></tr>
+<tr><th scope="row">Simulation horizon</th><td>900 ticks = 15 simulated seconds per car per generation</td></tr>
+<tr><th scope="row">Mutation and decay</th><td>Mutation 0.3; decay 0; crossover off; one parent; one preserved elite</td></tr>
+<tr><th scope="row">Reward and elimination</th><td>Distance-only (+100 total score); collision and idle elimination off</td></tr>
+<tr><th scope="row">Timing and execution</th><td>60 Hz physics and decisions; one CPU worker</td></tr>
+</tbody></table></div>
+<p class="small">This baseline promises neither a completed lap nor a wall-clock runtime. Connected bucket autosave, if enabled, receives the result automatically. Restoring starter settings changes the form, not saved recipes.</p>
+</section>
+
+<section class="section" id="results">
+<h2>Read the result before changing the setup</h2>
+<p>Match a measurement to its policy. The run’s overall best lap may belong to a different candidate from the downloaded final fitness leader.</p>
+<div class="table-scroll"><table>
+<thead><tr><th scope="col">Reported value</th><th scope="col">What it tells you</th></tr></thead>
+<tbody>
+<tr><th scope="row">Selection fitness</th><td>The configured reward score used to rank candidates within their evaluated generation. It is not lap time or a universal score for comparing runs.</td></tr>
+<tr><th scope="row">Forward laps / best lap</th><td>Completed forward laps and the fastest completed lap for that policy. A missing lap time means no completed lap was reported.</td></tr>
+<tr><th scope="row">Physical contacts</th><td>Recorded contacts. A clean-lap winner needs zero contacts and the configured minimum forward-lap count.</td></tr>
+<tr><th scope="row">Distance (simulation units)</th><td>Actual distance traveled by the vehicle. This alone does not establish progress around the course.</td></tr>
+</tbody></table></div>
+<p><strong>Final fitness leader</strong> comes from the final generation. <strong>Fastest completed lap</strong> is selected across training. One controller can fill several winner roles, and a role can be unavailable.</p>
+<p><strong>Reward distinction:</strong> Distance measures progress along the track’s centerline; Actual Distance measures the vehicle’s traveled path, so extra movement can be inefficient. Best Lap Performance needs a completed lap before it can reward a lap time. Distance can provide a signal before the first lap. Game reference: <a href="https://ai-learns-to-drive.fandom.com/wiki/Reward_Functions" target="_blank" rel="noopener">Reward Functions</a>.</p>
+</section>
+
+<section class="section" id="continue">
+<h2>Choose the next experiment</h2>
+<p>After receiving the result, choose a role under <strong>Winner to continue or evaluate</strong>:</p>
+<ul>
+<li><strong>Continue training</strong> stages that winner’s weights as the next input and selects training mode.</li>
+<li><strong>Evaluate unchanged</strong> stages those weights for a fresh frozen evaluation. It changes no weights and selects no new winners.</li>
+</ul>
+<p>Staging a winner does not start a run. Review the settings, then click <strong>Run training</strong> or <strong>Evaluate policy (weights frozen)</strong>. Built-in track selection is retained; reselect a custom track file if needed. Previous measurements are not reused as new evidence.</p>
+<p>To begin a fresh trial, use <strong>Create starter network</strong> on Run &amp; results. Load a saved <code>.evolution</code> file to return to an earlier checkpoint.</p>
+<p><strong>Next-step hypotheses:</strong> evaluate the saved policy before changing it. If useful progress is cut short, try a longer training horizon within the work limit. Once it completes laps consistently, try smaller mutation perturbations or a revised reward mix. Start with one change and check the outcome; there is no guaranteed best schedule. Game reference: <a href="https://ai-learns-to-drive.fandom.com/wiki/Training_Strategies" target="_blank" rel="noopener">Training Strategies</a>.</p>
+</section>
+
+<section class="section" id="compare">
+<h2>Make comparisons interpretable</h2>
+<p>For a controlled training comparison, vary one factor and hold the others constant: starting checkpoint, track, vehicle, horizon, controller frequency, elimination settings, and compute backend. Then evaluate the resulting policies under the same conditions.</p>
+<p>Frozen comparison runs selected policies in fresh simulations with unchanged weights. The app marks incompatible conditions. Compare lap time, completed laps, contacts, and distance together. Compare fitness only when the reward and evaluation conditions match; these selection scores are relative to the evaluated generation. A short horizon may end before a lap or challenge deadline. Success on one track does not establish generalization to another.</p>
+</section>
+
+<section class="section" id="recipes">
+<h2>Recipes save settings, not models</h2>
+<p>At the top of <strong>Training &amp; recipes</strong>, keep up to ten named recipes in slots <strong>A–J</strong>. Each holds training settings, rewards, and optional selective freezing. Tracks, networks, and results are excluded.</p>
+<ol class="steps">
+<li>Adjust the form, choose a slot, and name the recipe. <strong>Save settings to A</strong> (or your chosen slot) stores the current settings in this browser.</li>
+<li>To reuse a saved recipe, select it and click <strong>Apply recipe</strong>. Choosing a slot alone does not apply it; applying does not start training.</li>
+<li>The status shows whether the form matches the saved recipe or has unsaved changes. Save again to update that recipe.</li>
+</ol>
+<p><strong>Run training uses the current form; batches use saved recipes.</strong> Save changes before using them in a batch. Track, starting network, and CPU or GPU remain separate choices on <strong>Run &amp; results</strong>. Export/import the recipe library as JSON, or use optional <a href="#storage">private-bucket storage</a>.</p>
+</section>
+
+<section class="section" id="batches">
+<h2>Batches run saved recipes in order</h2>
+<p>A batch runs up to 20 training steps on the track and backend selected on <strong>Run &amp; results</strong>. Recipe slots and batch slots are separate.</p>
+<ol class="steps">
+<li>Save your recipes first. On <strong>Batches</strong>, choose a batch slot and name.</li>
+<li>Select a saved recipe and click <strong>Add step</strong>. Move steps up or down, duplicate, or remove them. Repeats are allowed. <strong>Advanced sequence</strong> edits the same list as comma-separated slots, such as <code>A, B, A</code>.</li>
+<li>Check <strong>Use each step’s result to train the next step</strong> to continue from the previous result. Unchecked, every step starts from the same original network.</li>
+<li>Click <strong>Save batch</strong>. Review the starting network, track, and CPU or GPU on <strong>Run &amp; results</strong>, then return to Batches and click <strong>Run batch</strong>.</li>
+</ol>
+<p>For example, save A as “Explore” and B as “Refine”, then run <code>A, B, A</code>. With continuation, the network trains through all three stages. Without it, each starts from the original. These names are illustrative; the app uses your saved recipes.</p>
+<p>Saving and running are separate. Changing the name, sequence, or continuation option makes an unsaved draft and disables Run batch. Save your changes or use <strong>Load saved batch</strong> to restore the saved version.</p>
+<p class="small">A batch stores recipe references and the continuation choice, without networks, tracks, or results. Starting takes a snapshot of saved recipe settings; later recipe changes affect future launches.</p>
+</section>
+
+<section class="section" id="concepts">
+<h2>Reference: challenge checks</h2>
+<p>Training measurements and fresh challenge checks are simulator results for reconstructed tracks. A supported challenge check replays the named current network with fixed weights; it does not accumulate stars across runs or evaluate original-game opponent races.</p>
+<p>Challenge checks use the selected driving settings, including collision elimination, and the chosen run duration or the track’s longer challenge deadline, capped at 300 simulated seconds. This extra replay may add processing time. A condition that is not met within that replay is not proof that the network could never meet it in a longer run.</p>
+<p class="small">These checks are bounded predictions for replica conditions, not original-game awards or Steam leaderboard results.</p>
+</section>
+
+<section class="section" id="freeze">
+<h2>Selective freezing</h2>
+<p>On <strong>Training &amp; recipes</strong>, open <strong>Selective freezing</strong> to keep selected parameters at their values in the starting network. Freezing an input holds its outgoing weights; freezing a hidden layer holds its incoming weights and biases; freezing an output holds its incoming weights and bias. The available choices and names come from the selected network. Freeze selections are part of saved recipes and can be edited later. Frozen evaluation runs the selected policy unchanged.</p>
+</section>
+
+<section class="section" id="storage">
+<h2>Files, privacy, and storage</h2>
+<p>Your selected files stay in the browser until you start a run or explicitly save/export them. Processing copies and undelivered results are temporary; results expire within five minutes and are deleted after verified browser receipt by default. The app's cleanup does not establish provider-wide zero-data retention.</p>
+<p>Run results stay in page memory after download until you discard them, replace them, or close the page. Download the network or a portable bundle if you want a local copy.</p>
+<p>Recipes are settings-only and save in this browser by default. Local JSON export/import is also available. Optional private-bucket storage requires a separate explicit HF authorization; its <code>write-repos</code> permission is broader than one bucket. After connecting an existing private bucket, automatic run saving starts on by default and can be turned off. Recipe-library save/list/import are separate actions and transfer settings only; importing asks before replacing the local recipe library and never starts a run. The app does not create or delete buckets.</p>
+<p>Read the full <a href="/policy" target="_blank" rel="noopener">data policy</a> before using private files or bucket storage.</p>
+</section>
+
+<section class="section" id="limits">
+<h2>Limits and compute</h2>
+<p>The worker supports Formula, Rally, Snowmobile, and Truck. Networks support at most 20 inputs, 12 total layers, and 16 neurons per hidden layer. Formula, Rally, and Truck support up to five outputs; Snowmobile supports up to four and cannot use Handbrake. Fresh controllers for every vehicle require Steering and Acceleration; Formula imports retain their supported ordered output subsets.</p>
+<p>CPU runs: up to 4,000,000 requested vehicle-ticks in a 25-second native execution window. GPU runs: up to 8,000,000 requested vehicle-ticks in a 45-second native execution window. Both allow up to 1,024 cars, 2,000 generations, fourteen distinct reward metrics, and 32,768 car-generation analysis rows per run. Requested vehicle-ticks are an upper-bound work estimate, not a guarantee of runtime. Results and analysis have separate size limits. These are bounded vanilla-worker limits, not support for arbitrary modified-game networks or full original-game parity.</p>
+<p>The public GPU app also provides CPU execution without GPU allowance. GPU runs use HF allowance; optional HF sign-in can associate a request with your account but does not guarantee quota. Sign-in can reload the page, so do it before choosing files if needed.</p>
+</section>
+
+<section class="section" id="game-reference">
+<h2>Further reading: the game wiki</h2>
+<p>The wiki describes the original game. Menus, defaults, and supported features can differ here; use this lab’s controls and limits for Space runs.</p>
+<ul>
+<li><a href="https://ai-learns-to-drive.fandom.com/wiki/Getting_Started" target="_blank" rel="noopener">Getting Started</a> — game overview.</li>
+<li><a href="https://ai-learns-to-drive.fandom.com/wiki/Training_Process" target="_blank" rel="noopener">Training Process</a> — evolution controls.</li>
+<li><a href="https://ai-learns-to-drive.fandom.com/wiki/Car_Sensors" target="_blank" rel="noopener">Car Sensors</a> — observation choices.</li>
+<li><a href="https://ai-learns-to-drive.fandom.com/wiki/Reward_Functions" target="_blank" rel="noopener">Reward Functions</a> — scoring metrics.</li>
+<li><a href="https://ai-learns-to-drive.fandom.com/wiki/Training_Strategies" target="_blank" rel="noopener">Training Strategies</a> — experiment ideas.</li>
+</ul>
+</section>
+
+<section class="section" id="feedback">
+<h2>Feedback</h2>
+<p><a href="https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new" target="_blank" rel="noopener">Open an editable GitHub issue draft</a>. It is not submitted automatically. Review the draft before posting and remove private names or data. Do not attach tokens, job keys, private networks, proprietary tracks, or unrelated logs.</p>
+</section>
+<footer><a href="/" target="_blank" rel="noopener">Open the training app</a><p class="small">This opens a fresh app page. Close this guide tab to return to your existing page.</p></footer>
+</main>
+</body>
+</html>
+
+

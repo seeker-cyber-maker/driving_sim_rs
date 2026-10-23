@@ -1,0 +1,38 @@
+{
+  "schema": "ald-native-cross-build-attempt-v1",
+  "started_utc": "2026-10-14T16:58:09.004157+00:00",
+  "command": [
+    "/Users/tiga/.cargo/bin/cargo",
+    "+1.95.0",
+    "build",
+    "--target",
+    "x86_64-unknown-linux-gnu",
+    "--manifest-path",
+    "build/source/Cargo.toml",
+    "--release",
+    "--locked",
+    "--offline",
+    "--no-default-features",
+    "--features",
+    "cli",
+    "--bin",
+    "altd-sim"
+  ],
+  "environment": {
+    "CARGO_TARGET_DIR": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/cross-target",
+    "CARGO_PROFILE_RELEASE_LTO": "false",
+    "CARGO_PROFILE_RELEASE_CODEGEN_UNITS": "16",
+    "CARGO_PROFILE_RELEASE_DEBUG": "0",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_LINKER": "/Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/cross-tools/linux-linker",
+    "RUSTFLAGS": "--sysroot /Volumes/PATRIOT/ALD-TAO-lab/hf-winners-evaluation-v1.2-20261013/build/cross-sysroot -C target-cpu=x86-64"
+  },
+  "status": "compiled",
+  "exit_code": 0,
+  "artifact": {
+    "path": "build/artifacts/altd-sim",
+    "bytes": 3647808,
+    "sha256": "ce31f754f6b6f3afaf4dcc44c1e6fda3e6414eb2924fa167b8778523bcaf2070"
+  },
+  "elapsed_seconds": 25.666
+}

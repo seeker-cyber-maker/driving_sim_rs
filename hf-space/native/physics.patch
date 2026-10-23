@@ -1,0 +1,59 @@
+--- a/src/physics/collision.rs
++++ b/src/physics/collision.rs
+@@ -329,6 +329,7 @@
+     contacts: &mut Vec<Contact>,
+ ) {
+     contacts.clear();
++    scratch.collided_shapes.clear();
+     let (sx, sy) = cfg.shape_basis;
+     let basis_x = V2::from(body_basis.0 * sx.x + body_basis.1 * sx.y);
+     let basis_y = V2::from(body_basis.0 * sy.x + body_basis.1 * sy.y);
+@@ -483,6 +484,8 @@
+         if separated || push == V2::ZERO {
+             continue;
+         }
++        // SAT overlap keeps cached contacts eligible even without a new contact.
++        scratch.collided_shapes.push(shape_index);
+         let support_car = rectangle_supports(&car, -push, basis_x, basis_y);
+         let support_wall = polygon_supports(wall, shape, push);
+         let mut pairs = [(V2::ZERO, V2::ZERO); 2];
+@@ -601,11 +604,7 @@
+     }
+     find_contacts_with_basis(cfg, track, position, rotation, body_basis, scratch, contacts);
+     previous.retain(|c| scratch.broad_pairs.contains(&c.shape_index));
+-    scratch.collided_shapes.clear();
+     for new in contacts.iter() {
+-        if !scratch.collided_shapes.contains(&new.shape_index) {
+-            scratch.collided_shapes.push(new.shape_index);
+-        }
+         let radius2 = (cfg.contact_recycle_radius as f32).powi(2);
+         if let Some(old) = previous.iter_mut().find(|old| {
+             let a = F2::from(old.local_point) - F2::from(new.local_point);
+--- a/gpu/sim/step.h
++++ b/gpu/sim/step.h
+@@ -471,7 +471,8 @@
+ }
+ 
+ // The rest of `solve_wall_contacts` once this tick's contacts are merged;
+-// `made_contacts` has a bit per broad pair that made contacts.
++// `made_contacts` has a bit per SAT-overlapping broad pair, including
++// overlaps with no new points but a valid retained contact.
+ __device__ inline SolveResult solve_contacts(const World& w, const VehicleDesc& v, Car& car, uint32_t made_contacts, Vec2 velocity,
+                                              float angular, Vec2 initial_velocity, float initial_angular) {
+     STEP_MARK(ts);
+@@ -682,12 +683,13 @@
+             f = car_frame(v, car);
+             framed = true;
+         }
+-        uint32_t made = pair_contacts(w, v, car, f, ci, push, [&](const Contact& c) {
++        pair_contacts(w, v, car, f, ci, push, [&](const Contact& c) {
+             STEP_MARK(tm);
+             merge_contact(v, car, c);
+             STEP_SECTION(11, tm);
+         });
+-        made_contacts |= made ? 1u << ci : 0u;
++        // Keep cached contacts eligible when SAT overlaps but produces no new point.
++        made_contacts |= 1u << ci;
+     }
+     STEP_SECTION(2, tc);
+     SolveResult r = solve_contacts(w, v, car, made_contacts, k.velocity, k.angular, k.previous_velocity, k.previous_angular);

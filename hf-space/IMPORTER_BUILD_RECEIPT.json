@@ -1,0 +1,60 @@
+{
+  "created_utc": "2026-10-08T19:25:38.550739+00:00",
+  "status": "built_and_smoke_verified",
+  "repository": "https://github.com/Zorro909/driving_sim_rs",
+  "source_revision": "d8ab74c25df70b6a86ed101080e33d5fb785ea6f",
+  "source_worktree_clean": true,
+  "build_command": "RUSTFLAGS=\"-C target-cpu=x86-64\" cargo build --locked --release --no-default-features --features cli --example extract_saved_track",
+  "build_exit_code": 0,
+  "rustc": "rustc 1.93.0 (254b59607 2026-01-19)\nbinary: rustc\ncommit-hash: 254b59607d4417e9dffbc307138ae5c86280fe4c\ncommit-date: 2026-01-19\nhost: x86_64-unknown-linux-gnu\nrelease: 1.93.0\nLLVM version: 21.1.8",
+  "cargo": "cargo 1.93.0 (083ac5135 2025-12-15)",
+  "architecture": "x86_64-unknown-linux-gnu",
+  "cpu_codegen": "x86-64 baseline (target-cpu=native overridden)",
+  "host_libc": "Debian GLIBC 2.41-12+deb13u4",
+  "binary_minimum_glibc_symbol_version": "2.34",
+  "dynamic_libraries": [
+    "libgcc_s.so.1",
+    "libc.so.6"
+  ],
+  "elf_interpreter": "/lib64/ld-linux-x86-64.so.2",
+  "runtime_compatibility_note": "ELF symbol requirements indicate glibc 2.34 or newer; tested only on this glibc 2.41 host. Destination integration remains untested.",
+  "smoke_commands": [
+    "./extract_saved_track --help",
+    "./extract_saved_track verification/generated_saved_track.json synthetic-smoke assets/scenes/formula_template.json verification/synthetic-scene.json"
+  ],
+  "verification": {
+    "help_exit_code": 0,
+    "synthetic_conversion_exit_code": 0,
+    "name_matches": true,
+    "tile_count_matches": true,
+    "tile_map_position_matches": true,
+    "native_broadphase_false": true,
+    "formula_vehicle_preserved": true,
+    "formula_physics_preserved": true,
+    "tiles": 24,
+    "physics_shapes": 160,
+    "walls": 401,
+    "path_points": 4593
+  },
+  "scope": "Importer build and smoke checks only. No full project test suite, private game data, deployment, shared source edits, or external services.",
+  "checksums_sha256": {
+    "GODOT_LICENSE": "fb2b3bb82c60f1e76841ba2122eb902f8e39c151476fe21ce10c9a05d1045304",
+    "LICENSE": "53d5851b6440feeae36f72a5f57fcab37858c48b7084765ece4b0c54b9a28ed8",
+    "SOURCE_REVISION": "1d1f925697ae11f17015c08189043fb55bcc48b724e97daf5e102d043d1d1f0a",
+    "assets/scenes/formula_template.json": "80f745df82bb7be45af52785fd582460bcddc63c5a4e1d8375d85b3122db4c6b",
+    "extract_saved_track": "3a7733c45b4301a786fcbfe92660a1c484749272da5f608d62f34878bd4ff31a",
+    "verification/Cargo.lock": "d8b8dfcfd4ddd90388a9aadae6c12a675e46277a3f26dabcce5ba8af6ff12183",
+    "verification/build.log": "55c65f1a725126537b35f3fafacccc5bcc8e6707a60f02d26b803da3a48b8763",
+    "verification/cargo-version.txt": "49f46ff5ffe434e6c1c66388a9230ac33bbe3dbd9175314e9ffc9aa7c418d329",
+    "verification/elf-report.txt": "ce9a1831871e3e7ce7cb24bb338934c92518cc65559d619a75c05657c09e5788",
+    "verification/file.txt": "18dcdc24bdaaf8eb6cd84fb37ab0ba9096766ffa31a5595cb9262ae8c3430363",
+    "verification/generated_saved_track.json": "dafb51079bddbc7b2a958acff37b6df3bbdd3af70fcae2b08df536db2f92f59b",
+    "verification/help.stderr.txt": "2da7efbb9ab342a5b0efb5e30855709859bc81fbbc134c539fd33cea1e86bf70",
+    "verification/help.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/ldd.txt": "38f782b358e5a768f4fccfff32f68262f4274fc1575b8568bf74d361d2d33a5d",
+    "verification/rustc-version.txt": "83e4eefd5e010a92d9f63328bf8219e23fe5e4cf5e5d17ce53d0263cfa4218a6",
+    "verification/smoke.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/smoke.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "verification/synthetic-scene.json": "1d87b18c7844402df8ef8272f99f3f32670f98a240f3f72e14b505c2b45743e0"
+  }
+}
