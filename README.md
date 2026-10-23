@@ -2,9 +2,24 @@
 
 ## ALD Training Lab release
 
+![ALD Training Lab concept illustration: tiled track, dot-style driver, Formula controls and six sensor input channels](docs/media/ald-training-lab-hero.png)
+
+*AI-generated concept illustration using a Formula/A01 example. The amber line illustrates the track centerline. Native replay recordings are fresh CPU drives.*
+
 The verified hosted GPU/CPU lab is published in [hf-space/](hf-space/) with native replay and a car black box. [Open the app](https://tiga-rce-ald-tao-gpu.hf.space/), read the [portable usage guide](docs/HF_LAB.md), or use the [agent experiment skill](skills/ald-run-experiment/SKILL.md).
 
 The [ALD release notes](docs/releases/ald-lab-2026.10.23/RELEASE_NOTES.md) identify the exact HF build and its four-vehicle qualification. The root Rust simulator below remains a separate source tree; it does not replace the custom native snapshot bundled with the HF app.
+
+[Full-size artwork](docs/media/ald-training-lab-hero.png) · [Thumbnail / social preview](docs/media/ald-training-lab-thumbnail.jpg) · [Image provenance and prompts](docs/media/ASSETS.md)
+
+<details>
+<summary>See the actual native replay and car black box</summary>
+
+![Actual ALD app showing a five-second recorded CPU evaluation, replay controls, native commands and consumed sensor inputs](docs/media/ald-native-replay.jpg)
+
+Actual interface capture from a five-second native CPU evaluation with a disposable Formula fixture. It shows measured commands and sensor inputs, including their capture timing and interpretation limits.
+
+</details>
 
 [![CI](https://github.com/Zorro909/driving_sim_rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Zorro909/driving_sim_rs/actions/workflows/ci.yml)
 

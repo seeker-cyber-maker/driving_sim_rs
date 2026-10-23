@@ -1,0 +1,46 @@
+# Release page media
+
+The hero and thumbnail are AI-generated editorial concept illustrations made with the built-in image generation tool. The native replay screenshot is an unmodified capture from the qualified app. No new training or simulated drive was run to produce these assets.
+
+| File | Size | Purpose |
+| --- | --- | --- |
+| `ald-training-lab-hero.png` | 1672 × 941; 1,584,360 bytes | README hero; Formula/A01 illustration with five control channels and six sensor inputs |
+| `ald-training-lab-thumbnail.jpg` | 1774 × 887; 212,440 bytes | 2:1 thumbnail for sharing; JPEG export of generated artwork |
+| `ald-native-replay.jpg` | 2320 × 1329; 194,435 bytes | Genuine replay and black-box interface, using a disposable Formula fixture |
+
+The amber line in the artwork illustrates the track centerline; it is not recorded driving telemetry. The Formula example includes handbrake, while Snowmobile does not expose that output. A native replay is a fresh CPU evaluation, including for GPU-trained controllers. These visuals do not claim clean laps, policy improvement or full original-game parity.
+
+The thumbnail exceeds GitHub's minimum pixel dimensions and is below its 1 MB file limit. GitHub recommends a 2:1 image, with 1280 × 640 for best display; this thumbnail uses the same aspect ratio at a larger resolution. See [GitHub's social preview requirements](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/customizing-your-repositorys-social-media-preview). The reusable file is included here; repository social-preview configuration is a separate setting.
+
+All generated PNG originals are retained separately. The thumbnail was exported as JPEG without cropping or resizing to fit the upload limit. Image generation used the built-in tool, not an external API/CLI generation workflow.
+
+## Prompt set
+
+The initial hero used the genuine Formula replay screenshot as visual reference. The targeted correction below narrows its input labels to the exact six channels in that fixture. The thumbnail was simplified from the artwork for legibility at small sizes.
+
+### Hero composition
+
+Use case: ads-marketing.
+Asset type: final GitHub README release hero, wide 16:9 landscape canvas, ideally 2048 by 1152 pixels.
+Primary request: create a polished editorial illustration for the real ALD Training Lab racing-controller experiment app.
+Input image 1 is a reference for the actual A01 track geometry, dark app palette, mint selected-driver dot, amber track centerline, and real native black-box categories. It is a reference, not an edit target and not a screenshot to falsify.
+Scene: clean deep midnight-navy technical canvas with restrained steel-blue track tiles, mint-green accents, warm amber centerline. Match the real product's understated dark engineering-lab character.
+Composition: strong readable typographic title, then a clear top-down tiled closed track based on the attached A01 layout, with ONE small mint dot for the selected driver. Connect the track concept to two minimal schematic information cards, one titled "Native controls" and one titled "Sensor inputs". The cards are an editorial explanation, not a fabricated operating UI. Use simple neutral iconography and labels, no invented telemetry numbers, charts, lap times, rankings or success metrics. Carefully arranged empty space, crisp edges, subtle depth, professional software-release visual, readable at GitHub page width.
+Exact text: "ALD TRAINING LAB"; subheading "Train · Replay · Inspect"; small capability line "CPU + GPU • Native replay • Agent experiments"; card headings "Native controls" and "Sensor inputs"; optional discreet footer "Formula • Rally • Snowmobile • Truck". No other text.
+Constraints: this app uses dot-style vehicle replay; show a dot, not a detailed race car. Show a track/layout concept and native command/input inspection. This is a concept illustration, not actual recorded output. No cinematic driving scene, no 3D racing game, no photorealistic sports car, no glowing holograms, no trophy, no winning/clean-lap promise, no video play button, no platform/company logos, no watermark. Keep all text exact and professionally typeset.
+
+### Hero sensor correction
+
+Use case: precise-object-edit. Edit the supplied ALD Training Lab hero artwork. Preserve the entire composition, track geometry, title, subheading, colors, left Native controls card, footer and graphic style exactly. Change ONLY the contents of the right "Sensor inputs" card.
+Replace its current five rows with SIX equally spaced, readable rows matching the actual reference controller. Exact row text, in order: "speed", "raycast −90°", "raycast −45°", "raycast 0°", "raycast 45°", "raycast 90°". Use simple speed and directional-ray icons consistent with existing icon style. The six labels are literal input channel names, not values. Remove the old labels "orientation", "vehicle state", and "environment" completely. No other new text, no invented measurements. Maintain the same large card outline and everything outside that card unchanged. Wide 16:9 landscape.
+
+### Thumbnail composition
+
+Use case: ads-marketing. Asset type: GitHub thumbnail / social preview, a wide 2:1 canvas, 1280 by 640 pixels.
+Use the supplied ALD hero image as a style and subject reference only. Create a NEW simplified thumbnail composition in its midnight navy, mint and amber style. Huge high-contrast title "ALD" and "TRAINING LAB", arranged for excellent legibility at 320 pixels wide. One smaller line "Train · Replay · Inspect".
+Pair the title with a clear compact top-down A01-style tiled closed track and ONE mint selected-driver dot, keeping the amber centerline and steel-blue tile treatment from the reference. Retain generous safe margins so no text or track is clipped in a social preview. Remove both detailed control/sensor cards, all small labels and the footer vehicle list. Three text lines at most; exact supplied text only. No screenshot window, no extra UI, no metrics, no charts, no promised performance, no detailed racing cars, no cinematic scene, no video-play button, no logos, no watermark. Make it crisp, memorable and consistent with the hero while much simpler.
+
+### Thumbnail simplified rendering
+
+Use case: precise-object-edit. Create a lighter, flat-color version of this exact ALD thumbnail for GitHub's social preview, which requires the PNG under 1 MB. Preserve its composition, exact text "ALD", "TRAINING LAB", "Train · Replay · Inspect", A01-like eight-tile track shape, single mint dot, generous margins and wide 2:1 aspect ratio.
+Change only rendering treatment: use completely uniform flat solid midnight navy for the whole background, flat solid mint lettering for ALD, flat pale-white TRAINING LAB, flat light-blue subtitle, flat solid steel-blue track tiles with simple thin pale outlines, one flat amber centerline. Remove ALL grain, noise, gradients, shadows, glow, subtle textures, dot grids and decorative fine lines. Clean vector-style graphic with crisp edges and a tiny palette of solid colors. No additional text, no data, no UI cards, no car. It must still look polished and match the existing ALD hero's navy/mint/amber identity. Target 1280x640 if supported; prioritize exact 2:1 layout, flat-color simplicity and PNG compressibility below 1 MB.
