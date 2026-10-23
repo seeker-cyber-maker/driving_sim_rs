@@ -1,13 +1,15 @@
 # AI Training Story: Driving Around media
 
-The current hero and thumbnail are AI-generated editorial concept art in the established cozy pixel management-game style. The Formula car practises on asphalt, the Snowmobile uses ice, the Rally car is stuck nose-first against tires on dirt, and the Truck is under repair in the workshop. The wall emblem depicts a layered neural network. These images express vehicle variety and training difficulty; they are not screenshots, measured driving results or a claim of implemented garage/repair mechanics. Actual app replay uses dots and recorded telemetry.
+The two current artworks are AI-generated editorial concept art in the established cozy pixel management-game style. The Formula car practises on asphalt, the Snowmobile uses ice, the Rally car is stuck nose-first against tires on dirt, and the Truck is under repair in the workshop. The wall emblem depicts a layered neural network. These images express vehicle variety and training difficulty; they are not screenshots, measured driving results or a claim of implemented garage/repair mechanics. Actual app replay uses dots and recorded telemetry.
 
 | File | Dimensions | Bytes | Role |
 | --- | --- | --- | --- |
-| `driving-around-hero.png` | 1672 × 941 | 2,408,276 | Current README hero, including the open challenge question |
-| `driving-around-thumbnail.jpg` | 1774 × 887 | 599,843 | Current 2:1 sharing thumbnail |
+| `driving-around-hero.png` | 1672 × 941 | 2,408,276 | Alternate README view: Snowmobile right, Rally left; includes the open challenge question |
+| `driving-around-thumbnail.jpg` | 1774 × 887 | 599,843 | Main README artwork and 2:1 sharing thumbnail: Snowmobile left, Rally right |
 
 The thumbnail was exported from the generated PNG as JPEG without cropping or resizing and is below 1 MB. The generated PNG originals are retained. App/repository URLs, old README anchors and prior artwork URLs are preserved. The repository social-preview setting is unchanged. No ALD simulation, training or ZeroGPU run was used to make the artwork.
+
+The user-preferred Snowmobile-left composition leads the README. The corrected Snowmobile-right composition remains visible in its own expandable second view. Both original image files and URLs are unchanged; this is a presentation-only arrangement with no new image generation.
 
 ## Current prompt set
 

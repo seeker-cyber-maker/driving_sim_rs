@@ -24,11 +24,20 @@
 
 </div>
 
-![AI Training Story: Driving Around pixel concept art featuring Formula on asphalt, Rally stuck on dirt, Snowmobile on ice and a Truck under repair](docs/media/driving-around-hero.png?v=20261023-road-clear)
+![AI Training Story: Driving Around, with the Snowmobile on the left ice section, Formula in the middle, Rally stuck on right-side dirt and Truck under repair](docs/media/driving-around-thumbnail.jpg)
 
 *AI-generated editorial concept art. The miniature campus shows four vehicle types, mixed surfaces and a training mishap; it is not a screenshot or a claim of repair, garage, campaign or progression mechanics. The current app uses a functional experiment workspace and dot-style replay.*
 
-[Full-size artwork](docs/media/driving-around-hero.png) · [Thumbnail / social preview](docs/media/driving-around-thumbnail.jpg) · [Image provenance and prompts](docs/media/ASSETS.md)
+[Main artwork / thumbnail](docs/media/driving-around-thumbnail.jpg) · [Alternate artwork](docs/media/driving-around-hero.png) · [Image provenance and prompts](docs/media/ASSETS.md)
+
+<details>
+<summary><strong>See the second view: Snowmobile on the right</strong></summary>
+
+![Alternate Driving Around concept illustration with the Snowmobile on the right, Rally on the left, Formula on clear asphalt and Truck under repair](docs/media/driving-around-hero.png?v=20261023-road-clear)
+
+Alternate concept view with the Snowmobile on the right and the Rally car on the left.
+
+</details>
 
 ## More than a lap time
 
