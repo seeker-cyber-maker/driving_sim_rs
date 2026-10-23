@@ -56,7 +56,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--snapshot', type=Path, default=ROOT / 'hf-space')
     parser.add_argument('--record', type=Path,
-                        default=ROOT / 'docs/releases/ald-lab-2026.10.23/SOURCE.json')
+                        default=ROOT / 'docs/HF_SOURCE.json')
     args = parser.parse_args()
     try:
         print(json.dumps(verify(args.snapshot, args.record), indent=2))

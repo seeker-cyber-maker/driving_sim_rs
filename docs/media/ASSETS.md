@@ -1,4 +1,44 @@
-# Release page media
+# AI Coaching Story: Driving Grounds media
+
+The current hero and thumbnail use original cozy pixel-art management-game imagery. They are **AI-generated editorial concept illustrations**, not app screenshots or measured replay frames. The workshop/campus and tiny cars express the coaching theme; they do not claim an implemented garage, campaign, progression system, learning coach or agent-driving benchmark. Actual replay continues to use dots and recorded telemetry.
+
+| File | Dimensions | Bytes | Role |
+| --- | --- | --- | --- |
+| `driving-grounds-hero.png` | 1672 × 941 | 2,186,249 | Current README hero, including the open challenge question |
+| `driving-grounds-thumbnail.jpg` | 1774 × 887 | 509,427 | Current 2:1 sharing thumbnail |
+
+The thumbnail is a JPEG format export of the generated PNG, without cropping or resizing. Both generated PNG originals are retained. The thumbnail is below GitHub's 1 MB upload limit; the repository social-preview setting is unchanged. The public app and repository URLs are unchanged.
+
+## Current prompt set
+
+### Hero
+
+Use case: ads-marketing
+Asset type: GitHub README hero for AI Coaching Story: Driving Grounds, wide 16:9 landscape illustration.
+Primary request: Replace a technical training-lab identity with an inviting cozy pixel-art management-game identity, while communicating a neural driving experiment playground. The user likes the charm of small Japanese pixel simulation games: use an original warm miniature isometric driving campus, crisp deliberate pixel clusters, friendly proportions, limited palette, and handcrafted tile details. No existing game characters, logos or copied game UI.
+Scene: a compact practice circuit with grass islands, one small garage workshop and a tiny observation area. Small mint dot-style driver markers on a dark paved closed practice track, one amber sensor-ray fan, and a little neural-node motif near the workshop, all clearly editorial concept illustration rather than functioning UI or measured telemetry. The track and quiet workshop should feel approachable and satisfying.
+Composition: artwork fills the lower and right areas; generous uncluttered dark navy negative space for typography at upper left. Readable cream and mint typography, warm amber accents. Strong clean hierarchy at normal GitHub width. Pixel art with a polished flat poster layout, not a screenshot.
+Text (verbatim): "AI COACHING STORY" (small brand line), "DRIVING GROUNDS" (largest title, may wrap over two lines), "Can you train a neural network to drive better than an agent?" (one clear sentence across a quiet panel), "Train · Replay · Inspect" (small footer).
+Constraints: all text must be exact, spelled correctly, fully readable and comfortably inside safe margins. No other text, no telemetry numbers, fake scores, trophies, lap wins, platform logos, video play button or watermark. No photorealism, no cinematic racing, no military proving ground. Do not imply a coach/tyke system or Create ML integration already exists in the current app. Warm cozy cream, sage/mint, amber and slate navy, with legible visual contrast.
+
+## Thumbnail
+
+Use case: ads-marketing
+Asset type: GitHub social thumbnail, wide exact 2:1 canvas, ideally 1280 by 640 pixels.
+Input image 1: style and brand reference, not an edit target. It is the approved AI Coaching Story: Driving Grounds hero.
+Create a NEW simplified thumbnail in the same cozy, original pixel-art driving management-game mood. Big beautifully legible cream pixel typography on quiet slate-navy negative space; a compact cheerful isometric practice circuit and one small garage at the right, sage grass, warm amber lamps, one small mint driver marker or tiny car with mint marker, a subtle neural-node emblem on the garage.
+Text (verbatim) only: "AI COACHING STORY" (small brand above), "DRIVING GROUNDS" (large dominant two-line title), "Train · Replay · Inspect" (one small footer).
+Simplify the reference considerably for legibility at 320 pixels wide: no long question panel, no small UI or measurement labels, no numerous cars, no complex foliage, no fake scores or numbers. Keep safe margins of at least 7 percent around all typography, exact 2:1 composition. Use clean pixel clusters and flat limited color regions; no grain or full-image noise.
+Warm inviting editorial concept artwork, no screenshot frame, no copied game characters/logos, no trophies, cinematic racing, watermark or extra text. Do not imply measured driving quality or an existing coach-and-tyke mechanic.
+
+
+---
+
+## Historical release artwork
+
+The following pre-rename assets and prompts are retained for the original release. The real replay screenshot also retains its original branding and is labeled historical in the README.
+
+### Original release page media
 
 The hero and thumbnail are AI-generated editorial concept illustrations made with the built-in image generation tool. The native replay screenshot is an unmodified capture from the qualified app. No new training or simulated drive was run to produce these assets.
 

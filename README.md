@@ -1,25 +1,209 @@
-# altd-sim
+<a id="ald-training-lab-release"></a>
+<div align="center">
 
-## ALD Training Lab release
+<h1>AI Coaching Story: Driving Grounds</h1>
 
-![ALD Training Lab concept illustration: tiled track, dot-style driver, Formula controls and six sensor input channels](docs/media/ald-training-lab-hero.png)
+<p><strong>Can you train a neural network to drive better than an agent?</strong></p>
 
-*AI-generated concept illustration using a Formula/A01 example. The amber line illustrates the track centerline. Native replay recordings are fresh CPU drives.*
+<p>Train a driver. Replay its decisions. Keep the evidence.</p>
 
-The verified hosted GPU/CPU lab is published in [hf-space/](hf-space/) with native replay and a car black box. [Open the app](https://tiga-rce-ald-tao-gpu.hf.space/), read the [portable usage guide](docs/HF_LAB.md), or use the [agent experiment skill](skills/ald-run-experiment/SKILL.md).
+<p>A browser-based controller workshop inspired by <em>AI Learns To Drive</em>.</p>
 
-The [ALD release notes](docs/releases/ald-lab-2026.10.23/RELEASE_NOTES.md) identify the exact HF build and its four-vehicle qualification. The root Rust simulator below remains a separate source tree; it does not replace the custom native snapshot bundled with the HF app.
+<p>
+  <a href="https://tiga-rce-ald-tao-gpu.hf.space/"><strong>Open Driving Grounds →</strong></a>
+  &nbsp; · &nbsp;
+  <a href="#start-with-one-run">Quick start</a>
+  &nbsp; · &nbsp;
+  <a href="#let-an-agent-run-the-experiment">Agent guide</a>
+  &nbsp; · &nbsp;
+  <a href="https://github.com/seeker-cyber-maker/driving_sim_rs/releases/tag/ald-lab-2026.10.23">Source &amp; downloads</a>
+</p>
 
-[Full-size artwork](docs/media/ald-training-lab-hero.png) · [Thumbnail / social preview](docs/media/ald-training-lab-thumbnail.jpg) · [Image provenance and prompts](docs/media/ASSETS.md)
+<p><kbd>28 replica tracks</kbd> &nbsp; <kbd>4 vehicle types</kbd> &nbsp; <kbd>CPU without sign-in</kbd> &nbsp; <kbd>Optional ZeroGPU</kbd></p>
+
+</div>
+
+![AI Coaching Story: Driving Grounds concept art, with a cozy pixel-art workshop and miniature practice circuit](docs/media/driving-grounds-hero.png)
+
+*AI-generated editorial concept art. The miniature campus expresses the coaching theme; it is not a screenshot or a claim of garage, campaign or progression mechanics. The current app uses a functional experiment workspace and dot-style replay.*
+
+[Full-size artwork](docs/media/driving-grounds-hero.png) · [Thumbnail / social preview](docs/media/driving-grounds-thumbnail.jpg) · [Image provenance and prompts](docs/media/ASSETS.md)
+
+## More than a lap time
+
+A faster lap tells you that something improved. It does not tell you which controller produced it, what changed during training, or whether the same driver can repeat it.
+
+Driving Grounds brings controller editing, evolutionary population training, frozen evaluation, reusable recipes and measured driving replay into one workflow. Create a driver or bring a compatible `.evolution` file, run a bounded experiment, then inspect and save the result.
+
+| Build a driver | Run an experiment | Inspect the drive |
+| --- | --- | --- |
+| Start in the browser or import a controller. Choose sensors, layers and supported outputs. | Evaluate unchanged weights or evolve candidates. Adjust rewards, mutation, freezing and recipes. | Record a native drive, step through measured samples, and compare controls with the inputs the network used. |
+
+No original-game installation is needed for the built-in replica tracks and browser editor. This is a standalone experimental companion, with its own branding, separate from the original game and its campaign. The broader AI Coaching Story coach-and-tyke game is a separate development project; this app does not yet integrate that learning-coach system. The opening question invites comparison: an agent can operate the experiment tools, while driving quality must be measured under matching conditions. There is no built-in agent-driving benchmark or demonstrated superiority claim.
+
+## Start with one run
+
+1. **Choose a track.** [Open Driving Grounds](https://tiga-rce-ald-tao-gpu.hf.space/) and select a built-in replica, such as **Replica A01 Beginner**, or upload a compatible `.track` file.
+2. **Choose a driver.** Click **Create starter network**, use the **Network editor**, or import a compatible `.evolution`. Imported drivers retain their vehicle type. Keep your original network as the baseline.
+3. **Choose the question.** Use **Frozen evaluation** to measure a driver without changing its weights, or **Train a population** to evolve candidates. Review **Training & recipes** before starting.
+4. **Run on CPU first.** CPU does not require Hugging Face sign-in or consume GPU allowance. For GPU runs, sign in before selecting files and check the current allowance.
+5. **Receive and inspect the result.** Save the driver, analysis archive and receipt from **Latest run**. Select a driver, record a five- or fifteen-second CPU drive, and inspect its replay and black box.
+
+For a small workflow check, use **8 candidates × 3 generations × 900 ticks**, with **60 decisions per second**. This is a compact operating check, not an optimal training recipe or a promise of a clean lap. The app also provides a larger, explicit first-run preset.
+
+[Full usage guide →](docs/HF_LAB.md)
+
+## Train with a purpose
+
+The training tools expose the choices that shape a driver: up to 14 reward metrics, evolutionary settings, selective freezing, saved recipes and batches. Ask a specific question, such as whether a reward change improves distance, lap time or clean driving.
+
+Training changes candidate controllers. Frozen evaluation measures one controller with unchanged weights. Compare candidates under matching tracks, timing and evaluation conditions.
+
+| Result role | What it means |
+| --- | --- |
+| Fitness winner | The final generation's winner under the selected reward settings. |
+| Fastest completed lap | A controller selected for its completed-lap result. |
+| Clean-lap controller | A controller meeting the clean-lap condition, when one qualifies. |
+
+One controller may fill several roles; unavailable roles are labeled. Population-relative ranks are not absolute scores that can be compared across unrelated runs.
+
+[Winner selection and evaluation rules →](hf-space/WINNERS_AND_EVALUATION.md)
+
+## Open the car’s black box
+
+Record the selected policy, then play, pause, scrub or step through native samples. Inspect measured motion, contacts, boost, raw and applied control commands, and the sensor vector consumed at the recorded decision tick. Download the recording and reopen it without another simulation.
+
+The recorder runs physics and decisions at **60 Hz** and stores snapshots at tick 1, every sixth tick and the requested endpoint. Optional pose smoothing changes display interpolation only; sensor and control measurements remain attached to recorded samples.
+
+> [!IMPORTANT]
+> A recording is a fresh native **CPU evaluation** of the selected, unchanged policy, including a policy trained on GPU. It is not automatically the trajectory from its winning training generation. The track-layout preview is separate from recorded driving replay.
+
+Hidden-layer activations and ray-hit positions are not recorded. Contact events identify sampled intervals, not necessarily an exact impact tick or a unique crash.
 
 <details>
-<summary>See the actual native replay and car black box</summary>
+<summary><strong>See the actual native replay and car black box</strong></summary>
 
-![Actual ALD app showing a five-second recorded CPU evaluation, replay controls, native commands and consumed sensor inputs](docs/media/ald-native-replay.jpg)
+![Actual interface showing a five-second recorded CPU evaluation, replay controls, native commands and consumed sensor inputs](docs/media/ald-native-replay.jpg)
 
-Actual interface capture from a five-second native CPU evaluation with a disposable Formula fixture. It shows measured commands and sensor inputs, including their capture timing and interpretation limits.
+Historical interface capture from the qualified pre-rename build, using a disposable Formula fixture. The branding has changed; the measured replay and black-box workflow remain the same.
 
 </details>
+
+[Replay format, capture phases and limits →](hf-space/REPLAY_BLACKBOX.md)
+
+## Let an agent run the experiment
+
+The portable **ald-run-experiment** skill gives an agent a bounded workflow: discover the app’s current actions, preserve the baseline, check GPU allowance before using it, collect result artifacts and inspect a measured replay.
+
+[Read the skill](skills/ald-run-experiment/SKILL.md) · [Download the standalone skill](https://github.com/seeker-cyber-maker/driving_sim_rs/releases/download/ald-lab-2026.10.23/ald-run-experiment-2026.10.23.zip)
+
+```text
+Use $ald-run-experiment on AI Coaching Story: Driving Grounds.
+Run one bounded CPU experiment on Replica A01 Beginner.
+Keep my input driver as the baseline and use 60 Hz decisions.
+Save the driver, analysis archive and run receipt.
+Inspect a five-second native replay.
+Do not replace the baseline unless the candidate passes my stated driving gates.
+```
+
+The skill is portable across computers and agent accounts. It uses discoverable actions for supported inspection and navigation, and normal visible controls for runs, downloads and account operations. It does not grant credentials or authorize paid GPU overage.
+
+## Keep the result, not just the score
+
+Save the driver, full analysis and run receipt together. Recordings, player reports and generation history add context for comparison or investigation.
+
+Recipes and batches are saved in your browser by default. Optional storage uses an existing private Hugging Face bucket. A bucket connection is not required to train.
+
+> [!NOTE]
+> Input files remain in the browser until a run or an explicit export/save action sends or includes them. Processing copies are temporary. Default result delivery deletes the server copy after browser receipt verification, and results expire within five minutes. This describes application retention, not provider-wide zero retention.
+
+Bucket authorization requests Hugging Face’s broad `write-repos` OAuth permission. Read the scope before connecting. GPU account sign-in and optional bucket access serve different purposes.
+
+[Data handling](hf-space/DATA_POLICY.md) · [Bucket storage](hf-space/STORAGE_BOUNDARY.md)
+
+<details>
+<summary><strong>Supported vehicles and network limits</strong></summary>
+
+| Vehicle | Maximum outputs | Important restriction |
+| --- | --- | --- |
+| Formula | 5 | New starters require Steering and Acceleration; supported imported output subsets are retained. |
+| Rally | 5 | Steering and Acceleration required. |
+| Snowmobile | 4 | Steering and Acceleration required; no Handbrake output. |
+| Truck | 5 | Steering and Acceleration required. |
+
+The packaged worker supports up to **20 inputs** (13 raycasts plus 7 other sensors), **12 total layers**, and **16 neurons per hidden layer**. Imported networks must satisfy vehicle-specific ordering and interface rules.
+
+[Track scope and provenance](hf-space/TRACK_LIBRARY.md) · [Package README](hf-space/README.md)
+
+</details>
+
+<details>
+<summary><strong>Run the published package locally</strong></summary>
+
+Download `ald-lab-2026.10.23-hf-space.tar.gz` from the [release page](https://github.com/seeker-cyber-maker/driving_sim_rs/releases/tag/ald-lab-2026.10.23), extract it, and follow the included guide. That immutable release preserves the pre-rename build and its checksums. The current GitHub `main` and hosted app use the Driving Grounds branding.
+
+From the extracted package root, verify the snapshot:
+
+```sh
+python3 scripts/verify_hf_snapshot.py
+```
+
+The verifier checks bytes and build identity without starting training. On compatible Linux x86-64 with the pinned dependencies installed, the CPU entrypoint is:
+
+```sh
+cd hf-space
+python3 app_release.py
+```
+
+The app starts on port 7860. Bundled native artifacts are Linux applications. Hosted GPU execution additionally needs the provider’s ZeroGPU configuration and OAuth setup. The source snapshot does not provide credentials.
+
+[Hosting and platform guide →](docs/HF_LAB.md)
+
+</details>
+
+<details>
+<summary><strong>What the 2026.10.23 release actually checks</strong></summary>
+
+The published qualification covers **12 CPU frozen evaluations, 12 native recordings, 4 GPU frozen evaluations and 4 short GPU training runs** across Formula, Rally, Snowmobile and Truck. The four frozen CPU/GPU comparisons matched their full measurement descriptors exactly in those fixtures.
+
+Test tracks were Replica A01 Beginner, A05 Two Terrains and A06 Ice. Evaluation used 900 configured ticks at 60 Hz decisions. Short training used eight cars, three generations and 900 ticks per generation.
+
+This is finite workflow qualification with disposable synthetic controllers. It does not establish clean laps, superior learning, exhaustive coverage or original-game physics parity. Supported challenge checks are predictions on reconstructed tracks; they do not award official stars or cover every opponent race.
+
+| Identity | Published value |
+| --- | --- |
+| Original release | `ald-lab-2026.10.23` |
+| Original HF revision | `6556847acbf7c98dce628615ece854bbcdec2000` |
+| Source snapshot | 100 files under `hf-space/` |
+| Current branded build | See the [current source record](docs/HF_SOURCE.json). |
+
+[Release notes](docs/releases/ald-lab-2026.10.23/RELEASE_NOTES.md) · [Qualification record](docs/releases/ald-lab-2026.10.23/verification.json) · [Original source identity](docs/releases/ald-lab-2026.10.23/SOURCE.json)
+
+</details>
+
+## Source, credit and scope
+
+The companion source lives in [hf-space/](hf-space/). Its custom native snapshot is distinct from this repository’s root Rust simulator tree. Use the hosted build identity for comparisons.
+
+Built on [Zorro909’s driving_sim_rs](https://github.com/Zorro909/driving_sim_rs), with TiGa’s hosted interface, bounded worker integration and native replay/black-box additions. Inspired by [AI Learns To Drive by ActivationFunction](https://store.steampowered.com/app/3312030/AI_Learns_To_Drive/). The package records upstream base `b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0` and subsequent changes.
+
+The package retains the upstream MIT licence, Godot notice and dependency notices. These do not license unrelated original-game content or private tracks and networks.
+
+## Report a reproducible issue
+
+Include the app build, vehicle, track identity, CPU/GPU route, physics and decision timing, settings, and the smallest shareable result demonstrating the problem. Keep measured results separate from expectations.
+
+[Open an issue draft →](https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new)
+
+Do not post access tokens, job keys, private networks, proprietary tracks or unrelated logs.
+
+<div align="center">
+<p><strong>Change the training. Measure the driving. Preserve what you learned.</strong></p>
+<p><a href="https://tiga-rce-ald-tao-gpu.hf.space/">Open AI Coaching Story: Driving Grounds →</a></p>
+</div>
+
+<details>
+<summary><strong>Root Rust simulator and upstream CLI guide</strong></summary>
 
 [![CI](https://github.com/Zorro909/driving_sim_rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Zorro909/driving_sim_rs/actions/workflows/ci.yml)
 
@@ -197,3 +381,5 @@ Tests retain self-contained native captures and label generated golden data as c
 GitHub Actions checks formatting, native and WASM Clippy, native release and debug tests, Windows and macOS Clippy and release tests, the HIP library build and layout, rustdoc, Rust 1.93 compatibility, and WASM packages with CPU browser comparisons. The release workflow builds and smoke-tests the archives, then publishes tags and nightly builds. Its native jobs override `target-cpu=native` with `x86-64` and include the flags in their cache keys, so cached builds can move between runner CPUs. Serial/threaded browser tests retain the documented expanded native differences. HIP equivalence and hardware WebGPU checks run separately because the hosted runners have no GPU.
 
 The project uses the [MIT license](LICENSE). Godot-derived code retains the [Godot notice](GODOT_LICENSE), and numerical modules retain their source notices.
+
+</details>

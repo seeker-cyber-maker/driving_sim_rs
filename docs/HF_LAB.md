@@ -1,12 +1,14 @@
-# ALD Training Lab: hosted package and agent experiments
+# AI Coaching Story: Driving Grounds
+
+Hosted package and agent experiments.
 
 Open the [hosted app](https://tiga-rce-ald-tao-gpu.hf.space/) to run a CPU experiment without installing the simulator. GPU experiments use Hugging Face ZeroGPU and its current allowance. This app is separate from the original game and from the root Rust command-line release.
 
 ## Source layout and identity
 
-`hf-space/` contains the exact 100-file deployed snapshot at HF revision `6556847acbf7c98dce628615ece854bbcdec2000`. All 99 members of its release manifest and its original metadata are preserved. The Python, browser code, vendored dependencies, three Linux native artifacts, replica tracks, native source archives, licenses and build provenance are included.
+`hf-space/` contains the current 100-file hosted package, including the Driving Grounds presentation update. Its [current source record](HF_SOURCE.json) identifies the exact HF revision and build. All 99 members of its release manifest are verified. The original snapshot and qualification remain available at the immutable `ald-lab-2026.10.23` tag. The Python, browser code, vendored dependencies, three Linux native artifacts, replica tracks, native source archives, licenses and build provenance are included.
 
-The repository's root Rust tree retains its previous state. Its `Cargo.toml` version and build instructions do not identify the hosted binary. Use `hf-space/UPSTREAM.json`, `hf-space/BINARY_PROVENANCE.json` and the native archives for the hosted package's custom source lineage. Historical build receipts contain the original build host's paths; they are provenance, not required runtime locations. The HF snapshot's README and deployment metadata remain byte-identical; this public GitHub copy does not change the HF repository's visibility.
+The repository's root Rust tree retains its previous state. Its `Cargo.toml` version and build instructions do not identify the hosted binary. Use `hf-space/UPSTREAM.json`, `hf-space/BINARY_PROVENANCE.json` and the native archives for the hosted package's custom source lineage. Historical build receipts contain the original build host's paths; they are provenance, not required runtime locations. The branding update changes presentation and its content-derived build identity. Native binaries, worker settings, tracks, service routes, OAuth scope and HF visibility retain their qualified values.
 
 From the repository or release archive root, verify the source with Python 3.10 or newer:
 
@@ -14,7 +16,7 @@ From the repository or release archive root, verify the source with Python 3.10 
 python3 scripts/verify_hf_snapshot.py
 ```
 
-This checks file bytes, the release manifest, native artifact identities and the content-derived build ID. It does not execute the simulator or rebuild the binaries. The [source record](releases/ald-lab-2026.10.23/SOURCE.json) is bound by the published release checksums.
+This checks file bytes, the release manifest, native artifact identities and the content-derived build ID. It does not execute the simulator or rebuild the binaries. The default verifier uses the [current source record](HF_SOURCE.json). The [original source record](releases/ald-lab-2026.10.23/SOURCE.json) and published release assets remain unchanged; run the verifier from that tag or extracted release archive to check that historical package.
 
 ## Run one experiment
 

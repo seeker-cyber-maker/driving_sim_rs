@@ -1,5 +1,5 @@
 ---
-title: AI Learns To Drive — GPU lab
+title: "AI Coaching Story: Driving Grounds"
 sdk: gradio
 sdk_version: 6.29.1
 python_version: "3.10"
@@ -10,11 +10,17 @@ hf_oauth_scopes:
   - write-repos
 ---
 
-This package is the public GPU app at https://tiga-rce-ald-tao-gpu.hf.space/. Its source repository remains restricted; the standalone CPU Space is private. The app also offers an anonymous CPU route. Build-specific deployment and qualification status belong in the release receipt.
+This package is the public GPU app at https://tiga-rce-ald-tao-gpu.hf.space/. Its HF source repository remains restricted; a public source copy is available at https://github.com/seeker-cyber-maker/driving_sim_rs/tree/main/hf-space; the standalone CPU Space is private. The app also offers an anonymous CPU route. Build-specific deployment and qualification status belong in the release receipt.
 
-# Start here
+# AI Coaching Story: Driving Grounds
 
-This lab lets you experiment with small driving controllers in a packaged simulator. You can make a controller in the browser or load a compatible `.evolution` file, then ask the simulator to evaluate it or train a group of candidates. You do not need the original game installed to try the 28 built-in replica tracks and browser editor.
+**Can you train a neural network to drive better than an agent?**
+
+Train a driver. Replay its decisions. Compare the evidence under matching conditions.
+
+## Start here
+
+Driving Grounds lets you experiment with small driving controllers in a packaged simulator. You can make a controller in the browser or load a compatible `.evolution` file, then ask the simulator to evaluate it or train a group of candidates. You do not need the original game installed to try the 28 built-in replica tracks and browser editor.
 
 The app is a separate, bounded experiment. It does not control the original game, reproduce its full campaign, or grant official stars or progression. Its track map previews tiles and terrain; it is not a live driving view. The built-in tracks are reconstructed replicas, and a successful simulation run is not proof of original-game physics parity.
 
