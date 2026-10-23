@@ -4,7 +4,7 @@ The current hero and thumbnail are AI-generated editorial concept art in the est
 
 | File | Dimensions | Bytes | Role |
 | --- | --- | --- | --- |
-| `driving-around-hero.png` | 1672 × 941 | 2,450,642 | Current README hero, including the open challenge question |
+| `driving-around-hero.png` | 1672 × 941 | 2,408,276 | Current README hero, including the open challenge question |
 | `driving-around-thumbnail.jpg` | 1774 × 887 | 599,843 | Current 2:1 sharing thumbnail |
 
 The thumbnail was exported from the generated PNG as JPEG without cropping or resizing and is below 1 MB. The generated PNG originals are retained. App/repository URLs, old README anchors and prior artwork URLs are preserved. The repository social-preview setting is unchanged. No ALD simulation, training or ZeroGPU run was used to make the artwork.
@@ -25,6 +25,17 @@ Replace the identical tiny hatchbacks with FOUR distinct vehicles distributed in
 The central track remains asphalt with clear ice and dirt side sections. Keep island visually coherent and avoid cluttering the type.
 Replace the emblem on the workshop outer wall with an unmistakable layered feed-forward neural network: 3 vertical layers of round mint nodes (3 input nodes, 4 hidden nodes, 2 output nodes), fine connections only BETWEEN adjacent layers. No connected perimeter or molecule/constellation shape.
 Keep text all perfectly readable and exact. Retain the established charming miniature pixel management-game feel. This is editorial concept art; no fake gameplay window, metrics, scores, trophies, lap records, platform logos, watermark or claims of performance.
+
+### Hero road-clearance correction
+
+The final hero removes the isolated tree from the asphalt beside the Formula car. The thumbnail is unchanged. This was a built-in image-generation edit using the full hero as the target and a user-supplied close-up only to locate the obstruction. Composition, text, four vehicles, grass-island trees and workshop were visually reviewed; small generative foliage/detail differences elsewhere mean this is not a pixel-identical masked edit.
+
+Use case: precise-object-edit.
+Input image 1 is the FULL EDIT TARGET: the complete 1672 × 941 AI Training Story: Driving Around hero.
+Input image 2 is ONLY a close-up locator reference showing the unwanted tree; do NOT output that crop. Return the complete full-size landscape hero with the same composition and dimensions as image 1.
+Make ONE localized correction: remove the single small isolated green tree/bush growing out of the DARK ASPHALT immediately beside the Formula car, above/right of its front wheel and just above the amber sensor fan. In the full image this obstruction is around x=1200, y=375; in the close-up it is the small green foliage behind the car's nose. Replace the entire tree with seamless matching dark road asphalt and its existing subtle pixel texture.
+Preserve the Formula car completely, including all wheels, nose, cockpit, its mint marker and amber sensor rays. Preserve the nearby grassy island and ALL trees growing on that grass; those are intentional. Preserve all other track geometry, dirt, ice, four vehicle models, crashed Rally, Truck under repair, workshop and layered neural-network emblem, fences, lighting, pixel-art style, palette, title, question, typography, scale and framing. All existing text must remain EXACTLY unchanged. No added objects, no other edits, no crop or zoom. The sole difference should be that this one asphalt obstruction is gone and the driving lane is clear.
+
 
 ## Thumbnail
 

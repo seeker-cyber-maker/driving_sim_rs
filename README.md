@@ -24,7 +24,7 @@
 
 </div>
 
-![AI Training Story: Driving Around pixel concept art featuring Formula on asphalt, Rally stuck on dirt, Snowmobile on ice and a Truck under repair](docs/media/driving-around-hero.png)
+![AI Training Story: Driving Around pixel concept art featuring Formula on asphalt, Rally stuck on dirt, Snowmobile on ice and a Truck under repair](docs/media/driving-around-hero.png?v=20261023-road-clear)
 
 *AI-generated editorial concept art. The miniature campus shows four vehicle types, mixed surfaces and a training mishap; it is not a screenshot or a claim of repair, garage, campaign or progression mechanics. The current app uses a functional experiment workspace and dot-style replay.*
 
