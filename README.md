@@ -105,6 +105,12 @@ Historical interface capture from the qualified pre-rename build, using a dispos
 
 The map now draws the road and obstacles from the native track parts’ collision polygons. **Calculate suggested route** adds an optional dashed yellow guide for general orientation; the green **Recorded path** shows actual measured car positions. Toggle the two layers independently, then play, scrub or step through the drive and its black box.
 
+[![Watch the native map preview, actual driving trajectory and car black box](docs/media/driving-around-replay.gif)](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu)
+
+*8.6-second replay clip at 2× speed, using an example Formula driver. Yellow is the suggested route; green is the measured trajectory. Controls and consumed sensor inputs stay attached to the recorded sample.*
+
+[Try it in the public HF Space →](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu)
+
 The guide uses part-derived masks and real openings between neighboring pieces, including split lanes. It is a geometric reference, not an optimal racing line or a driving-quality score. It does not change the controller, rewards, physics or recorded telemetry.
 
 The [Hugging Face Space and source](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu) are public. CPU works without sign-in; GPU remains subject to the provider’s allowance. Optional private-bucket storage retains its own authorization.

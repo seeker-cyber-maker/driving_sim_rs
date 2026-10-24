@@ -6,7 +6,7 @@
       "bin/extract_saved_track": "3a7733c45b4301a786fcbfe92660a1c484749272da5f608d62f34878bd4ff31a",
       "bin/libaltd_gpu.so": "e5e9a61d863bc3b429af69a13cd8d50f63cad8984b3e6a9001ae342fc5981e05"
     },
-    "build_id": "ald-winners-2a41891ca1dbf3341b9f64323debc4c0edc63ef62b3bb918f8d01d89fe18741a",
+    "build_id": "ald-winners-6b407a9095d7e0536499e95b927e76237443afc6e2621747dc47aa8e9c02359e",
     "math_profile": "proton",
     "native_build_receipt_sha256": "de3eea6c45a5ae4897287a97b0e2822fdae552a0655250bf940cef20d9b60d96",
     "native_source_revision": "b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0",
@@ -18,7 +18,7 @@
     "source_repository": "https://github.com/Zorro909/driving_sim_rs"
   },
   "directory": "hf-space",
-  "file_count": 102,
+  "file_count": 103,
   "files": {
     "BETA_TESTING.md": "829dae67ec37dac2a4e7b178ab5ee4fc5f63896af132fbff457a5e35141fe94d",
     "BINARY_PROVENANCE.json": "4c8fbc45f4766fecbc04cc23bfd953e7fd8f4d96532150524ef75c76fbe569ce",
@@ -30,8 +30,8 @@
     "GODOT_LICENSE": "fb2b3bb82c60f1e76841ba2122eb902f8e39c151476fe21ce10c9a05d1045304",
     "IMPORTER_BUILD_RECEIPT.json": "4ba5c533cc617105478e4d85c83f456a7dfa68b1388049624619871ba9e42e9d",
     "LICENSE": "53d5851b6440feeae36f72a5f57fcab37858c48b7084765ece4b0c54b9a28ed8",
-    "README.md": "9ed79c2a6aa6f2280b8c2d2fa57fa6ee45a352a3f3b25b3a7959d06ed449bdbb",
-    "RELEASE_MANIFEST.json": "8b7813afbaa2f15620336e8a6a5d738fd4f5594ea9ca8a517333cbf2e8922ec8",
+    "README.md": "ac57de1064bc3da70161c666273f55369dd545a488329790c93df9b8dcd4a0b4",
+    "RELEASE_MANIFEST.json": "50a0b08a16628b10eebdcbe10628aabf0eb9be86667c5833fb799e52bfcdc656",
     "REPLAY_BLACKBOX.md": "a94c6b7e13273535746f63666254a359ef1dc18908711b8a4a33f2bf92dd82a8",
     "STORAGE_BOUNDARY.md": "1d0cab6c82723f1879d7b437bab6b0d21248436bce161f3fbfe6c0e83b9e87a1",
     "TRACK_LIBRARY.md": "be64c91633ef6696233df537afeef4c5175b2d55daac9336758d9eb3d24763c9",
@@ -47,6 +47,7 @@
     "assets/formula_template.json": "80f745df82bb7be45af52785fd582460bcddc63c5a4e1d8375d85b3122db4c6b",
     "assets/rally_template.json": "7350a3fe28d9b4da7a0965ae6ea7ca3472fb7885303e342310d63a0dce80851c",
     "assets/snowmobile_template.json": "8232f4d54829445c44de9292e12557bfe66b3d43e0363e07d2ae0b4118721c08",
+    "assets/space-thumbnail.jpg": "c2714655f360e0e407a2851910097808db5ff4ccd782032460cc95f98a694a93",
     "assets/track-atlas.json": "d6168fa2bbcf3e387bae2c61aa4912ad4b556038d2c34adeb4a11716139918ea",
     "assets/truck_template.json": "a83bffea4d5e818c135ab3aba68a47aa288d6ad0e7b8bd9c95ed0dea9e9df2f7",
     "bin/altd-sim": "225de9c2b7dd0d9cb11c2578f50fff8a34f4cf6223580035ab0fa64e700beac8",
@@ -124,9 +125,9 @@
     "worker.py": "17350cafc4e785f45ce5be5bc272d4cc1d967bc3babd299d94d7238dc48b84ae"
   },
   "hf_repository": "TiGa-RCE/ald-tao-gpu",
-  "hf_revision": "8994edc1950e5a1289ddad1795319206acca1f1f",
+  "hf_revision": "3653f9a3bd93f0bb633378134578c71d3d8830fe",
   "hosted_app": "https://tiga-rce-ald-tao-gpu.hf.space/",
-  "note": "Native-mask map and optional suggested route with measured trajectory. Native binaries and training/storage/auth contracts unchanged. Original tagged release and qualification remain immutable. Hosted acceptance and public visibility recorded in docs/releases/driving-around-mask-2026.10.24/verification.json.",
+  "note": "Presentation-only update: approved HF custom thumbnail and public Space description. Runtime code, native binaries and qualified map/replay behavior retained unchanged from 8994edc1950e5a1289ddad1795319206acca1f1f. GIF added to GitHub documentation; historical release qualification and tagged downloads preserved.",
   "schema": "ald-hf-source-snapshot/1",
-  "verified_at": "2026-10-24T08:18:15.847960+00:00"
+  "verified_at": "2026-10-24T09:24:09.952441+00:00"
 }

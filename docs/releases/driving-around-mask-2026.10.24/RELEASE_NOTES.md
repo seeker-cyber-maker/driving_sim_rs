@@ -13,7 +13,20 @@ AI Training Story: Driving Around now draws the preview road from the native tra
 
 The suggested route is a geometric reference. It is not an optimal racing line, a driving-quality score or a guarantee that a vehicle can follow it. No policy was promoted.
 
-## Fresh verification
+## Replay GIF and Space thumbnail — 2026-10-24
+
+[![Map preview, actual trajectory and native black-box replay](../../media/driving-around-replay.gif)](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu)
+
+[Open the public HF Space →](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu)
+
+The 8.6-second loop uses real app captures of an example Formula driver on Replica A05 Two Terrains at 2× playback. It shows the optional yellow suggested route, green measured trajectory, native controls and consumed sensor inputs. The Space now uses the approved Driving Around concept artwork as its custom thumbnail.
+
+This presentation update changes only the HF README metadata, thumbnail asset and package manifest. Simulator, training, map/replay code, account permissions and storage behavior are unchanged. The current package contains 103 product files and 102 manifest members; its live identity is in the [current source record](../../HF_SOURCE.json). The qualification and identity below describe the earlier mask-preview build, whose runtime code is retained unchanged.
+
+Presentation-only HF revision: `3653f9a3bd93f0bb633378134578c71d3d8830fe`. Build: `ald-winners-6b407a9095d7e0536499e95b927e76237443afc6e2621747dc47aa8e9c02359e`. The [Space thumbnail](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu/resolve/main/assets/space-thumbnail.jpg) is publicly accessible.
+
+## Mask-preview qualification
+
 
 - All 28 built-in tracks generated a guide; an independent native-polygon audit passed all 15,951 final segments.
 - Independent mask checks covered 151 distinct part geometries and 312,816 free cells, with zero wall intersections.
@@ -21,7 +34,7 @@ The suggested route is a geometric reference. It is not an optimal racing line, 
 - On this exact hosted build, fresh native CPU recordings passed at 5 seconds / 51 measured samples and 15 seconds / 151 measured samples, with 60 Hz physics/decisions and verified unchanged policy weights.
 - Browser checks passed route calculation, play/pause, scrub to tick 450, next sample 456 / previous 450, native controls/sensor tick binding, independent route/path toggles, recording download and reopen. The downloaded recording’s JSON equals the native response. No console errors were observed.
 - Anonymous HF metadata, Space page, exact source file and live app reads passed after making the Space public.
-- Current GitHub source is 102 product files, with 101 release-manifest members. Run `python3 scripts/verify_hf_snapshot.py` from the repository root to verify bytes and build identity.
+- The qualified mask-preview package contains 102 product files, with 101 release-manifest members. Run `python3 scripts/verify_hf_snapshot.py` from the repository root to verify bytes and build identity.
 
 This is a preview/UI release. It does not claim new learning gains or rerun the full CPU/GPU driving qualification. No GPU call or paid hardware was used. The native binaries, worker/training behavior, OAuth scope and private-bucket behavior are unchanged. Godot and Swift received no edits; the retained parent remains unchanged. The original `ald-lab-2026.10.23` tag and release assets are preserved.
 

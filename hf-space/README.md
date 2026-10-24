@@ -1,5 +1,7 @@
 ---
 title: "AI Training Story: Driving Around"
+thumbnail: https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu/resolve/main/assets/space-thumbnail.jpg
+short_description: "Train drivers, compare runs, inspect native replays."
 sdk: gradio
 sdk_version: 6.29.1
 python_version: "3.10"

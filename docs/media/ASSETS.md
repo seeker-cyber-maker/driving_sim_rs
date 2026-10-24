@@ -146,3 +146,10 @@ Pair the title with a clear compact top-down A01-style tiled closed track and ON
 
 Use case: precise-object-edit. Create a lighter, flat-color version of this exact ALD thumbnail for GitHub's social preview, which requires the PNG under 1 MB. Preserve its composition, exact text "ALD", "TRAINING LAB", "Train · Replay · Inspect", A01-like eight-tile track shape, single mint dot, generous margins and wide 2:1 aspect ratio.
 Change only rendering treatment: use completely uniform flat solid midnight navy for the whole background, flat solid mint lettering for ALD, flat pale-white TRAINING LAB, flat light-blue subtitle, flat solid steel-blue track tiles with simple thin pale outlines, one flat amber centerline. Remove ALL grain, noise, gradients, shadows, glow, subtle textures, dot grids and decorative fine lines. Clean vector-style graphic with crisp edges and a tiny palette of solid colors. No additional text, no data, no UI cards, no car. It must still look polished and match the existing ALD hero's navy/mint/amber identity. Target 1280x640 if supported; prioritize exact 2:1 layout, flat-color simplicity and PNG compressibility below 1 MB.
+
+
+## Measured replay GIF — 2026-10-24
+
+`driving-around-replay.gif` is an 8.6-second 1080×780 loop assembled from actual released-app screenshot crops, with a title and legend for readability. Source is an example Formula driver on Replica A05 Two Terrains, native ticks 120–900 at 2× playback with short end holds. The source recording was accepted on HF revision `8994edc1950e5a1289ddad1795319206acca1f1f`. The image does not claim a clean lap or better driving. Native controls and consumed sensor inputs correspond to the measured tick. It contains no account or bucket data.
+
+GIF SHA-256:`e55d4929846bb0f14204a287ebd113416b47169444a3cf312a94766b8ecee070`. The existing `driving-around-thumbnail.jpg` is reused without edits as the HF custom thumbnail under `hf-space/assets/space-thumbnail.jpg` (SHA-256:`c2714655f360e0e407a2851910097808db5ff4ccd782032460cc95f98a694a93`). Its concept-art status and original image provenance above still apply.
