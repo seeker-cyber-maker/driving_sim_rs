@@ -51,7 +51,7 @@ parity, or training quality.
 ## Feedback
 
 `/feedback` serves a template only; it does not submit a report. The configured
-public destination is the [driving_sim_rs issue tracker](https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new).
+public destination is the [aits-driving-around issue tracker](https://github.com/seeker-cyber-maker/aits-driving-around/issues/new).
 Reports should identify the app URL and build ID, browser and version, operating
 system, CPU/GPU choice, reproduction steps, expected and observed behavior, and
 a redacted receipt or screenshot. Do not attach tokens, job access keys, private

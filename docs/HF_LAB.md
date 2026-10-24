@@ -2,6 +2,8 @@
 
 Hosted package and agent experiments.
 
+Repository: [aits-driving-around](https://github.com/seeker-cyber-maker/aits-driving-around), forked from [Zorro909’s driving_sim_rs engine](https://github.com/Zorro909/driving_sim_rs). Original game: [AI Learns To Drive by ActivationFunction on Steam](https://store.steampowered.com/app/3312030/AI_Learns_To_Drive/).
+
 Open the [hosted app](https://tiga-rce-ald-tao-gpu.hf.space/) to run a CPU experiment without installing the simulator. GPU experiments use Hugging Face ZeroGPU and its current allowance. This app is separate from the original game and from the root Rust command-line release.
 
 ## Source layout and identity

@@ -12,13 +12,15 @@ hf_oauth_scopes:
   - write-repos
 ---
 
-This package is the public GPU app at https://tiga-rce-ald-tao-gpu.hf.space/. The HF Space and its source are public at https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu, with a matching source copy at https://github.com/seeker-cyber-maker/driving_sim_rs/tree/main/hf-space. The standalone CPU Space remains private. The app also offers an anonymous CPU route. Build-specific deployment and qualification status belong in the release receipt.
+This package is the public GPU app at https://tiga-rce-ald-tao-gpu.hf.space/. The HF Space and its source are public at https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu, with a matching source copy at https://github.com/seeker-cyber-maker/aits-driving-around/tree/main/hf-space. The standalone CPU Space remains private. The app also offers an anonymous CPU route. Build-specific deployment and qualification status belong in the release receipt.
 
 # AI Training Story: Driving Around
 
 **Can you train a neural network to drive better than an agent?**
 
 Train a driver. Replay its decisions. Compare the evidence under matching conditions.
+
+Built on a fork of [Zorro909’s driving_sim_rs engine](https://github.com/Zorro909/driving_sim_rs). Original game: [AI Learns To Drive by ActivationFunction on Steam](https://store.steampowered.com/app/3312030/AI_Learns_To_Drive/).
 
 ## Start here
 
@@ -57,7 +59,7 @@ A training result can include the final-generation fitness winner, the fastest c
 
 The app can check supported track conditions after a run by replaying the named controller with fixed weights. This may add time to the run. The result is a bounded prediction for the reconstructed track. It does not award or accumulate original-game stars; opponent races and unsupported conditions remain unchecked.
 
-The simulator is based on [driving_sim_rs](https://github.com/Zorro909/driving_sim_rs), upstream revision `b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0`; the release receipt records the packaged build and local changes. The package includes the upstream [MIT license](LICENSE). Upstream pull requests 19 and 21 are not included. Feedback: [open an editable issue draft](https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new). It is not submitted automatically. Review the draft and remove private names or data before posting. Never attach tokens, job keys, private networks, proprietary tracks, or unrelated logs.
+The simulator is based on [driving_sim_rs](https://github.com/Zorro909/driving_sim_rs), upstream revision `b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0`; the release receipt records the packaged build and local changes. The package includes the upstream [MIT license](LICENSE). Upstream pull requests 19 and 21 are not included. Feedback: [open an editable issue draft](https://github.com/seeker-cyber-maker/aits-driving-around/issues/new). It is not submitted automatically. Review the draft and remove private names or data before posting. Never attach tokens, job keys, private networks, proprietary tracks, or unrelated logs.
 
 
 ## Driver-first / 60 Hz

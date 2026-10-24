@@ -13,6 +13,12 @@ AI Training Story: Driving Around now draws the preview road from the native tra
 
 The suggested route is a geometric reference. It is not an optimal racing line, a driving-quality score or a guarantee that a vehicle can follow it. No policy was promoted.
 
+## Repository name and credits — 2026-10-24
+
+The repository is now [aits-driving-around](https://github.com/seeker-cyber-maker/aits-driving-around). It remains a fork of [Zorro909’s driving_sim_rs engine](https://github.com/Zorro909/driving_sim_rs), inspired by the original [AI Learns To Drive by ActivationFunction on Steam](https://store.steampowered.com/app/3312030/AI_Learns_To_Drive/). The [public HF Space](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu) keeps its existing URL. This update changes current repository/feedback links and credit text; native simulation, training, policy weights and measured replay data are unchanged. Earlier qualification identities below remain historical records.
+
+Repository-link update HF revision: `db111049b8962b41399fdce87458dcfe5b78240e`. Build: `ald-winners-0ec436fbe610c0b648883413a120855f2878d1be854a3c9ddda32da4a025e514`.
+
 ## Replay GIF and Space thumbnail — 2026-10-24
 
 [![Map preview, actual trajectory and native black-box replay](../../media/driving-around-replay.gif)](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu)

@@ -5,25 +5,25 @@
     "source": "Runner r14 single-engine browser UI; selected .track tile renderer added from simulator atlas",
     "source_sha256": "65d1e5f2c4e19b4951b828e82510005ab99a5270cf3dcb9f4eaa0fa1af8c40f8"
   },
-  "client_sha256": "9de0e2faafd9a023391f0c237ab31e395654076072f2fe19327a83c62941e7f0",
+  "client_sha256": "acc63231b6575a2138972ac506595ab4344e5000a152d1e2a13efe6e31dc9194",
   "identity_note": "The historical source fields describe the base frontend; local packaged file hashes describe this candidate's derived frontend.",
-  "local_customization_id": "driving-around-native-mask-route-20261024",
-  "output_sha256": "578a58a48410cc6c68d71dc1ebfaa806086bb53ecc696cf865b23a9af0141579",
+  "local_customization_id": "aits-driving-around-repository-rename-20261024",
+  "output_sha256": "a2880dd93b52fe17bad4a69ff11854458b3453a79244247c14b1ce4f6a26770e",
   "packaged_frontend_files": {
     "agent-manifest.json": "7187c85327d588cb3b81f5ddf60bae099567a656bcceac8147ecb2227e07f561",
     "agent-tools.js": "af4af7d4dab229f5988daf49f630e08879025b37b561a5c93669a6667ab8fdf4",
     "agents.html": "c2c6889e50056c68c921559ccf95267a541622471e2ccec55099d70989ee8110",
     "assets/track-atlas.json": "d6168fa2bbcf3e387bae2c61aa4912ad4b556038d2c34adeb4a11716139918ea",
-    "client.js": "9de0e2faafd9a023391f0c237ab31e395654076072f2fe19327a83c62941e7f0",
-    "help.html": "1b9acbebf92914f3705fe401483ec27b0e456c3a6b3d648253f96e3db0e1cd6b",
+    "client.js": "acc63231b6575a2138972ac506595ab4344e5000a152d1e2a13efe6e31dc9194",
+    "help.html": "a12d5ad5e7d347267cab465f44e7ac709731f30982f8424e9f5d83c561881964",
     "hf-auth.js": "3f3938bbc0935e4e9230c094029ef46e03beea74be199887c50e053e03dafcfe",
-    "index.html": "578a58a48410cc6c68d71dc1ebfaa806086bb53ecc696cf865b23a9af0141579",
+    "index.html": "a2880dd93b52fe17bad4a69ff11854458b3453a79244247c14b1ce4f6a26770e",
     "track-library.js": "351ec4c026b49420ce963f4310cb000d9e987fd28e6dac5ecd0176509340f6e6",
     "track-map.js": "1bbd528a5c593bf630698b5e35f939e86df569c79b668445c9d6155c362a87b0",
     "track-mask.js": "75b20e989b8d192d32c96dff24c5e6f0bf3fdf5bb53302accbd4fc6884eb09f7"
   },
-  "packaged_frontend_sha256": "62a2efe8c01cf0cef25e404ceb756810f9bb66bc3f4ba24bebf4a28ec136144b",
+  "packaged_frontend_sha256": "b044d716fced564d01d27f8ffe95ebcccb194dda44e3270ead207583109dfd6e",
   "packaged_frontend_sha256_format": "SHA-256 of UTF-8 JSON for packaged_frontend_files, sorted keys, compact separators, no trailing newline",
-  "parent_local_customization_id": "driving-around-native-mask-guide-20261023",
-  "status": "Native part-derived map and optional suggested route; measured trajectory and replay retained. Deployment and public-visibility readback recorded separately."
+  "parent_local_customization_id": "driving-around-native-mask-route-20261024",
+  "status": "Repository link rename and prominent engine/game attribution; native, driving and training behavior unchanged. Qualification and current-link readback recorded separately."
 }

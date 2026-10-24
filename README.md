@@ -10,6 +10,8 @@
 
 <p>A browser-based controller workshop inspired by <em>AI Learns To Drive</em>.</p>
 
+<p>Built on a fork of <a href="https://github.com/Zorro909/driving_sim_rs">Zorro909’s driving_sim_rs engine</a>. Original game: <a href="https://store.steampowered.com/app/3312030/AI_Learns_To_Drive/">AI Learns To Drive by ActivationFunction on Steam</a>.</p>
+
 <p>
   <a href="https://tiga-rce-ald-tao-gpu.hf.space/"><strong>Open Driving Around →</strong></a>
   &nbsp; · &nbsp;
@@ -17,7 +19,7 @@
   &nbsp; · &nbsp;
   <a href="#let-an-agent-run-the-experiment">Agent guide</a>
   &nbsp; · &nbsp;
-  <a href="https://github.com/seeker-cyber-maker/driving_sim_rs/releases/tag/ald-lab-2026.10.23">Source &amp; downloads</a>
+  <a href="https://github.com/seeker-cyber-maker/aits-driving-around/releases/tag/ald-lab-2026.10.23">Source &amp; downloads</a>
 </p>
 
 <p><kbd>28 replica tracks</kbd> &nbsp; <kbd>4 vehicle types</kbd> &nbsp; <kbd>CPU without sign-in</kbd> &nbsp; <kbd>Optional ZeroGPU</kbd></p>
@@ -130,7 +132,7 @@ Current deployed interface with a disposable Formula fixture on Replica A05 Two 
 
 The portable **ald-run-experiment** skill gives an agent a bounded workflow: discover the app’s current actions, preserve the baseline, check GPU allowance before using it, collect result artifacts and inspect a measured replay.
 
-[Read the skill](skills/ald-run-experiment/SKILL.md) · [Download the standalone skill](https://github.com/seeker-cyber-maker/driving_sim_rs/releases/download/ald-lab-2026.10.23/ald-run-experiment-2026.10.23.zip)
+[Read the skill](skills/ald-run-experiment/SKILL.md) · [Download the standalone skill](https://github.com/seeker-cyber-maker/aits-driving-around/releases/download/ald-lab-2026.10.23/ald-run-experiment-2026.10.23.zip)
 
 ```text
 Use $ald-run-experiment on AI Training Story: Driving Around.
@@ -175,7 +177,7 @@ The packaged worker supports up to **20 inputs** (13 raycasts plus 7 other senso
 <details>
 <summary><strong>Run the published package locally</strong></summary>
 
-Download `ald-lab-2026.10.23-hf-space.tar.gz` from the [release page](https://github.com/seeker-cyber-maker/driving_sim_rs/releases/tag/ald-lab-2026.10.23), extract it, and follow the included guide. That immutable release preserves the pre-rename build and its checksums. The current GitHub `main` and hosted app use the Driving Around branding.
+Download `ald-lab-2026.10.23-hf-space.tar.gz` from the [release page](https://github.com/seeker-cyber-maker/aits-driving-around/releases/tag/ald-lab-2026.10.23), extract it, and follow the included guide. That immutable release preserves the pre-rename build and its checksums. The current GitHub `main` and hosted app use the Driving Around branding.
 
 From the extracted package root, verify the snapshot:
 
@@ -228,7 +230,7 @@ The package retains the upstream MIT licence, Godot notice and dependency notice
 
 Include the app build, vehicle, track identity, CPU/GPU route, physics and decision timing, settings, and the smallest shareable result demonstrating the problem. Keep measured results separate from expectations.
 
-[Open an issue draft →](https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new)
+[Open an issue draft →](https://github.com/seeker-cyber-maker/aits-driving-around/issues/new)
 
 Do not post access tokens, job keys, private networks, proprietary tracks or unrelated logs.
 

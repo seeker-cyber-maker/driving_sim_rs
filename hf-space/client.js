@@ -491,7 +491,7 @@ $('leaderboard_opt_in')?.addEventListener('change',()=>{
 });
 const feedbackLink=$('feedbackLink');
 feedbackLink?.addEventListener('click',()=>{
-  const url=new URL('https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new');
+  const url=new URL('https://github.com/seeker-cyber-maker/aits-driving-around/issues/new');
   const browser=navigator.userAgent||'Not reported';
   const body=['Build: '+(appBuild?.build_id??'Not reported'),'Browser and OS: '+browser,'Selected backend: '+$('backend').value.toUpperCase(),'','What happened?'].join('\n');
   url.searchParams.set('title','Driving Around problem report');url.searchParams.set('body',body);

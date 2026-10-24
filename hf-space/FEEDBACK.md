@@ -1,7 +1,7 @@
 # Feedback report template
 
 This form is a local template. It does not submit a message or upload files.
-Use the public issue form at https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new
+Use the public issue form at https://github.com/seeker-cyber-maker/aits-driving-around/issues/new
 to report a problem. Review every attachment before posting. The issue tracker is
 for product reports; do not include confidential material.
 
