@@ -5,23 +5,25 @@
     "source": "Runner r14 single-engine browser UI; selected .track tile renderer added from simulator atlas",
     "source_sha256": "65d1e5f2c4e19b4951b828e82510005ab99a5270cf3dcb9f4eaa0fa1af8c40f8"
   },
-  "client_sha256": "db89eadb60209fb58e061cd41247a7c2c40e77183a5fd3040cdb8e04a20d1521",
+  "client_sha256": "9de0e2faafd9a023391f0c237ab31e395654076072f2fe19327a83c62941e7f0",
   "identity_note": "The historical source fields describe the base frontend; local packaged file hashes describe this candidate's derived frontend.",
-  "local_customization_id": "ai-training-story-driving-around-20261023",
-  "output_sha256": "1563f362b39eb62941585b370aded739d408ee917e71ec3de2966930c7d22dd7",
+  "local_customization_id": "driving-around-native-mask-route-20261024",
+  "output_sha256": "578a58a48410cc6c68d71dc1ebfaa806086bb53ecc696cf865b23a9af0141579",
   "packaged_frontend_files": {
     "agent-manifest.json": "7187c85327d588cb3b81f5ddf60bae099567a656bcceac8147ecb2227e07f561",
     "agent-tools.js": "af4af7d4dab229f5988daf49f630e08879025b37b561a5c93669a6667ab8fdf4",
     "agents.html": "c2c6889e50056c68c921559ccf95267a541622471e2ccec55099d70989ee8110",
-    "assets/track-atlas.json": "d97c8900e3e5fb17734b5bd61d1f4f4b196d9be30af9848e2e273ae7e4079ae4",
-    "client.js": "db89eadb60209fb58e061cd41247a7c2c40e77183a5fd3040cdb8e04a20d1521",
-    "help.html": "370eafcaf6141c90393761631ff26a4d0c2abd0c14a6a753f78e7dd9329e24e5",
+    "assets/track-atlas.json": "d6168fa2bbcf3e387bae2c61aa4912ad4b556038d2c34adeb4a11716139918ea",
+    "client.js": "9de0e2faafd9a023391f0c237ab31e395654076072f2fe19327a83c62941e7f0",
+    "help.html": "1b9acbebf92914f3705fe401483ec27b0e456c3a6b3d648253f96e3db0e1cd6b",
     "hf-auth.js": "3f3938bbc0935e4e9230c094029ef46e03beea74be199887c50e053e03dafcfe",
-    "index.html": "1563f362b39eb62941585b370aded739d408ee917e71ec3de2966930c7d22dd7",
+    "index.html": "578a58a48410cc6c68d71dc1ebfaa806086bb53ecc696cf865b23a9af0141579",
     "track-library.js": "351ec4c026b49420ce963f4310cb000d9e987fd28e6dac5ecd0176509340f6e6",
-    "track-map.js": "c5f56f1083f4c9487f8d3d663c939c736bdc478217e2b60142f820f3263adb44"
+    "track-map.js": "1bbd528a5c593bf630698b5e35f939e86df569c79b668445c9d6155c362a87b0",
+    "track-mask.js": "75b20e989b8d192d32c96dff24c5e6f0bf3fdf5bb53302accbd4fc6884eb09f7"
   },
-  "packaged_frontend_sha256": "fbf489cd3f38afd927db6b7b0e9ff5a7b62e7360f1e6eae38a99120dd4ebb51b",
+  "packaged_frontend_sha256": "62a2efe8c01cf0cef25e404ceb756810f9bb66bc3f4ba24bebf4a28ec136144b",
   "packaged_frontend_sha256_format": "SHA-256 of UTF-8 JSON for packaged_frontend_files, sorted keys, compact separators, no trailing newline",
-  "status": "AI Training Story: Driving Around name; direct driving-network training wording; experiment controls and contracts preserved"
+  "parent_local_customization_id": "driving-around-native-mask-guide-20261023",
+  "status": "Native part-derived map and optional suggested route; measured trajectory and replay retained. Deployment and public-visibility readback recorded separately."
 }

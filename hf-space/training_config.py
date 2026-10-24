@@ -30,6 +30,8 @@ def validate_config(value=None, *, work_limit=4_000_000):
     if value is None:return copy.deepcopy(DEFAULTS)
     if not isinstance(value,dict) or set(value)-set(DEFAULTS):raise ValueError('Unexpected training settings')
     c={**copy.deepcopy(DEFAULTS),**value}
+    if type(c['control_hz']) is not int or c['control_hz']!=60:
+        raise ValueError('New training and evaluation runs require control_hz=60; historical records are not converted')
     bounds={'population':(1,1024,True),'generations':(1,2000,True),'ticks':(1,18000,True),
         'mutation':(0,4.2,False),'mutation_end':(0,4.2,False),'seed':(0,2147483647,True),
         'clean_min_laps':(1,100,True),'parents':(1,1024,True),'elite':(0,1024,True),'decay':(0,1,False),'workers':(1,4,True)}
@@ -37,7 +39,7 @@ def validate_config(value=None, *, work_limit=4_000_000):
         v=c[key]
         if type(v) not in (int,float) or not math.isfinite(v) or not low<=v<=high or (integer and type(v) is not int):raise ValueError('Invalid '+key)
     for key,choices in {'mode':('train','evaluate'),'schedule':('fixed','linear','geometric'),'selection':('best','tournament','roulette'),
-                        'crossover':('none','single_point','uniform'),'control_hz':(60,30,15)}.items():
+                        'crossover':('none','single_point','uniform'),'control_hz':(60,)}.items():
         if c[key] not in choices or (key=='control_hz' and type(c[key]) is not int):raise ValueError('Invalid '+key)
     for key in ('adaptive_mutation','collision','idle'):
         if type(c[key]) is not bool:raise ValueError('Invalid '+key)

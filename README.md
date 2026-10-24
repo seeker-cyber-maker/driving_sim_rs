@@ -53,13 +53,13 @@ No original-game installation is needed for the built-in replica tracks and brow
 
 ## Start with one run
 
-1. **Choose a track.** [Open Driving Around](https://tiga-rce-ald-tao-gpu.hf.space/) and select a built-in replica, such as **Replica A01 Beginner**, or upload a compatible `.track` file.
-2. **Choose a driver.** Click **Create starter network**, use the **Network editor**, or import a compatible `.evolution`. Imported drivers retain their vehicle type. Keep your original network as the baseline.
+1. **Choose a driver.** [Open Driving Around](https://tiga-rce-ald-tao-gpu.hf.space/) and load a compatible `.evolution` from your device or an existing private bucket. To start fresh, expand **Create a new driver instead**. Keep your original driver as the baseline.
+2. **Choose a track.** Select a built-in replica, such as **Replica A01 Beginner**, or upload a compatible `.track` file.
 3. **Choose the question.** Use **Frozen evaluation** to measure a driver without changing its weights, or **Train a population** to evolve candidates. Review **Training & recipes** before starting.
 4. **Run on CPU first.** CPU does not require Hugging Face sign-in or consume GPU allowance. For GPU runs, sign in before selecting files and check the current allowance.
 5. **Receive and inspect the result.** Save the driver, analysis archive and receipt from **Latest run**. Select a driver, record a five- or fifteen-second CPU drive, and inspect its replay and black box.
 
-For a small workflow check, use **8 candidates × 3 generations × 900 ticks**, with **60 decisions per second**. This is a compact operating check, not an optimal training recipe or a promise of a clean lap. The app also provides a larger, explicit first-run preset.
+For a small workflow check, use **8 candidates × 3 generations × 900 ticks**, with **60 Hz physics and 60 Hz decisions** (`batch_count=1`). New CPU and GPU runs enforce this cadence; historical recipes remain readable and can be copied to 60 Hz. This is a compact operating check, not an optimal training recipe or a promise of a clean lap. The app also provides a larger, explicit first-run preset.
 
 [Full usage guide →](docs/HF_LAB.md)
 
@@ -86,7 +86,7 @@ Record the selected policy, then play, pause, scrub or step through native sampl
 The recorder runs physics and decisions at **60 Hz** and stores snapshots at tick 1, every sixth tick and the requested endpoint. Optional pose smoothing changes display interpolation only; sensor and control measurements remain attached to recorded samples.
 
 > [!IMPORTANT]
-> A recording is a fresh native **CPU evaluation** of the selected, unchanged policy, including a policy trained on GPU. It is not automatically the trajectory from its winning training generation. The track-layout preview is separate from recorded driving replay.
+> A recording is a fresh native **CPU evaluation** of the selected, unchanged policy, including a policy trained on GPU. It is not automatically the trajectory from its winning training generation. The optional yellow suggested route is a geometric reference; the green recorded path is the car’s actual trajectory. Neither is a recording of the training population.
 
 Hidden-layer activations and ray-hit positions are not recorded. Contact events identify sampled intervals, not necessarily an exact impact tick or a unique crash.
 
@@ -100,6 +100,25 @@ Historical interface capture from the qualified pre-rename build, using a dispos
 </details>
 
 [Replay format, capture phases and limits →](hf-space/REPLAY_BLACKBOX.md)
+
+## Read the track and compare the drive
+
+The map now draws the road and obstacles from the native track parts’ collision polygons. **Calculate suggested route** adds an optional dashed yellow guide for general orientation; the green **Recorded path** shows actual measured car positions. Toggle the two layers independently, then play, scrub or step through the drive and its black box.
+
+The guide uses part-derived masks and real openings between neighboring pieces, including split lanes. It is a geometric reference, not an optimal racing line or a driving-quality score. It does not change the controller, rewards, physics or recorded telemetry.
+
+The [Hugging Face Space and source](https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu) are public. CPU works without sign-in; GPU remains subject to the provider’s allowance. Optional private-bucket storage retains its own authorization.
+
+[Map-preview release notes and bounded verification →](docs/releases/driving-around-mask-2026.10.24/RELEASE_NOTES.md)
+
+<details>
+<summary><strong>See the current map preview and measured replay</strong></summary>
+
+![Native-mask road preview, optional suggested route and actual recorded drive with native controls and sensor inputs](docs/media/driving-around-mask-replay.png)
+
+Current deployed interface with a disposable Formula fixture on Replica A05 Two Terrains. Yellow is the geometric suggestion; green is the actual recorded trajectory. This is an inspection example, not a driving-performance result.
+
+</details>
 
 ## Let an agent run the experiment
 

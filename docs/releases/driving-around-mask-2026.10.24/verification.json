@@ -1,0 +1,79 @@
+{
+  "browser_console_errors": 0,
+  "build_id": "ald-winners-2a41891ca1dbf3341b9f64323debc4c0edc63ef62b3bb918f8d01d89fe18741a",
+  "download_json_equals_native_response": true,
+  "hf_revision": "8994edc1950e5a1289ddad1795319206acca1f1f",
+  "hosted_browser": {
+    "build_id": "ald-winners-2a41891ca1dbf3341b9f64323debc4c0edc63ef62b3bb918f8d01d89fe18741a",
+    "downloadAndReopen": true,
+    "measuredSamples": 151,
+    "nativeRecordingSeconds": 15,
+    "nextSample": {
+      "phase": "Post-physics snapshot: tick 456. Native decision: tick 456, pre-physics.",
+      "time": "7.60s / 15.00s \u00b7 Tick 456 \u00b7 Measured tick 456"
+    },
+    "playbackAdvancedToTick16": true,
+    "previousSampleReturned450": true,
+    "routeAndRecordedPathToggledIndependently": true,
+    "routeOnlyAndNoOverlayScreenshotsInspected": true,
+    "routeStatus": "Suggested route ready \u00b7 16 connected pieces. A geometric guide for orientation; vehicle dynamics are not modeled.",
+    "scrubTick450": true,
+    "status": "pass",
+    "workerRouteCalculation": true
+  },
+  "hosted_native_recordings": [
+    {
+      "control_hz": 60,
+      "controls_and_consumed_inputs_valid": true,
+      "physics_hz": 60,
+      "samples": 51,
+      "sha256": "10e30315a4148e19aff1f3c0a440954d4f57c57c495c5aa07a48968fb476bfba",
+      "strict_viewer_validation": true,
+      "ticks": 300,
+      "track": "a01",
+      "weights_verified_unchanged": true
+    },
+    {
+      "control_hz": 60,
+      "controls_and_consumed_inputs_valid": true,
+      "physics_hz": 60,
+      "samples": 151,
+      "sha256": "70023c533e96bc9ebafa255a450d506a17663587274debc94bc4f546742af1e7",
+      "strict_viewer_validation": true,
+      "ticks": 900,
+      "track": "a05",
+      "weights_verified_unchanged": true
+    }
+  ],
+  "local_geometry": {
+    "focused_properties": 10,
+    "free_cells_checked": 312816,
+    "independent_clearance_audit": "pass",
+    "segments": 15951,
+    "served_inline_scripts": 14,
+    "tracks": 28,
+    "unique_masks": 151,
+    "wall_intersections": 0
+  },
+  "package_files": 102,
+  "preservation": {
+    "GPU_calls": 0,
+    "Godot_and_Swift_edits": 0,
+    "OAuth_scope_and_bucket_behavior_unchanged": true,
+    "native_binaries_and_worker_unchanged": true,
+    "policy_promoted": false,
+    "retained_parent_sha256": "0504c4273e8ac78b47c2889d78eb782e995bc27980e1f422165c48f11f54a943"
+  },
+  "public_visibility": {
+    "anonymous_live_build_id": "ald-winners-2a41891ca1dbf3341b9f64323debc4c0edc63ef62b3bb918f8d01d89fe18741a",
+    "anonymous_metadata_http": 200,
+    "anonymous_source_http": 200,
+    "anonymous_space_page_http": 200,
+    "private": false
+  },
+  "qualification_scope": "Map preview and measured replay UI; no new clean-lap, learning-improvement or full CPU/GPU driving qualification claim.",
+  "release_members": 101,
+  "schema": "ald-preview-release-verification/1",
+  "status": "pass",
+  "verified_at": "2026-10-24T08:24:03.549286+00:00"
+}

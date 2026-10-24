@@ -1,0 +1,32 @@
+{
+  "base_github_commit": "9384cb4dd596c101fb8bfd0c4d764452b78717f8",
+  "changes": [
+    "index.html",
+    "client.js",
+    "training_config.py",
+    "worker.py",
+    "FRONTEND_SOURCE.json"
+  ],
+  "execution": {
+    "batch_count": 1,
+    "control_hz": 60,
+    "physics_hz": 60
+  },
+  "legacy_policy": "Historical recipe/bundle/report schemas remain readable. New runs reject non-60 Hz. Conversion makes a separate recipe copy and never rewrites batches or measurements.",
+  "native_artifacts": "unchanged; no native source or binary rebuild",
+  "reference_overlay": {
+    "cell_size_game_units": 8,
+    "max_points": 2048,
+    "max_search_expanded": 6000000,
+    "method": "part_mask_portal_graph_exact_clearance",
+    "physical_mask": "tile square minus native collision polygon union",
+    "renderer": "exact vector complement of the same native polygons",
+    "route_topology": "ordered pieces and shared opening component dynamic program",
+    "static_wall_margin_game_units": 32,
+    "status": "Bounded geometry guide; no vehicle dynamics or optimal-lap claim"
+  },
+  "schema": "ald.ui-cadence-change/v1",
+  "status": "qualification_in_release_acceptance_receipt",
+  "supplied_patch_sha256": "33cec17dc3b03b720292c2fece10696d5bd04a67739f25eba925eb25059e9bea",
+  "validation": "Cadence validation and source-preserving layout changes; see the separate exact-build acceptance receipt for executed gates."
+}

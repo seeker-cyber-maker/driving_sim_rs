@@ -303,6 +303,8 @@ def create_app(worker=run_reported,store=None,gpu_worker=None,track_library=None
         return Response(payload,media_type='application/octet-stream',headers={'Cache-Control':'no-store'})
     @app.get('/track-library.js')
     def track_script():return FileResponse(ROOT/'track-library.js',media_type='text/javascript')
+    @app.get('/track-mask.js')
+    def mask_script():return FileResponse(ROOT/'track-mask.js',media_type='text/javascript',headers={'Cache-Control':'no-store'})
     @app.get('/track-map.js')
     def map_script():return FileResponse(ROOT/'track-map.js',media_type='text/javascript',headers={'Cache-Control':'no-store'})
     @app.get('/assets/track-atlas.json')
@@ -322,8 +324,10 @@ def create_app(worker=run_reported,store=None,gpu_worker=None,track_library=None
         # Deliver the bootstrap with the authenticated document: private HF
         # iframe subresource access can fail before an external script runs.
         script=(ROOT/'client.js').read_text().replace('</script','<\\/script')
+        mask_js=(ROOT/'track-mask.js').read_text().replace('</script','<\\/script')
         map_js=(ROOT/'track-map.js').read_text().replace('</script','<\\/script')
         return HTMLResponse((ROOT/'index.html').read_text().replace(
+            '<script src="/track-mask.js"></script>','<script>'+mask_js+'</script>').replace(
             '<script src="/track-map.js"></script>','<script>'+map_js+'</script>').replace(
             '<script src="/client.js"></script>','<script>'+script+'</script>').replace(
             '<script src="/agent-tools.js"></script>','<script>'+(ROOT/'agent-tools.js').read_text().replace('</script','<\\/script')+'</script>'),

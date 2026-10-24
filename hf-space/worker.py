@@ -282,7 +282,7 @@ def run_native(track_bytes,network_bytes,*,binary=None,importer=None,scene_templ
             '--scene',str(scene),'--spawn-trace',spawn,'--network',network,'--init-network',network,
             '--model',model,'--settings',settings,'--shape',','.join(map(str,n['Shape'])),
             '--population',str(config['population']),'--generations',str(config['generations']),
-            '--ticks',str(config['ticks']),'--seed',str(config['seed']),'--batch-count',str(60//config['control_hz']),
+            '--ticks',str(config['ticks']),'--seed',str(config['seed']),'--batch-count','1',
             '--out-dir',str(out),'--mutation-start',str(config['mutation']),
             '--mutation-end',str(config['mutation'] if config['schedule']=='fixed' else config['mutation_end']),
             '--schedule','linear' if config['schedule']=='fixed' else config['schedule'],'--save-final-candidate',

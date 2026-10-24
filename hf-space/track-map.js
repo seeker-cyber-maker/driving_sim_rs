@@ -3,6 +3,7 @@
   if(typeof module==='object'&&module.exports)module.exports=factory(root);
   else root.TrackMap=factory(root);
 })(typeof window==='undefined'?this:window,function(root){
+  const maskPlanner=typeof module==='object'&&module.exports?require('./track-mask.js'):root.TrackMask;
   const COLOURS=['#607e96','#b89561','#b9d9ed'];
   const NAMES=['Asphalt','Dirt','Ice'];
   const VECTOR=/^Vector2i\((-?\d+),\s*(-?\d+)\)$/;
@@ -73,7 +74,11 @@
       const block=atlas?.blocks?.[`${id?.AtlasId}:${id?.AlternativeId}`];
       if(!block||![0,1,2].includes(block.surface))throw Error('Track uses a piece not in the simulator atlas');
       if(!Array.isArray(block.connections)||block.connections.length!==2)throw Error('Track piece connections are unavailable');
-      return {x,y,surface:block.surface,connections:block.connections.map(value=>connection(value))};
+      const polygons=block.polygons;
+      if(polygons!==undefined&&(!Array.isArray(polygons)||polygons.length>32||polygons.some(p=>!Array.isArray(p)||p.length<3||p.length>128||p.some(v=>!Array.isArray(v)||v.length!==2||v.some(n=>!Number.isFinite(n)||Math.abs(n)>384)))))
+        throw Error('Track wall geometry is invalid');
+      return {x,y,surface:block.surface,connections:block.connections.map(value=>connection(value)),
+        polygons:polygons?.map(p=>p.map(([px,py])=>[px+x*768+384,py+y*768+384]))};
     });
     if(new Set(tiles.map(t=>`${t.x},${t.y}`)).size!==tiles.length)throw Error('Duplicate track tile');
     const start=vector(saved.StartTileCoords);
@@ -87,6 +92,72 @@
     if(maxX-minX>30||maxY-minY>30)throw Error('Track preview is too large');
     return {tiles,start,startConnection,bounds:{minX,maxX,minY,maxY}};
   }
+  const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+  function projectPoint(p,a,b){
+    const dx=b[0]-a[0],dy=b[1]-a[1],length=dx*dx+dy*dy;
+    const t=length?Math.max(0,Math.min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/length)):0;
+    return [a[0]+t*dx,a[1]+t*dy];
+  }
+  function insidePolygon(point,polygon){
+    let inside=false;
+    for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){
+      const a=polygon[i],b=polygon[j];
+      if((a[1]>point[1])!==(b[1]>point[1])&&point[0]<(b[0]-a[0])*(point[1]-a[1])/(b[1]-a[1])+a[0])inside=!inside;
+    }
+    return inside;
+  }
+  function segmentDistance(a,b,c,d){
+    const cross=(p,q,r)=>(q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]);
+    const ac=cross(a,b,c),ad=cross(a,b,d),ca=cross(c,d,a),cb=cross(c,d,b);
+    if(ac*ad<0&&ca*cb<0)return 0;
+    return Math.min(distance(a,projectPoint(a,c,d)),distance(b,projectPoint(b,c,d)),distance(c,projectPoint(c,a,b)),distance(d,projectPoint(d,a,b)));
+  }
+  function routePoints(track){
+    const byTile=new Map(track.tiles.map(t=>[`${t.x},${t.y}`,t]));
+    const equal=(a,b)=>a.side===b.side&&a.index===b.index&&a.type===b.type;
+    let tile=byTile.get(track.start.join(',')),incoming=track.startConnection;
+    const visited=new Set(),points=[],neighbors=[[0,-1],[0,1],[-1,0],[1,0]];
+    while(tile&&!visited.has(`${tile.x},${tile.y}`)){
+      visited.add(`${tile.x},${tile.y}`);
+      if(!tile.connections.some(c=>equal(c,incoming)))throw Error('The saved route has an incompatible connection');
+      const outgoing=tile.connections.find(c=>!equal(c,incoming));
+      if(!outgoing)throw Error('The saved route has no exit');
+      const a=connectionPoint(incoming,tile.x*768,tile.y*768,768),b=connectionPoint(outgoing,tile.x*768,tile.y*768,768);
+      const p=connectionControl(incoming,outgoing,a,b),q=connectionControl(outgoing,incoming,b,a);
+      for(let i=0;i<32;i++){
+        const t=i/32,s=1-t;
+        points.push([s*s*s*a[0]+3*s*s*t*p[0]+3*s*t*t*q[0]+t*t*t*b[0],s*s*s*a[1]+3*s*s*t*p[1]+3*s*t*t*q[1]+t*t*t*b[1]]);
+      }
+      const step=neighbors[outgoing.side];
+      tile=byTile.get(`${tile.x+step[0]},${tile.y+step[1]}`);
+      incoming={...outgoing,side:outgoing.side^1};
+    }
+    if(!tile||tile.x!==track.start[0]||tile.y!==track.start[1]||!equal(incoming,track.startConnection))throw Error('The saved route does not close at its starting connection');
+    points.push(points[0]);
+    const lengths=[0];
+    for(let i=1;i<points.length;i++)lengths.push(lengths[i-1]+distance(points[i-1],points[i]));
+    const length=lengths[lengths.length-1];
+    if(!Number.isFinite(length)||length<100)throw Error('The saved route has no usable length');
+    const count=Math.min(2048,Math.max(32,Math.ceil(length/64))),sampled=[];
+    let at=0;
+    for(let i=0;i<count;i++){
+      const target=length*i/count;
+      while(at+1<lengths.length-1&&lengths[at+1]<target)at++;
+      const t=(target-lengths[at])/(lengths[at+1]-lengths[at]);
+      sampled.push(points[at].map((v,axis)=>v+t*(points[at+1][axis]-v)));
+    }
+    return {points:sampled,route_tiles:visited.size};
+  }
+  function referenceLine(track){if(!maskPlanner)throw Error('Road-mask planner unavailable');return maskPlanner.line(track);}
+  function referenceDistance(point,line){
+    if(!line?.points?.length)return null;
+    let best=null;
+    line.points.forEach((a,i)=>{
+      const projected=projectPoint(point,a,line.points[(i+1)%line.points.length]),d=distance(point,projected);
+      if(!best||d<best.distance)best={distance:d,point:projected};
+    });
+    return best;
+  }
   function render(canvas,track){
     const context=canvas.getContext('2d');
     if(!context)throw Error('Canvas preview unavailable');
@@ -99,18 +170,15 @@
     for(const tile of track.tiles){
       const x=left+(tile.x-b.minX)*size,y=top+(tile.y-b.minY)*size;
       context.fillStyle=COLOURS[tile.surface];
-      context.beginPath();context.roundRect(x+2,y+2,size-4,size-4,Math.max(4,size*.13));context.fill();
-      context.strokeStyle='#d7e8f2';context.lineWidth=Math.max(1,size*.018);
-      context.stroke();
-      if(Array.isArray(tile.connections)&&tile.connections.length>=2){
-        const [entry,exit]=tile.connections;
-        const a=connectionPoint(entry,x,y,size),z=connectionPoint(exit,x,y,size);
-        const p1=connectionControl(entry,exit,a,z),p2=connectionControl(exit,entry,z,a);
-        context.beginPath();context.moveTo(...a);
-        context.bezierCurveTo(...p1,...p2,...z);
-        context.strokeStyle='#f3a967';context.lineWidth=Math.max(3,size*.055);
-        context.lineCap='round';context.stroke();
+      // Physical part mask: a full tile with each native wall polygon removed.
+      // No guessed rounded pavement or artificial gaps at tile joins.
+      context.fillRect(x,y,size,size);
+      for(const polygon of tile.polygons??[]){
+        context.beginPath();
+        polygon.forEach(([px,py],i)=>{const p=[x+(px-tile.x*768)/768*size,y+(py-tile.y*768)/768*size];if(i)context.lineTo(...p);else context.moveTo(...p);});
+        context.closePath();context.fillStyle='#253443';context.fill();
       }
+
     }
     const startX=left+(track.start[0]-b.minX)*size,startY=top+(track.start[1]-b.minY)*size;
     const [sx,sy]=connectionPoint(track.startConnection,startX,startY,size);
@@ -339,6 +407,7 @@
     if(!canvas||!status||!legend||!picker)return;
     const element=id=>document.getElementById(id);
     let version=0,atlasPromise=null,currentTrack=null,currentTrackSha=null,staticLayer=null;
+    let reference=null,referenceBusy=false,referenceWorker=null;
     let recording=null,hasRunSummary=false,cursor=1,playing=false,animId=null,lastFrameTime=null;
     let playSpeed=Math.max(0.25,Math.min(4,Number(element('replay_speed')?.value)||1));
     let cameraMode=element('replay_camera')?.value==='follow'?'follow':'full';
@@ -348,6 +417,8 @@
     const summaryOnly='No replay recorded. This run contains summary measurements, not vehicle positions or control samples.';
     function setText(id,text){const node=element(id);if(node&&node.textContent!==text)node.textContent=text;}
     function syncControls(reason){
+      if(element('reference_calculate'))element('reference_calculate').disabled=!currentTrack||referenceBusy;
+      if(element('reference_show'))element('reference_show').disabled=!reference;
       const last=recording?.frames[recording.frames.length-1].tick;
       const play=element('replay_play');
       if(play){play.disabled=!recording||cursor>=last;play.textContent=playing?'Pause':'Play';}
@@ -410,6 +481,11 @@
         ctx.translate(canvas.width/2,canvas.height/2);ctx.scale(2,2);ctx.translate(-position[0],-position[1]);
       }
       if(staticLayer)ctx.drawImage(staticLayer,0,0);else render(canvas,currentTrack);
+      if(reference&&element('reference_show')?.checked){
+        ctx.beginPath();
+        reference.points.forEach((p,i)=>{const xy=worldPoint(view,...p);if(i)ctx.lineTo(...xy);else ctx.moveTo(...xy);});
+        ctx.closePath();ctx.strokeStyle='#ffd073';ctx.lineWidth=2.5;ctx.setLineDash([7,5]);ctx.stroke();ctx.setLineDash([]);
+      }
       if(recording){
         if(layers.line){
           ctx.beginPath();
@@ -423,6 +499,8 @@
       if(state){
         const frame=state.frame;blackbox(frame);const speed=Math.hypot(frame.vx,frame.vy)/15*3.6;
         const contacts=frame.collision_count===undefined?'unavailable':String(frame.collision_count);
+        const deviation=referenceDistance([frame.x,frame.y],reference);
+        setText('reference_deviation',deviation?`Measured position is ${(deviation.distance/15).toFixed(2)} m from the nearest suggested-route segment. Distance alone does not measure driving quality.`:'');
         setText('replay_time_label',`${(cursor/60).toFixed(2)}s / ${(recording.requested_ticks/60).toFixed(2)}s · Tick ${Math.round(cursor)} · Measured tick ${frame.tick}`);
         setText('replay_readout',`Recorded sample tick ${frame.tick} (${(frame.tick/60).toFixed(2)}s). Speed ${speed.toFixed(1)} km/h, derived from recorded velocity. Position (${frame.x.toFixed(2)}, ${frame.y.toFixed(2)}). Contacts ${contacts}. ${frame.active?'Active':'Inactive'} at this sample. ${frame.decision?'Native controls and inputs captured at tick '+frame.decision.tick+'.':'No captured decision at this sample.'}`);
         if(layers.hud){
@@ -435,6 +513,7 @@
     }
     function clearRecording(reason){
       const hadRecording=recording!==null;stopPlayback();recording=null;cursor=1;blackboxTick=null;eventOptions();
+      setText('reference_deviation','');
       if(hadRecording)draw();syncControls(reason);
     }
     function step(now){
@@ -450,6 +529,34 @@
     }
     function bind(){
       const on=(id,event,callback)=>{const node=element(id);if(node)node.addEventListener(event,callback);};
+      on('reference_calculate','click',async()=>{
+        if(!currentTrack||referenceBusy)return;
+        const track=currentTrack,request=version;referenceBusy=true;syncControls();setText('reference_status','Calculating suggested route…');
+        await new Promise(resolve=>typeof root?.setTimeout==='function'?root.setTimeout(resolve,0):resolve());
+        if(request!==version)return;
+        try{
+          if(typeof root?.Worker==='function'&&typeof root?.URL?.createObjectURL==='function'){
+            const source=`const MaskPlanner=${maskPlanner.workerSource()};onmessage=event=>{try{postMessage({line:MaskPlanner.line(event.data)});}catch(error){postMessage({error:error.message});}};`;
+            const url=root.URL.createObjectURL(new Blob([source],{type:'application/javascript'}));
+            let worker;
+            try{
+              worker=new root.Worker(url);
+              const line=await new Promise((resolve,reject)=>{
+                referenceWorker={worker,cancel:()=>reject(Error('Track changed'))};
+                worker.onmessage=event=>event.data.error?reject(Error(event.data.error)):resolve(event.data.line);
+                worker.onerror=()=>reject(Error('Browser could not calculate the suggested route'));
+                worker.postMessage(track);
+              });
+              if(request!==version)return;
+              reference=line;
+            }finally{worker?.terminate();root.URL.revokeObjectURL(url);if(referenceWorker?.worker===worker)referenceWorker=null;}
+          }else reference=referenceLine(track);
+          if(request!==version)return;
+          setText('reference_status',`Suggested route ready · ${reference.route_tiles} connected pieces. A geometric guide for orientation; vehicle dynamics are not modeled.`);
+        }catch(error){if(request===version){reference=null;setText('reference_status','Suggested route unavailable: '+error.message);}}
+        finally{if(request===version){referenceBusy=false;draw();syncControls();}}
+      });
+      on('reference_show','change',draw);
       on('replay_play','click',()=>{
         if(!recording)return;
         if(playing){stopPlayback();syncControls();return;}
@@ -473,7 +580,9 @@
       document.addEventListener('visibilitychange',()=>{if(document.hidden){stopPlayback();syncControls();}});
     }
     async function refresh(){
-      const current=++version;clearRecording();currentTrackSha=null;currentTrack=null;staticLayer=null;
+      if(referenceWorker){referenceWorker.worker.terminate();referenceWorker.cancel();referenceWorker=null;}
+      const current=++version;clearRecording();currentTrackSha=null;currentTrack=null;staticLayer=null;reference=null;referenceBusy=false;
+      setText('reference_status','Calculate an optional route for general orientation, then compare it with the recorded car path.');setText('reference_deviation','');syncControls();
       const info=picker.info();
       const source=info.source==='builtin'?info.display_name:element('track')?.files?.[0]?.name;
       if(!source){status.textContent='Select a built-in track or choose a custom .track file.';legend.textContent='';renderEmpty();return;}
@@ -494,7 +603,8 @@
         if(off?.getContext?.('2d')){off.width=canvas.width;off.height=canvas.height;render(off,track);staticLayer=off;}
         const counts=[0,0,0];track.tiles.forEach(tile=>counts[tile.surface]++);
         status.textContent=source+' · '+track.tiles.length+' pieces · green dot marks the saved starting point';
-        legend.textContent=NAMES.filter((_,i)=>counts[i]).map(name=>name+' '+counts[NAMES.indexOf(name)]).join(' · ')+' · Orange line follows the track centerline. Collision shapes are not shown. Vehicle positions appear only from a recorded replay.';
+        legend.textContent=NAMES.filter((_,i)=>counts[i]).map(name=>name+' '+counts[NAMES.indexOf(name)]).join(' · ')+' · Dark shapes show static walls. Road shape follows native part geometry. Dashed yellow: mask-derived suggestion. Green: recorded drive. Vehicle positions appear only from a recorded replay.';
+        syncControls();
       }catch(error){
         if(current!==version)return;
         currentTrack=null;currentTrackSha=null;staticLayer=null;renderEmpty();
@@ -522,5 +632,5 @@
     bind();syncControls();document.addEventListener('track-library-change',refresh);refresh();
     return controller;
   }
-  return {mount,model,decode,render,validateRecording,sampleRecording,recordingEvents,adjacentSampleTick};
+  return {mount,model,decode,render,referenceLine,referenceDistance,validateRecording,sampleRecording,recordingEvents,adjacentSampleTick};
 });

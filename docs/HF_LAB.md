@@ -6,9 +6,9 @@ Open the [hosted app](https://tiga-rce-ald-tao-gpu.hf.space/) to run a CPU exper
 
 ## Source layout and identity
 
-`hf-space/` contains the current 100-file hosted package, including the Driving Around presentation update. Its [current source record](HF_SOURCE.json) identifies the exact HF revision and build. All 99 members of its release manifest are verified. The original snapshot and qualification remain available at the immutable `ald-lab-2026.10.23` tag. The Python, browser code, vendored dependencies, three Linux native artifacts, replica tracks, native source archives, licenses and build provenance are included.
+`hf-space/` contains the current 102-file hosted package, including the native-mask map and optional suggested route. Its [current source record](HF_SOURCE.json) identifies the exact HF revision and build. All 101 members of its release manifest are verified. The original snapshot and qualification remain available at the immutable `ald-lab-2026.10.23` tag. The Python, browser code, vendored dependencies, three Linux native artifacts, replica tracks, native source archives, licenses and build provenance are included.
 
-The repository's root Rust tree retains its previous state. Its `Cargo.toml` version and build instructions do not identify the hosted binary. Use `hf-space/UPSTREAM.json`, `hf-space/BINARY_PROVENANCE.json` and the native archives for the hosted package's custom source lineage. Historical build receipts contain the original build host's paths; they are provenance, not required runtime locations. The branding update changes presentation and its content-derived build identity. Native binaries, worker settings, tracks, service routes, OAuth scope and HF visibility retain their qualified values.
+The repository's root Rust tree retains its previous state. Its `Cargo.toml` version and build instructions do not identify the hosted binary. Use `hf-space/UPSTREAM.json`, `hf-space/BINARY_PROVENANCE.json` and the native archives for the hosted package's custom source lineage. Historical build receipts contain the original build host's paths; they are provenance, not required runtime locations. The current update adds native-part road rendering and an optional suggested route alongside the actual recorded trajectory. The HF Space and source are now public. Native binaries, worker settings, tracks, compute/storage contracts and OAuth scope retain their qualified values. New CPU/GPU runs require batch_count=1 with 60 Hz physics and decisions; historical recipes can be copied to the required cadence.
 
 From the repository or release archive root, verify the source with Python 3.10 or newer:
 
@@ -27,6 +27,10 @@ This checks file bytes, the release manifest, native artifact identities and the
 5. Select the policy to inspect and record a five- or fifteen-second CPU drive. Playback exposes actual native controls and consumed sensor inputs. A GPU-trained driver's recording is a fresh CPU drive, not its original training trajectory.
 
 For GPU, sign in before selecting files, check live included allowance before each run and avoid paid overage unless separately authorized. Account GPU sign-in and optional bucket/repository access are separate decisions; bucket access is not needed to train. See the snapshot's [data policy](../hf-space/DATA_POLICY.md) and [replay contract](../hf-space/REPLAY_BLACKBOX.md).
+
+## Map and recorded driving
+
+Use **Calculate suggested route** for a rough geometric reference. **Show suggested route** and **Recorded path** are independent layers. The route searches conservative masks from native collision polygons and matches actual openings between pieces. It is not a fastest-lap prediction or a vehicle-dynamics model. Playback and black-box values remain attached to native samples. See the [current preview release notes](releases/driving-around-mask-2026.10.24/RELEASE_NOTES.md).
 
 ## Portable agent skill
 

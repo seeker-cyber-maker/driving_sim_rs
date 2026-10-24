@@ -139,6 +139,8 @@ function buttons() {
   syncRunModeUI(settingsUnavailable);
   renderResultSummary();
   renderRecordingIdentity();
+  window.DriverFirst?.update(networkSource()?.name||null);
+  if($('driver_inspect'))$('driver_inspect').disabled=unavailable||!networkSource();
 }
 // Presentation only: these summaries reuse the verified run/replay state and existing controls.
 function selectedReplayDriverLabel(){

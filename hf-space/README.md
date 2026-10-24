@@ -10,7 +10,7 @@ hf_oauth_scopes:
   - write-repos
 ---
 
-This package is the public GPU app at https://tiga-rce-ald-tao-gpu.hf.space/. Its HF source repository remains restricted; a public source copy is available at https://github.com/seeker-cyber-maker/driving_sim_rs/tree/main/hf-space; the standalone CPU Space is private. The app also offers an anonymous CPU route. Build-specific deployment and qualification status belong in the release receipt.
+This package is the public GPU app at https://tiga-rce-ald-tao-gpu.hf.space/. The HF Space and its source are public at https://huggingface.co/spaces/TiGa-RCE/ald-tao-gpu, with a matching source copy at https://github.com/seeker-cyber-maker/driving_sim_rs/tree/main/hf-space. The standalone CPU Space remains private. The app also offers an anonymous CPU route. Build-specific deployment and qualification status belong in the release receipt.
 
 # AI Training Story: Driving Around
 
@@ -22,13 +22,13 @@ Train a driver. Replay its decisions. Compare the evidence under matching condit
 
 Driving Around lets you experiment with small driving controllers in a packaged simulator. You can make a controller in the browser or load a compatible `.evolution` file, then ask the simulator to evaluate it or train a group of candidates. You do not need the original game installed to try the 28 built-in replica tracks and browser editor.
 
-The app is a separate, bounded experiment. It does not control the original game, reproduce its full campaign, or grant official stars or progression. Its track map previews tiles and terrain; it is not a live driving view. The built-in tracks are reconstructed replicas, and a successful simulation run is not proof of original-game physics parity.
+The app is a separate, bounded experiment. It does not control the original game, reproduce its full campaign, or grant official stars or progression. Its track map shows static walls and a calculated suggested route; saved native recordings animate the measured car motion. It does not stream a running training population. The built-in tracks are reconstructed replicas, and a successful simulation run is not proof of original-game physics parity.
 
 ## A first run
 
-1. Click **Choose a track** and select one of the built-in replicas. You can instead upload a `.track` file. The map is a layout and terrain preview.
-2. Click **Create starter network** to make a small controller in this page, or choose a `.evolution` file/use the **Network editor**. Choose a vehicle for a new starter network; imported controllers keep their own vehicle type. The starter is held in the browser and does not begin training.
-3. Click **Review first-run settings**. The starter recipe is 32 candidates × 20 generations × 900 ticks per generation (15 simulated seconds per car per generation), mutation 0.3, decay 0, and a distance-only reward of +100. Collision and idle elimination are off; selection uses one parent and keeps one elite candidate. These are a starting point, not a promise of a fast or clean lap. Use **Apply first-run settings to this form** only if you want to reset the current form; saved recipes remain unchanged.
+1. Under **Choose your driver**, use **From this device** to load a compatible `.evolution` file, or **Saved in bucket** to restore an existing private-bucket bundle. Check the selected driver name. If you need a fresh network, expand **Create a new driver instead**; creating one does not start a run.
+2. Under **Choose a track**, select one of the built-in replicas or expand **Use a custom .track file**. Use **Calculate suggested route** for a rough geometric reference. Toggle **Show suggested route** and **Recorded path** independently to compare it with the car’s actual trajectory.
+3. Click **Review training settings & recipes**. The starter recipe is 32 candidates × 20 generations × 900 ticks per generation (15 simulated seconds per car per generation), mutation 0.3, decay 0, and a distance-only reward of +100. Collision and idle elimination are off; selection uses one parent and keeps one elite candidate. These are a starting point, not a promise of a fast or clean lap. Use **Apply first-run settings to this form** only if you want to reset the current form; saved recipes remain unchanged.
 4. CPU runs without an HF account. Under **Action**, choose **Train a population** or **Frozen evaluation · one policy, unchanged weights**, then click the run button to begin. Training evolves a group of candidate controllers; a generation is one round of simulation and selection. Reward settings tell the trainer which measured outcomes to favor.
 5. Click **Download result** to receive the result and reveal its winner, measurements, and supported challenge checks. Connected bucket autosave handles delivery instead. A challenge check replays the named network with fixed weights; it predicts conditions for the replica track and does not award stars in the original game.
 6. Download a controller or portable bundle to keep it locally. You can also connect an existing private Hugging Face bucket for optional saves. Read the storage note below before authorizing bucket access.
@@ -56,3 +56,18 @@ A training result can include the final-generation fitness winner, the fastest c
 The app can check supported track conditions after a run by replaying the named controller with fixed weights. This may add time to the run. The result is a bounded prediction for the reconstructed track. It does not award or accumulate original-game stars; opponent races and unsupported conditions remain unchecked.
 
 The simulator is based on [driving_sim_rs](https://github.com/Zorro909/driving_sim_rs), upstream revision `b90b8af06ffc4ea4e4fd703becd1107a48b8e5e0`; the release receipt records the packaged build and local changes. The package includes the upstream [MIT license](LICENSE). Upstream pull requests 19 and 21 are not included. Feedback: [open an editable issue draft](https://github.com/seeker-cyber-maker/driving_sim_rs/issues/new). It is not submitted automatically. Review the draft and remove private names or data before posting. Never attach tokens, job keys, private networks, proprietary tracks, or unrelated logs.
+
+
+## Driver-first / 60 Hz
+
+Load an existing `.evolution` driver or saved bucket bundle first. Creating a new driver is secondary. The Run button follows the driver, track, action and compute settings. New training and frozen evaluations require **60 Hz physics and 60 Hz controller decisions** (`batch_count=1`) on CPU and GPU.
+
+Historical 30/15 Hz recipes and receipts remain readable and retain their recorded timing. They cannot start a new run. Use **Make a 60 Hz copy** in Training & recipes to create a new recipe in an empty slot; the original recipe and batches stay unchanged. Restoring an older bundle loads its driver but does not apply its non-60 Hz recipe. Replay sampling and playback speed are unchanged.
+
+Build-specific bucket, CPU/GPU and deployment qualification is recorded in the release acceptance receipt. The interface does not automatically promote a trained policy. See `UI_CADENCE_CHANGE.json`.
+
+## Suggested route
+
+The optional route is for general orientation. **Show suggested route** and **Recorded path** are independent layers; green shows actual positions from the native recording.
+
+The preview renders road geometry directly from the native part polygons and calculates a guide using conservative part masks, shared opening components and clearance-weighted search. Split-lane choices stay connected through neighboring pieces. Every displayed guide segment is checked continuously for a 32-unit static margin and the saved piece order. The replay readout measures distance from the selected native position to that line. See `REPLAY_BLACKBOX.md` for its bounded search, static-clearance checks and vehicle-dynamics limitations. This is not an optimal-lap solver or a policy promotion.
